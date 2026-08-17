@@ -1,0 +1,64 @@
+{
+  "round": "ko-verify-before",
+  "timestamp": "2026-08-17T15:00:21.195Z",
+  "filesEvaluated": 5,
+  "average": 9.9,
+  "minScore": 9.5,
+  "gate": "VIRAL",
+  "results": [
+    {
+      "file": "2026-h1-roadmap.html",
+      "format": "dashboard",
+      "layer2Score": 100,
+      "layer3Score": null,
+      "overall": 10,
+      "failedChecks": [],
+      "consoleErrors": []
+    },
+    {
+      "file": "blog-announce-card.html",
+      "format": "generic",
+      "layer2Score": 100,
+      "layer3Score": null,
+      "overall": 10,
+      "failedChecks": [],
+      "consoleErrors": []
+    },
+    {
+      "file": "deploy-tool-pitch.html",
+      "format": "slide-deck",
+      "layer2Score": 100,
+      "layer3Score": null,
+      "overall": 10,
+      "failedChecks": [],
+      "consoleErrors": []
+    },
+    {
+      "file": "docs-tool-comparison.html",
+      "format": "comparison",
+      "layer2Score": 100,
+      "layer3Score": null,
+      "overall": 10,
+      "failedChecks": [],
+      "consoleErrors": []
+    },
+    {
+      "file": "saas-q3-dashboard.html",
+      "format": "dashboard",
+      "layer2Score": 95,
+      "layer3Score": null,
+      "overall": 9.5,
+      "failedChecks": [
+        {
+          "name": "no-overflow-375",
+          "message": "No horizontal overflow at 375px viewport width (mobile)"
+        },
+        {
+          "name": "card-padding",
+          "message": "Card elements have sufficient padding (>= 24px)"
+        }
+      ],
+      "consoleErrors": []
+    }
+  ]
+}
