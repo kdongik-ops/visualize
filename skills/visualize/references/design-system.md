@@ -508,7 +508,7 @@ CSS로만 만든 차트(막대, 레이더, 도넛)와 Chart.js 차트는 모두 
 모든 시각화는 아래 기본 접근성 요구사항을 반드시 충족해야 한다:
 
 **최소 접근성 점검 목록:**
-- [ ] 본문 바로가기 링크가 있다
+- [ ] Skip-to-content 링크가 있다
 - [ ] 모든 주요 섹션에 `aria-label`과 함께 `role="region"`
 - [ ] 비교 섹션, 아키텍처 계층, 슬라이드 묶음에 `role="group"`
 - [ ] 타임라인 섹션과 항목에 `role="list"` / `role="listitem"`
@@ -517,7 +517,7 @@ CSS로만 만든 차트(막대, 레이더, 도넛)와 Chart.js 차트는 모두 
 - [ ] 모든 인터랙티브 요소에 `border-radius: 4px`를 가진 `:focus-visible`
 - [ ] 슬라이드 카운터·동적 콘텐츠에 `aria-live="polite"`
 
-- **본문 바로가기:** `<body>` 맨 위에 `<a href="#main-content" class="skip-link">Skip to content</a>`를 넣는다. 스타일은 평소에 숨기고 포커스를 받을 때 보이게.
+- **Skip navigation:** `<body>` 맨 위에 `<a href="#main-content" class="skip-link">Skip to content</a>`를 넣는다. 스타일은 평소에 숨기고 포커스를 받을 때 보이게.
 - **랜드마크 역할:** `<main>`, `<nav>`, `<header>`, `<footer>`, `<section>`을 쓰고, 같은 랜드마크가 여럿이면 `aria-label`을 붙인다.
 - **인터랙티브 요소:** 버튼·링크·컨트롤의 글자만으로 설명이 되지 않으면(예: 아이콘만 있는 버튼) `aria-label`을 반드시 붙인다.
 - **포커스 표시:** 모든 인터랙티브 요소에 눈에 보이는 `:focus-visible` 스타일을 넣는다: `outline: 2px solid var(--accent); outline-offset: 2px;`

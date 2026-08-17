@@ -18,38 +18,38 @@ metadata:
 
 # Visualize
 
-Turn any idea, data, or content into a stunning single-file HTML visualization.
+어떤 아이디어, 데이터, 내용이든 단일 파일 HTML 시각화로 바꾼다.
 
-## After Creating a File
+## 파일을 만든 뒤에 (After Creating a File)
 
-**Always do BOTH of these after writing the HTML file:**
+**HTML 파일을 쓴 다음 아래 두 가지를 항상 함께 한다:**
 
-1. **Auto-open in browser:** Run `open <filename>.html` (macOS), `xdg-open <filename>.html` (Linux), or `Start-Process <filename>.html` (Windows PowerShell) so the user sees it immediately
-2. **Return the file path as a clickable URL:** Include `file://<absolute-path>` in your response so the user can click to open it
+1. **브라우저에서 자동으로 연다:** `open <filename>.html` (macOS), `xdg-open <filename>.html` (Linux), 또는 `Start-Process <filename>.html` (Windows PowerShell)을 실행해 사용자가 바로 볼 수 있게 한다
+2. **파일 경로를 클릭 가능한 URL로 돌려준다:** 응답에 `file://<absolute-path>`를 넣어 사용자가 눌러서 열 수 있게 한다
 
-Example response after creation:
+생성 후 응답 예시:
 ```
 Created your visualization! Opening in browser now...
 📄 file:///Users/you/project/my-dashboard.html
 ```
 
-## Critical Requirements (NON-NEGOTIABLE)
+## Critical Requirements — 필수 요구사항 (NON-NEGOTIABLE)
 
 ⚠️ **EVALUATION FAILURE GUARANTEED WITHOUT THESE 8 ELEMENTS** ⚠️
 
-**EVERY file MUST start from the skeleton template in [references/skeleton.md](references/skeleton.md) — copy the ENTIRE template, then add your content.**
+**EVERY file MUST start from the skeleton template in [references/skeleton.md](references/skeleton.md) — 템플릿 ENTIRE 전체를 복사한 다음 내용을 추가한다.**
 
-1. **CSS Custom Properties:** Exact names required: `--bg, --surface, --surface-hover, --border, --text, --text-secondary, --accent, --accent-secondary, --positive, --negative, --warning` — NO other names (not --bg-primary, not --text-primary). **CRITICAL:** These exact property names are required for evaluation system compatibility.
-2. **Utility Menu System (MANDATORY):** Complete `.viz-menu` element with `.viz-menu-toggle` button, `.viz-menu-dropdown` container, download PNG button (`onclick="downloadImage()"`), print button (`onclick="window.print()"`), and html-to-image CDN script (`<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>`). **EVALUATION CRITICAL:** Menu system is automatically checked and WILL CAUSE FAILURES if missing.
-3. **Theme Classes (EVALUATION CRITICAL):** Must explicitly define BOTH `.theme-light` and `.theme-dark` classes in stylesheet with complete custom property definitions. **EXAMPLE REQUIRED:**
+1. **CSS 사용자 정의 속성:** 아래 이름을 정확히 써야 한다: `--bg, --surface, --surface-hover, --border, --text, --text-secondary, --accent, --accent-secondary, --positive, --negative, --warning` — 다른 이름은 NO (--bg-primary도, --text-primary도 안 된다). **CRITICAL:** 평가 시스템과 맞물리려면 이 속성 이름이 정확해야 한다.
+2. **유틸리티 메뉴 시스템 (MANDATORY):** `.viz-menu-toggle` 버튼, `.viz-menu-dropdown` 컨테이너, PNG 내려받기 버튼(`onclick="downloadImage()"`), 인쇄 버튼(`onclick="window.print()"`), html-to-image CDN 스크립트(`<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>`)를 모두 갖춘 `.viz-menu` 요소. **EVALUATION CRITICAL:** 메뉴 시스템은 자동으로 검사되며 없으면 WILL CAUSE FAILURES.
+3. **테마 클래스 (EVALUATION CRITICAL):** 스타일시트에 `.theme-light`와 `.theme-dark` 클래스를 BOTH 둘 다 명시적으로 정의하고, 사용자 정의 속성을 빠짐없이 넣어야 한다. **EXAMPLE REQUIRED:**
 ```css
 :root { /* base properties */ }
 .theme-light { --bg: #ffffff; --surface: #f8f9fa; --text: #1a1a1a; /* etc */ }
 .theme-dark { --bg: #0a0a0a; --surface: #1a1a1a; --text: #ffffff; /* etc */ }
 ```
-**NEVER rely on just `:root` or `@media (prefers-color-scheme)` — evaluation system checks for class-based themes.**
-4. **Semantic HTML:** `<main id="main-content">` element, **MANDATORY: Multiple `<section>` elements for major content blocks** (header, metrics, charts, etc.), skip-to-content link. Each distinct content area must be wrapped in semantic `<section>` tags.
-5. **Chart.js Requirements (EVALUATION CRITICAL):** MUST include `<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>` before closing `</head>`. **MANDATORY:** IMMEDIATELY after Chart.js script, add `<script>Chart.defaults.animation = false;</script>` (prevents animation glitches and is automatically checked by evaluation system). **MANDATORY CHART VALIDATION:** Every chart function MUST start with `if (typeof Chart === 'undefined') { console.error('Chart.js not loaded'); return; }`. **CHART ACCESSIBILITY:** Every canvas element MUST have `role="img"` and descriptive `aria-label` attributes. **CRITICAL CHART CONFIG:** Set `maintainAspectRatio: false`, `responsive: true`, and `plugins: { tooltip: { enabled: true } }` for accessibility. **NEVER disable tooltips** - evaluation system checks for enabled tooltips. **CHART RELIABILITY SYSTEM:** Use dedicated ChartManager pattern for bulletproof integration:
+**`:root`만 쓰거나 `@media (prefers-color-scheme)`에 의존하지 말 것 (NEVER) — 평가 시스템은 클래스 기반 테마를 검사한다.**
+4. **시맨틱 HTML:** `<main id="main-content">` 요소, **MANDATORY: 주요 내용 블록마다 `<section>` 요소를 여러 개** (헤더, 지표, 차트 등), skip-to-content 링크. 구분되는 내용 영역은 각각 시맨틱 `<section>` 태그로 감싼다.
+5. **Chart.js 요구사항 (EVALUATION CRITICAL):** `</head>` 앞에 `<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>`를 MUST 넣어야 한다. **MANDATORY:** Chart.js 스크립트 IMMEDIATELY 바로 뒤에 `<script>Chart.defaults.animation = false;</script>`를 넣는다 (애니메이션 결함을 막고 평가 시스템이 자동으로 검사한다). **MANDATORY CHART VALIDATION:** 모든 차트 함수는 `if (typeof Chart === 'undefined') { console.error('Chart.js not loaded'); return; }`로 시작해야 한다 (MUST). **CHART ACCESSIBILITY:** 모든 canvas 요소에 `role="img"`와 설명이 담긴 `aria-label` 속성이 MUST 있어야 한다. **CRITICAL CHART CONFIG:** 접근성을 위해 `maintainAspectRatio: false`, `responsive: true`, `plugins: { tooltip: { enabled: true } }`를 설정한다. **툴팁을 끄지 않는다 (NEVER)** - 평가 시스템이 툴팁이 켜져 있는지 검사한다. **CHART RELIABILITY SYSTEM:** 빈틈없는 연동을 위해 전용 ChartManager 패턴을 쓴다:
 ```javascript
 var ChartManager = {
   charts: new Map(),
@@ -109,17 +109,17 @@ var ChartManager = {
   }
 };
 ```
-Use `ChartManager.safeInit()` instead of raw `new Chart()`. **CRITICAL CHART CONFIG:** Set `maintainAspectRatio: false`, `responsive: true`, and `plugins: { tooltip: { enabled: true } }` for accessibility. **CHART CONTAINER DIMENSIONS:** Container must have explicit `height` >= 300px for charts to render properly. Use theme-aware colors with CSS custom properties, never static hex colors. **NEVER use import/export syntax with Chart.js CDN** — use standard var declarations only.
+`new Chart()`를 직접 쓰는 대신 `ChartManager.safeInit()`을 쓴다. **CRITICAL CHART CONFIG:** 접근성을 위해 `maintainAspectRatio: false`, `responsive: true`, `plugins: { tooltip: { enabled: true } }`를 설정한다. **CHART CONTAINER DIMENSIONS:** 차트가 제대로 그려지려면 컨테이너에 `height`가 300px 이상으로 명시되어 있어야 한다. CSS 사용자 정의 속성으로 테마에 반응하는 색을 쓰고, 고정된 16진수 색은 절대 쓰지 않는다. **Chart.js CDN과 함께 import/export 문법을 NEVER 쓰지 않는다** — 표준 var 선언만 쓴다.
 
-**CHART.JS TROUBLESHOOTING (CRITICAL):** If charts appear as blank white spaces:
-- Verify Chart.js CDN is included before `</head>`
-- Verify `Chart.defaults.animation = false;` is immediately after CDN
-- Verify chart initialization is in DOMContentLoaded event listener
-- Verify no module import/export syntax anywhere in the file
-- Verify ChartManager.safeInit() pattern is used correctly
-- Verify canvas has `role="img"` and `aria-label` attributes
+**CHART.JS TROUBLESHOOTING (CRITICAL):** 차트가 빈 흰 공간으로 나온다면 아래를 확인한다:
+- Chart.js CDN이 `</head>` 앞에 들어갔는지 확인
+- `Chart.defaults.animation = false;`가 CDN 바로 뒤에 있는지 확인
+- 차트 초기화가 DOMContentLoaded 이벤트 리스너 안에 있는지 확인
+- 파일 어디에도 모듈 import/export 문법이 없는지 확인
+- ChartManager.safeInit() 패턴을 올바르게 썼는지 확인
+- canvas에 `role="img"`와 `aria-label` 속성이 있는지 확인
 
-6. **Responsive Design:** Section spacing ≥48px, **CRITICAL: NO horizontal overflow at 375px viewport** (MANDATORY: add `@media (max-width: 375px) { body { overflow-x: hidden; } }` to prevent horizontal scroll), **MANDATORY FONT-SIZE HIERARCHY:** h1 ≥ 2.5rem, h2 ≥ 2rem, h3 ≥ 1.5rem, body = 1rem. **SLIDE DECK REQUIREMENTS:** Title slide h1 ≥ 3rem, content slide titles ≥ 2.5rem, clear visual distinction between heading levels. **SLIDE SECTION SPACING:** Major sections within slides must have ≥48px spacing (title-to-content, content-to-charts, charts-to-navigation). **Test all layouts at 375px width — dashboards especially prone to chart container overflow.** **CSS CONTAINER QUERIES:** For advanced responsiveness, use container-based queries:
+6. **반응형 디자인:** 섹션 간격 48px 이상, **CRITICAL: 375px 뷰포트에서 가로 오버플로 NO** (MANDATORY: 가로 스크롤을 막기 위해 `@media (max-width: 375px) { body { overflow-x: hidden; } }`를 넣는다), **MANDATORY FONT-SIZE HIERARCHY:** h1 ≥ 2.5rem, h2 ≥ 2rem, h3 ≥ 1.5rem, body = 1rem. **SLIDE DECK REQUIREMENTS:** 제목 슬라이드 h1 ≥ 3rem, 본문 슬라이드 제목 ≥ 2.5rem, 제목 단계 간 시각적 구분이 분명할 것. **SLIDE SECTION SPACING:** 슬라이드 안 주요 구역은 48px 이상 간격을 둔다 (제목-본문, 본문-차트, 차트-내비게이션). **모든 레이아웃을 375px 너비에서 확인한다 — 특히 대시보드는 차트 컨테이너가 넘치기 쉽다.** **CSS CONTAINER QUERIES:** 더 정밀한 반응형에는 컨테이너 기반 쿼리를 쓴다:
 ```css
 .chart-container { container-type: inline-size; }
 @container (max-width: 400px) { 
@@ -127,43 +127,43 @@ Use `ChartManager.safeInit()` instead of raw `new Chart()`. **CRITICAL CHART CON
   .chart-title { font-size: 1rem; }
 }
 ```
-This provides true component-level responsiveness beyond viewport media queries.
-7. **Print & Accessibility:** `@media print` styles, `@media (prefers-reduced-motion: reduce)` with disabled animations
-8. **Entrance Animations (MANDATORY):** Must include entrance animations via `.animate` classes, `data-reveal` attributes, or CSS `@keyframes`. **EVALUATION CRITICAL:** Animation presence is automatically detected and required.
-9. **JavaScript Functions:** `cycleTheme()`, `toggleMenu()`, top-level variables use `var` not `let`/`const`
+뷰포트 미디어 쿼리를 넘어 컴포넌트 단위의 진짜 반응형을 얻을 수 있다.
+7. **인쇄와 접근성:** `@media print` 스타일, 애니메이션을 끈 `@media (prefers-reduced-motion: reduce)`
+8. **진입 애니메이션 (MANDATORY):** `.animate` 클래스, `data-reveal` 속성, 또는 CSS `@keyframes`로 진입 애니메이션을 반드시 넣는다. **EVALUATION CRITICAL:** 애니메이션 유무는 자동으로 검사되며 필수다.
+9. **JavaScript 함수:** `cycleTheme()`, `toggleMenu()`, 최상위 변수는 `let`/`const`가 아니라 `var`를 쓴다
 
-**🔥 CRITICAL: Copy skeleton.md exactly → Replace "YOUR CONTENT HERE" with visualization content → Save file**
+**🔥 CRITICAL: skeleton.md를 그대로 복사 → "YOUR CONTENT HERE"를 시각화 내용으로 교체 → 파일 저장**
 
-## Core Principles
+## Core Principles — 핵심 원칙
 
-1. **Single-file HTML** — one `.html` file with inline CSS/JS. Opens in any browser, works offline, emails easily.
-2. **Light theme optimized** — modern designs prioritize light mode quality. Dark theme available via toggle.
-3. **Beautiful by default** — the first output should look professional with zero iteration.
-4. **Content-first** — the visualization serves the message. Never sacrifice clarity for aesthetics.
-5. **Responsive** — works on desktop, tablet, and mobile unless explicitly fixed-dimension (e.g., 16:9 slides).
-6. **Visual restraint** — Professional designs avoid decorative elements that add noise. No floating gradient orbs, rainbow borders, or ornamental animations.
+1. **단일 파일 HTML** — CSS/JS가 인라인으로 들어간 `.html` 파일 하나. 아무 브라우저에서나 열리고, 오프라인에서 동작하고, 메일로 보내기 쉽다.
+2. **라이트 테마 최적화** — 현대적 디자인은 라이트 모드의 품질을 우선한다. 다크 테마는 전환 버튼으로 제공한다.
+3. **기본값이 이미 아름답다** — 첫 결과물이 손보지 않아도 전문적으로 보여야 한다.
+4. **내용 우선** — 시각화는 메시지를 위해 존재한다. 미적인 이유로 명료함을 희생하지 않는다.
+5. **반응형** — 명시적으로 크기가 고정된 경우(예: 16:9 슬라이드)를 빼면 데스크톱·태블릿·모바일에서 모두 동작한다.
+6. **시각적 절제** — 전문적인 디자인은 소음이 되는 장식 요소를 피한다. 떠다니는 그라디언트 구, 무지개 테두리, 장식용 애니메이션은 쓰지 않는다.
 
-## Philosophy
+## Philosophy — 철학
 
-HTML is not a "website" — it's a visualization tool. Code is cheap. Everyone should feel empowered to visualize anything. This skill turns conversation context, URLs, articles, data, or raw ideas into something visual and digestible in seconds.
+HTML은 "웹사이트"가 아니라 시각화 도구다. 코드는 값싸다. 누구든 무엇이든 시각화할 수 있어야 한다. 이 스킬은 대화 맥락, URL, 기사, 데이터, 다듬어지지 않은 아이디어를 몇 초 만에 눈으로 보고 이해할 수 있는 것으로 바꾼다.
 
-Users invoke this **mid-conversation** with Claude Code. Use the full conversation context — whatever they've been discussing, any links they've shared, any data they've pasted — as source material. When given a URL, crawl it and extract the content to visualize.
+사용자는 Claude Code와 **대화 도중에** 이 스킬을 부른다. 지금까지 나눈 이야기, 공유된 링크, 붙여 넣은 데이터 등 대화 맥락 전체를 재료로 쓴다. URL이 주어지면 크롤링해서 내용을 뽑아 시각화한다.
 
-## Output Rules
+## Output Rules — 출력 규칙
 
-**MANDATORY FIRST STEP: Copy the complete skeleton from [references/skeleton.md](references/skeleton.md) — this includes all required elements (menu, theme system, CSS properties, semantic HTML, accessibility features). Never write HTML from scratch.**
+**MANDATORY FIRST STEP: [references/skeleton.md](references/skeleton.md)에서 스켈레톤 전체를 복사한다 — 여기에 필요한 요소가 전부 들어 있다 (메뉴, 테마 시스템, CSS 속성, 시맨틱 HTML, 접근성 기능). HTML을 맨바닥부터 쓰지 않는다 (Never).**
 
-- Write ONE `.html` file to `~/Downloads/` (or user-specified path)
-- Filename: descriptive kebab-case, e.g., `q4-revenue-dashboard.html`, `team-roadmap-deck.html`
-- Start with skeleton.md template, add your content to the `<!-- YOUR CONTENT HERE -->` section
-- All custom styles in `<style>` after the skeleton's base styles
-- **CDN libraries are encouraged** — use the best tool for the job:
-  - **Tailwind CSS** — `https://cdn.tailwindcss.com` (utility-first styling, use freely)
-  - **Chart.js** — `https://cdn.jsdelivr.net/npm/chart.js` (bar, line, pie, radar, doughnut)
-  - **D3.js** — `https://cdn.jsdelivr.net/npm/d3@7` (complex/custom data viz, force graphs)
-  - **Mermaid** — `https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js` (flowcharts, sequence diagrams)
-  - **Three.js** — 3D when appropriate
-  - **Reveal.js** — full-featured slide engine when needed. **CRITICAL:** Must set `html, body { height: 100%; overflow: hidden; }` and give the `.reveal` container `height: 100%`. Config MUST use numeric dimensions: `Reveal.initialize({ width: 1280, height: 720, center: true, controls: false })` — NEVER use string percentages like `'100%'` which cause zero-height viewport and blank slides. **MANDATORY: Disable Reveal.js default controls** (`controls: false`) — the default `<` `>` arrow overlays are ugly. Instead, add a custom minimal bottom nav bar:
+- `.html` 파일 하나를 `~/Downloads/`에 쓴다 (또는 사용자가 지정한 경로)
+- 파일명: 내용을 알 수 있는 kebab-case, 예: `q4-revenue-dashboard.html`, `team-roadmap-deck.html`
+- skeleton.md 템플릿에서 시작해 `<!-- YOUR CONTENT HERE -->` 구역에 내용을 넣는다
+- 맞춤 스타일은 전부 스켈레톤 기본 스타일 뒤의 `<style>`에 넣는다
+- **CDN 라이브러리를 적극 쓴다** — 목적에 가장 맞는 도구를 고른다:
+  - **Tailwind CSS** — `https://cdn.tailwindcss.com` (유틸리티 우선 스타일링, 자유롭게 쓴다)
+  - **Chart.js** — `https://cdn.jsdelivr.net/npm/chart.js` (막대, 선, 원, 레이더, 도넛)
+  - **D3.js** — `https://cdn.jsdelivr.net/npm/d3@7` (복잡하거나 맞춤형인 데이터 시각화, 포스 그래프)
+  - **Mermaid** — `https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js` (순서도, 시퀀스 다이어그램)
+  - **Three.js** — 필요할 때 3D에 쓴다
+  - **Reveal.js** — 본격적인 슬라이드 엔진이 필요할 때. **CRITICAL:** `html, body { height: 100%; overflow: hidden; }`를 설정하고 `.reveal` 컨테이너에 `height: 100%`를 줘야 한다. 설정에는 숫자 크기를 MUST 써야 한다: `Reveal.initialize({ width: 1280, height: 720, center: true, controls: false })` — `'100%'` 같은 문자열 퍼센트는 NEVER 쓰지 않는다. 뷰포트 높이가 0이 되어 슬라이드가 빈 화면으로 나온다. **MANDATORY: Reveal.js 기본 컨트롤을 끈다** (`controls: false`) — 기본으로 겹쳐 나오는 `<` `>` 화살표는 보기 흉하다. 대신 아래쪽에 간결한 맞춤 내비게이션 바를 넣는다:
 ```html
 <nav class="slide-nav" aria-label="Slide navigation">
   <button onclick="prevSlide()" aria-label="Previous slide">
@@ -181,158 +181,158 @@ Users invoke this **mid-conversation** with Claude Code. Use the full conversati
 .slide-nav button:hover { opacity: 0.7; }
 .slide-counter { font-size: 12px; color: var(--text-secondary); font-weight: 400; min-width: 40px; text-align: center; opacity: 0.35; }
 ```
-  - **Leaflet** — maps and geospatial data (`https://unpkg.com/leaflet@1.9/dist/leaflet.js` + CSS). **Required for geographic data** — never hand-draw SVG continent shapes. Use OpenStreetMap tiles or a minimal tile provider.
-- SVG for icons and simple graphics — never use external image URLs unless user provides them
-- Prefer CSS animations over JS when possible
+  - **Leaflet** — 지도와 지리 데이터 (`https://unpkg.com/leaflet@1.9/dist/leaflet.js` + CSS). **지리 데이터에는 필수** — SVG로 대륙 모양을 직접 그리지 않는다. OpenStreetMap 타일이나 간결한 타일 제공자를 쓴다.
+- 아이콘과 단순한 그래픽은 SVG로 — 사용자가 제공하지 않는 한 외부 이미지 URL은 쓰지 않는다
+- 가능하면 JS보다 CSS 애니메이션을 쓴다
 
-See [references/libraries.md](references/libraries.md) for detailed CDN links, patterns, and tips.
+자세한 CDN 링크, 패턴, 요령은 [references/libraries.md](references/libraries.md)를 보라.
 
-## Design System
+## Design System — 디자인 시스템
 
-Apply these defaults. They are opinionated and tested — override only when user requests it.
+여기 적힌 기본값을 적용한다. 의도적으로 정해졌고 검증된 값이므로, 사용자가 요청할 때만 덮어쓴다.
 
-**Full design system reference:** See [references/design-system.md](references/design-system.md) for complete typography, color, spacing, animation, accessibility, and visual polish specifications.
+**전체 디자인 시스템 참조:** 타이포그래피, 색, 간격, 애니메이션, 접근성, 시각적 완성도의 전체 규격은 [references/design-system.md](references/design-system.md)를 보라.
 
-Key highlights (consult reference for full details):
+주요 항목만 아래에 추린다 (자세한 내용은 참조 문서를 볼 것):
 
-### Design Notes
+### 설계 메모 (Design Notes)
 
-**Theming System (CRITICAL):**
-- Use **class-based theming ONLY** — `<html class="theme-dark">` or `<html class="theme-light">`
-- Theme toggle changes html class: `document.documentElement.className = 'theme-' + newTheme`
-- **Never use `data-theme` attributes** — the evaluation system expects class-based themes
-- **Required CSS custom properties:** `--bg, --surface, --text, --accent, --border` (minimum set for evaluation compatibility)
+**테마 시스템 (CRITICAL):**
+- **클래스 기반 테마만 (ONLY)** 쓴다 — `<html class="theme-dark">` 또는 `<html class="theme-light">`
+- 테마 전환은 html 클래스를 바꾼다: `document.documentElement.className = 'theme-' + newTheme`
+- **`data-theme` 속성을 쓰지 않는다 (Never)** — 평가 시스템은 클래스 기반 테마를 기대한다
+- **필수 CSS 사용자 정의 속성:** `--bg, --surface, --text, --accent, --border` (평가와 맞물리기 위한 최소 집합)
 
-**Typography:**
-- **Inter font mandatory** — `https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap`
-- **MANDATORY font weight hierarchy:** h1 ≥ 700, h2 ≥ 600, h3 ≥ 500, body = 400 (critical evaluation requirement)
-- -0.03em tracking on headings
-- **KOREAN TYPOGRAPHY EXCELLENCE:** For Korean content, use Noto Sans KR for body text with Inter for UI elements. Apply `line-height: 1.6` for Korean (vs 1.4 for Latin). Korean Medium weight maps to Western Regular (400). Include: `https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap`
+**타이포그래피:**
+- **Inter 글꼴 필수** — `https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap`
+- **MANDATORY 글꼴 굵기 위계:** h1 ≥ 700, h2 ≥ 600, h3 ≥ 500, body = 400 (평가의 핵심 요구사항)
+- 제목 자간 -0.03em
+- **KOREAN TYPOGRAPHY EXCELLENCE:** 한글 내용에는 본문에 Noto Sans KR을, UI 요소에는 Inter를 쓴다. 한글에는 `line-height: 1.6`을 적용한다 (라틴 문자는 1.4). 한글 Medium 굵기는 서구권 Regular(400)에 대응한다. 다음을 포함한다: `https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap`
 
-**Colors:**
-- Class-based theming only (NO @media prefers-color-scheme)
-- Dark: #0A0A0A bg, #EDEDED text. Light: #FAFAF9 bg, #0f172a text
-- See reference for full palette.
-- **Cards:** 8px radius, shadow-only hover (no translateY/scale), 1px solid var(--border). **GLASS MORPHISM UPGRADE:** For premium layouts, use glass containers with `backdrop-filter: blur(8px)`, semi-transparent backgrounds with CSS var `--glass-opacity: 0.08`, and elevated shadows. Apply selectively to hero sections or primary cards for sophisticated layering.
-- **Animations:** CSS @keyframes for page-load (.animate + .delay-N), data-reveal + IntersectionObserver for scroll, data-count for counters. Content visible by default. **Above-fold content must NEVER use data-reveal** — use `.animate` classes instead. Use `data-reveal` sparingly (max 3-4 sections) for below-fold content only.
-- **Accessibility:** Skip-to-content, aria-labels, landmark roles, :focus-visible, sr-only for chart data. See reference for full checklist.
-- **Icons:** Inline SVG only, never emojis. Lucide-style 24x24, stroke-based.
-- **Chart.js (MANDATORY PATTERNS):** `Chart.defaults.animation = false;` at top of script, destroy+recreate on theme toggle, explicit rgba() colors, tooltips always enabled, `maintainAspectRatio: false` on all chart options. **Accessibility: Wrap canvas in div with `role="img"` and descriptive `aria-label`**. **Guard pattern:** Use `chartsBuilt` flag — `onThemeChange()` must check `if (chartsBuilt)` before rebuilding. **Chart containers need min-height: 360px for substantial presence.**
-- **Chart.js customization:** Apply professional styling beyond defaults — custom padding (`layout: { padding: 30 }`), remove excessive gridlines (opacity ≤ 0.04), use rounded corners (`borderRadius: 4`), thoughtful color palettes that match theme. Chart containers need 12px border radius, 40px internal padding, and 360px minimum height for substantial presence. Avoid library defaults that look auto-generated.
-- **Typography hierarchy:** MANDATORY descending font-size scale: h1 > h2 > h3 > body text. **REQUIRED MINIMUMS:** h1: ≥3rem (48px), h2: ≥2rem (32px), h3: ≥1.5rem (24px), body: 1rem (16px). **EVALUATION CRITICAL:** Each heading level must be visibly smaller than the previous level with at least 0.5rem difference between levels. Example valid hierarchy: h1: 3rem, h2: 2.5rem, h3: 1.5rem, body: 1rem.
-- **Visual restraint:** No floating orbs, gradient borders, gradient text on headings, scale transforms, glow effects, decorative animations.
-- **Stat value colors:** Colored numbers must have semantic meaning (green/positive = good metric, red/negative = bad metric, accent = primary/neutral highlight). If no clear semantic meaning, use `var(--text)`. Never randomly colorize stat values. **For KPI grids with 4+ cards:** use at most 2 accent colors for values — `var(--accent)` for the single most important metric and `var(--text)` for all others. Reserve `var(--positive)`/`var(--negative)` only for delta indicators (arrows, percentages), not the main card value.
-- **Background atmosphere:** One subtle technique per file (radial gradient, noise texture, or dot grid). **Adapt the atmosphere to the content** — a game dashboard should feel different from a financial report. Adjust accent colors and gradient hues to match the subject matter.
-- **AI-NATIVE INFORMATION ARCHITECTURE:** Modern designs prioritize insight-driven hierarchy. Place the most important metric/insight above the fold. Use progressive revelation patterns — show key data immediately, provide drill-down on hover/click. Contextual actions should appear near relevant content. Lead with conclusions, support with details.
-- **Entrance animations mandatory:** fadeInUp + stagger on all cards/sections.
-- **Single-screen posters:** overflow:hidden + justify-content:space-between on fixed-dimension body. See reference for 9:16, 1:1, 4:5 sizing.
+**색:**
+- 클래스 기반 테마만 (NO @media prefers-color-scheme)
+- 다크: 배경 #0A0A0A, 글자 #EDEDED. 라이트: 배경 #FAFAF9, 글자 #0f172a
+- 전체 팔레트는 참조 문서를 볼 것.
+- **카드:** 모서리 8px, 그림자만 바뀌는 호버 (translateY/scale 없이), `1px solid var(--border)`. **GLASS MORPHISM UPGRADE:** 고급스러운 레이아웃에는 `backdrop-filter: blur(8px)`를 쓴 유리 컨테이너, CSS 변수 `--glass-opacity: 0.08`을 쓴 반투명 배경, 띄운 그림자를 쓴다. 대표 영역이나 주요 카드에만 선별적으로 적용해 정교한 층을 만든다.
+- **애니메이션:** 페이지 로드에는 CSS @keyframes (.animate + .delay-N), 스크롤에는 data-reveal + IntersectionObserver, 카운터에는 data-count. 내용은 기본적으로 보인다. **첫 화면에 보이는 내용에는 data-reveal을 NEVER 쓰지 않는다** — 대신 `.animate` 클래스를 쓴다. `data-reveal`은 첫 화면 아래 내용에만 아껴서 쓴다 (최대 3~4개 섹션).
+- **접근성:** Skip-to-content, aria-label, 랜드마크 역할, :focus-visible, 차트 데이터용 sr-only. 전체 점검 목록은 참조 문서를 볼 것.
+- **아이콘:** 인라인 SVG만, 이모지는 절대 쓰지 않는다. Lucide 스타일 24x24, 선 기반.
+- **Chart.js (MANDATORY PATTERNS):** 스크립트 맨 위에 `Chart.defaults.animation = false;`, 테마 전환 시 파기 후 재생성, 명시적인 rgba() 색, 툴팁 항상 켜기, 모든 차트 옵션에 `maintainAspectRatio: false`. **접근성: canvas를 `role="img"`와 설명이 담긴 `aria-label`을 가진 div로 감싼다**. **가드 패턴:** `chartsBuilt` 플래그를 쓴다 — `onThemeChange()`는 다시 만들기 전에 `if (chartsBuilt)`를 확인해야 한다. **차트 컨테이너는 존재감을 위해 min-height: 360px가 필요하다.**
+- **Chart.js 맞춤 설정:** 기본값을 넘어 전문적인 스타일을 적용한다 — 여백 지정 (`layout: { padding: 30 }`), 과한 격자선 제거 (불투명도 0.04 이하), 둥근 모서리 (`borderRadius: 4`), 테마와 어울리는 색 팔레트. 차트 컨테이너는 존재감을 위해 모서리 반지름 12px, 내부 여백 40px, 최소 높이 360px가 필요하다. 자동 생성된 티가 나는 라이브러리 기본값은 피한다.
+- **타이포그래피 위계:** MANDATORY 글꼴 크기가 내림차순이어야 한다: h1 > h2 > h3 > 본문. **REQUIRED MINIMUMS:** h1: 3rem 이상 (48px), h2: 2rem 이상 (32px), h3: 1.5rem 이상 (24px), body: 1rem (16px). **EVALUATION CRITICAL:** 각 제목 단계는 앞 단계보다 눈에 띄게 작아야 하며 단계 간 차이가 최소 0.5rem이어야 한다. 유효한 위계 예시: h1: 3rem, h2: 2.5rem, h3: 1.5rem, body: 1rem.
+- **시각적 절제:** 떠다니는 구, 그라디언트 테두리, 제목의 그라디언트 텍스트, 확대 변형, 발광 효과, 장식용 애니메이션을 쓰지 않는다.
+- **통계 수치의 색:** 색을 입힌 숫자는 의미를 담아야 한다 (초록/positive = 좋은 지표, 빨강/negative = 나쁜 지표, accent = 주요·중립 강조). 분명한 의미가 없으면 `var(--text)`를 쓴다. 통계 수치에 임의로 색을 입히지 않는다 (Never). **카드 4개 이상인 KPI 그리드:** 수치에 강조색을 최대 2개만 쓴다 — 가장 중요한 지표 하나에 `var(--accent)`, 나머지는 전부 `var(--text)`. `var(--positive)`/`var(--negative)`는 변화량 표시(화살표, 퍼센트)에만 쓰고 카드의 주요 수치에는 쓰지 않는다.
+- **배경 분위기:** 파일당 은은한 기법 하나만 (방사형 그라디언트, 노이즈 질감, 점 격자 중 하나). **분위기를 내용에 맞춘다** — 게임 대시보드는 재무 보고서와 다른 느낌이어야 한다. 강조색과 그라디언트 색조를 주제에 맞게 조정한다.
+- **AI-NATIVE INFORMATION ARCHITECTURE:** 현대적 디자인은 통찰 중심의 위계를 우선한다. 가장 중요한 지표·통찰을 첫 화면에 둔다. 단계적 공개 패턴을 쓴다 — 핵심 데이터는 바로 보여 주고, 호버·클릭으로 상세를 제공한다. 맥락에 맞는 동작은 관련 내용 가까이에 둔다. 결론을 먼저 말하고 세부로 뒷받침한다.
+- **진입 애니메이션 필수:** 모든 카드·섹션에 fadeInUp + 시차.
+- **단일 화면 포스터:** 크기가 고정된 body에 overflow:hidden + justify-content:space-between. 9:16, 1:1, 4:5 크기는 참조 문서를 볼 것.
 
 
-## Critical Implementation Requirements
+## Critical Implementation Requirements — 구현 필수 요구사항
 
-**MANDATORY: Use the skeleton template** — see [references/skeleton.md](references/skeleton.md) for complete copy-paste HTML with all requirements built-in.
+**MANDATORY: 스켈레톤 템플릿을 쓴다** — 요구사항이 전부 내장된 복사·붙여넣기용 HTML은 [references/skeleton.md](references/skeleton.md)를 보라.
 
-**JavaScript Implementation Rules:**
-- **All top-level variables MUST use `var`** (not `let`/`const`) to avoid TDZ errors with function hoisting
-- **Theme toggle MUST use `cycleTheme()` function** — this is built into the skeleton with proper `applyTheme()` implementation
-- **Menu MUST use `toggleMenu()` with outside-click handling** — skeleton includes automatic dropdown closure on outside clicks and escape key
-- **Chart rebuilding:** Define `function onThemeChange() {}` for chart re-rendering on theme changes
-- **Mobile responsive:** Test all layouts at 375px viewport width — use CSS Grid `minmax(320px, 1fr)` for card grids
+**JavaScript 구현 규칙:**
+- **최상위 변수는 전부 `var`를 MUST 써야 한다** (`let`/`const`가 아니다). 함수 호이스팅으로 인한 TDZ 오류를 피하기 위함
+- **테마 전환은 `cycleTheme()` 함수를 MUST 써야 한다** — 스켈레톤에 올바른 `applyTheme()` 구현과 함께 들어 있다
+- **메뉴는 바깥 클릭 처리가 된 `toggleMenu()`를 MUST 써야 한다** — 스켈레톤에 바깥 클릭과 Escape 키로 드롭다운이 닫히는 처리가 들어 있다
+- **차트 재생성:** 테마 변경 시 차트를 다시 그리도록 `function onThemeChange() {}`를 정의한다
+- **모바일 반응형:** 모든 레이아웃을 375px 뷰포트 너비에서 확인한다 — 카드 그리드에는 CSS Grid `minmax(320px, 1fr)`를 쓴다
 
-**Evaluation Checkers Expect:**
-- `cycleTheme()` function exists and works (changes html class)
-- `toggleMenu()` function exists and closes on outside clicks  
-- Top-level JS variables are declared with `var`
-- No horizontal overflow at 375px width
-- Interactive elements beyond basic menu (hover states, chart interactions, etc.)
+**평가 검사기가 확인하는 것:**
+- `cycleTheme()` 함수가 있고 동작한다 (html 클래스를 바꾼다)
+- `toggleMenu()` 함수가 있고 바깥 클릭 시 닫힌다  
+- 최상위 JS 변수가 `var`로 선언되어 있다
+- 375px 너비에서 가로 오버플로가 없다
+- 기본 메뉴 외의 인터랙티브 요소가 있다 (호버 상태, 차트 인터랙션 등)
 
-**The skeleton template automatically provides all required functionality. ALWAYS start from skeleton.md to avoid implementation errors.**
+**스켈레톤 템플릿에 필요한 기능이 모두 들어 있다. 구현 오류를 피하려면 ALWAYS skeleton.md에서 시작한다.**
 
-## Semantic HTML Requirements
+## Semantic HTML Requirements — 시맨틱 HTML 요구사항
 
-All visualizations must include these semantic elements:
+모든 시각화는 아래 시맨틱 요소를 포함해야 한다:
 
-**Required Structure:**
-- `<main>` element containing primary content
-- `<section>` elements for major content blocks
-- Landmark roles (`role="banner"`, `role="main"`, `role="complementary"`) OR skip-to-content link
-- Chart accessibility: `role="img"` and `aria-label` on chart containers
+**필수 구조:**
+- 주요 내용을 담는 `<main>` 요소
+- 주요 내용 블록마다 `<section>` 요소
+- 랜드마크 역할 (`role="banner"`, `role="main"`, `role="complementary"`) 또는 skip-to-content link
+- 차트 접근성: 차트 컨테이너에 `role="img"`와 `aria-label`
 
-**Additional Requirements:**
-- `@media print` styles defined
-- `@media (prefers-reduced-motion)` styles for accessibility
-- Adequate spacing between sections (≥48px)
-- Hover states for interactive elements
+**추가 요구사항:**
+- `@media print` 스타일 정의
+- 접근성을 위한 `@media (prefers-reduced-motion)` 스타일
+- 섹션 간 충분한 간격 (48px 이상)
+- 인터랙티브 요소의 호버 상태
 
-## Visualization Types
+## Visualization Types — 시각화 형식
 
-Choose the right format. See [references/types.md](references/types.md) for detailed patterns.
+알맞은 형식을 고른다. 자세한 패턴은 [references/types.md](references/types.md)를 보라.
 
-| Type | When to Use | Key Feature |
+| Type | 언제 쓰는가 | 핵심 특징 |
 |------|-------------|-------------|
-| **Slide Deck** | Presentations, pitches | 16:9, keyboard nav, transitions |
-| **Infographic** | Data summaries, visual stories | Long scroll, big numbers, sections |
-| **Dashboard** | Metrics, KPIs | Grid of cards + charts |
-| **Flowchart** | Processes, architecture | Mermaid or SVG diagrams |
-| **Timeline** | Chronological events | Alternating left/right, scroll-triggered |
-| **Comparison** | Side-by-side analysis | Feature matrix, pros/cons |
-| **Data Viz** | Charts, data stories | Chart.js or D3 |
-| **One-Pager** | Summaries, briefs | Single viewport, print-friendly |
-| **Mind Map** | Concept relationships | Radial SVG layout |
-| **Kanban** | Status tracking | Column-based cards |
-| **Carousel Cards** | Social media (IG/LinkedIn) | 1080×1080 per card, swipeable, bold text |
-| **Event Poster** | Conferences, meetups, webinars | Portrait A4/letter, bold headline, date/venue |
-| **Resume/CV** | Job applications | One-page, two-column, print-optimized |
-| **Banner/Header** | Email, blog, social cover | 1200×630 or 1500×500, centered text on visual bg |
-| **Quote Card** | Social proof, testimonials | Portrait/square, large quote, attribution |
-| **Process Guide** | How-to, step-by-step | Numbered steps, icons, clear flow |
-| **Status Report** | Executive updates | KPIs + progress bars + highlights, one-page |
-| **Org Chart** | Team structure | Hierarchical tree, photos/avatars, roles |
-| **Data Story** | Narrative + data | Scrollytelling, charts woven with narrative text |
-| **Product Card** | Feature highlight, launch | Hero image area, feature pills, CTA |
+| **Slide Deck** | 발표, 피치 | 16:9, 키보드 내비게이션, 전환 효과 |
+| **Infographic** | 데이터 요약, 시각적 이야기 | 긴 스크롤, 큰 숫자, 구역 나누기 |
+| **Dashboard** | 지표, KPI | 카드 격자 + 차트 |
+| **Flowchart** | 프로세스, 아키텍처 | Mermaid 또는 SVG 다이어그램 |
+| **Timeline** | 시간순 사건 | 좌우 교차 배치, 스크롤 연동 |
+| **Comparison** | 나란히 놓고 분석 | 기능 매트릭스, 장단점 |
+| **Data Viz** | 차트, 데이터 이야기 | Chart.js 또는 D3 |
+| **One-Pager** | 요약, 브리프 | 화면 한 장, 인쇄 친화적 |
+| **Mind Map** | 개념 관계 | 방사형 SVG 배치 |
+| **Kanban** | 상태 추적 | 열 기반 카드 |
+| **Carousel Cards** | 소셜미디어 (IG/LinkedIn) | 카드당 1080×1080, 스와이프, 굵은 글씨 |
+| **Event Poster** | 컨퍼런스, 모임, 웨비나 | 세로 A4/레터, 굵은 제목, 날짜·장소 |
+| **Resume/CV** | 입사 지원 | 한 장, 2단, 인쇄 최적화 |
+| **Banner/Header** | 이메일, 블로그, 소셜 커버 | 1200×630 또는 1500×500, 시각적 배경 위 가운데 글자 |
+| **Quote Card** | 사회적 증거, 후기 | 세로·정사각형, 큰 인용문, 출처 |
+| **Process Guide** | 방법 안내, 단계별 | 번호가 붙은 단계, 아이콘, 명확한 흐름 |
+| **Status Report** | 경영진 보고 | KPI + 진행 바 + 주요 사항, 한 장 |
+| **Org Chart** | 조직 구조 | 계층 트리, 사진·아바타, 직책 |
+| **Data Story** | 서사 + 데이터 | 스크롤리텔링, 서술 사이에 차트를 엮음 |
+| **Product Card** | 기능 소개, 출시 | 대표 이미지 영역, 기능 칩, 행동 유도 |
 
-### Carousel Card Rules
+### Carousel Card Rules — 캐러셀 카드 규칙
 
-Carousel cards are huge for social media. Get these right:
+캐러셀 카드는 소셜미디어에서 비중이 크다. 아래를 지킨다:
 
-- **Square format** — `1080×1080px` (or configurable via CSS var)
-- **One idea per card** — bold headline + 1-2 supporting points max
-- **Swipe nav** — arrows + dots + touch swipe + keyboard
-- **Card counter** — "3 / 8" visible
-- **Download all** — PNG export of individual cards or full set
-- **Typography dominates** — headline at 2.5-4rem, minimal body text
-- **Color-coded** — each card can have a subtle accent shift
-- **Print layout** — grid of all cards for printing
-- **Max 10 cards** — keep it focused
+- **정사각형 형식** — `1080×1080px` (또는 CSS 변수로 조정 가능하게)
+- **카드 하나에 아이디어 하나** — 굵은 제목 + 뒷받침 항목 최대 1~2개
+- **스와이프 내비게이션** — 화살표 + 점 + 터치 스와이프 + 키보드
+- **카드 카운터** — "3 / 8"이 보이게
+- **전체 내려받기** — 개별 카드 또는 전체 세트를 PNG로 내보내기
+- **타이포그래피가 주인공** — 제목 2.5~4rem, 본문은 최소로
+- **색 구분** — 카드마다 강조색을 은은하게 달리할 수 있다
+- **인쇄 레이아웃** — 인쇄용으로 전체 카드를 격자에 배치
+- **최대 10장** — 초점을 잃지 않게
 
-### Event Poster Rules
+### Event Poster Rules — 이벤트 포스터 규칙
 
-- **Portrait orientation** — A4/letter ratio or square
-- **Visual hierarchy** — Event name (largest) → Date/Time → Location → Description → CTA
-- **Bold headline** — 3-5rem, max 6 words
-- **Date/time prominent** — styled as a badge or highlighted block
-- **QR code area** — placeholder box for registration link
-- **Print-first** — looks great printed, dark or light theme
+- **세로 방향** — A4/레터 비율 또는 정사각형
+- **시각적 위계** — 행사명(가장 크게) → 날짜·시각 → 장소 → 설명 → 행동 유도
+- **굵은 제목** — 3~5rem, 최대 6단어
+- **날짜·시각을 눈에 띄게** — 배지나 강조 블록으로 처리
+- **QR 코드 자리** — 등록 링크용 자리표시자 상자
+- **인쇄 우선** — 인쇄했을 때 보기 좋아야 하고, 다크·라이트 모두
 
-### Quote Card Rules
+### Quote Card Rules — 인용 카드 규칙
 
-- **Large quotation marks** — decorative " " in accent color, oversized
-- **Quote text** — 1.5-2.5rem, serif or italic weight for contrast
-- **Attribution** — name, title, company below quote
-- **Square or portrait** — optimized for social sharing
-- **Minimal design** — quote is the hero, everything else is subtle
+- **큰 따옴표** — 강조색으로 크게 넣은 장식용 " "
+- **인용문** — 1.5~2.5rem, 대비를 위해 세리프나 이탤릭
+- **출처 표기** — 인용문 아래에 이름, 직함, 회사
+- **정사각형 또는 세로형** — 소셜 공유에 맞춰 최적화
+- **최소한의 디자인** — 인용문이 주인공이고 나머지는 은은하게
 
-### Single-Screen / Mobile-Fit Rules (Posters, Cards, One-Pagers)
+### Single-Screen / Mobile-Fit Rules — 단일 화면·모바일 맞춤 규칙 (포스터, 카드, 한 장 요약)
 
-When the user asks for something that fits "one screen," "phone screen," "9:16," or "mobile-fit," create a **fixed-dimension single-viewport** visualization — NOT a scrolling page.
+사용자가 "한 화면", "휴대폰 화면", "9:16", "모바일에 맞게"를 요청하면 스크롤하는 페이지가 아니라 (NOT) **크기가 고정된 단일 뷰포트** 시각화를 만든다.
 
-**Dimensions:**
-- **9:16 portrait (phone):** `width: 1080px; height: 1920px;` — standard Instagram Story / phone screen
-- **1:1 square:** `width: 1080px; height: 1080px;` — Instagram post
-- **4:5 portrait:** `width: 1080px; height: 1350px;` — Instagram portrait post
-- **16:9 landscape:** `width: 1920px; height: 1080px;` — presentation slide
+**크기:**
+- **9:16 세로 (휴대폰):** `width: 1080px; height: 1920px;` — 표준 인스타그램 스토리 / 휴대폰 화면
+- **1:1 정사각형:** `width: 1080px; height: 1080px;` — 인스타그램 게시물
+- **4:5 세로:** `width: 1080px; height: 1350px;` — 인스타그램 세로 게시물
+- **16:9 가로:** `width: 1920px; height: 1080px;` — 발표 슬라이드
 
-**Critical CSS pattern:**
+**핵심 CSS 패턴:**
 ```css
 body {
   width: 1080px; height: 1920px; /* or chosen ratio */
@@ -344,65 +344,65 @@ body {
 .poster-footer { padding: 16px 48px 36px; }
 ```
 
-**Layout rules:**
-- `overflow: hidden` on body — this is what makes it "one screen." Non-negotiable.
-- `justify-content: space-between` on the main container — distributes sections evenly with NO dead gaps.
-- **Use `flex: 1` on the main content area** (grid, body, etc.) so it expands to fill ALL remaining space between header and footer. Never use fixed `height` values that leave dead space.
-- Wrap each logical section in a `<div>` so flexbox distributes them as blocks.
-- **Zero dead space rule:** The poster canvas should be 100% utilized. No large empty margins at bottom or sides. If there's visible empty space, either expand content to fill it or reduce padding. Content should feel like it "fits" the frame perfectly.
-- **Test mentally:** count your sections, divide 1920px among them. Each section gets ~200-300px. If content is sparse, make elements bigger (larger fonts, more padding, bigger icons).
-- **No hamburger menu** for fixed-dimension posters — it wastes space and the poster is meant for screenshot/export, not interaction.
+**레이아웃 규칙:**
+- body에 `overflow: hidden` — 이것이 "한 화면"을 만드는 핵심이다. 협상 불가.
+- 주 컨테이너에 `justify-content: space-between` — 빈 틈 NO 없이 섹션을 고르게 분배한다.
+- **주 내용 영역에 `flex: 1`을 쓴다** (그리드, 본문 등). 그래야 헤더와 푸터 사이의 남은 공간을 ALL 전부 채운다. 빈 공간을 남기는 고정 `height` 값은 쓰지 않는다 (Never).
+- 논리적 구역마다 `<div>`로 감싸서 flexbox가 블록 단위로 분배하게 한다.
+- **빈 공간 0 규칙:** 포스터 캔버스를 100% 활용해야 한다. 아래나 옆에 큰 빈 여백이 없어야 한다. 눈에 띄는 빈 공간이 있으면 내용을 늘려 채우거나 여백을 줄인다. 내용이 틀에 꼭 맞는 느낌이어야 한다.
+- **머릿속으로 확인:** 섹션 수를 세고 1920px를 나눠 본다. 섹션당 약 200~300px이 된다. 내용이 빈약하면 요소를 키운다 (글꼴 크게, 여백 늘리기, 아이콘 크게).
+- 크기가 고정된 포스터에는 **햄버거 메뉴를 넣지 않는다** — 공간을 낭비하고, 포스터는 인터랙션이 아니라 스크린샷·내보내기용이다.
 
-**Content density for 9:16:**
-- Hero (title + subtitle): ~25% of height
-- 2-3 content sections: ~55% of height
-- Footer/CTA: ~10% of height
-- Breathing room (gaps): ~10% of height
-- **If it looks empty, your content is too small.** Scale up fonts, add more grid items, use larger icons.
+**9:16의 내용 밀도:**
+- 대표 영역 (제목 + 부제): 높이의 약 25%
+- 본문 섹션 2~3개: 높이의 약 55%
+- 푸터·행동 유도: 높이의 약 10%
+- 숨 쉴 공간 (간격): 높이의 약 10%
+- **비어 보인다면 내용이 너무 작은 것이다.** 글꼴을 키우고, 격자 항목을 늘리고, 아이콘을 크게 한다.
 
-**Font sizing for 1080px-wide posters:**
-- Hero h1: `68-80px` (bigger than web — this is a poster)
-- Section labels: `15-18px` uppercase, letter-spacing `0.06em`
-- Card text: `16-20px`
-- Body: `20-24px`
+**너비 1080px 포스터의 글꼴 크기:**
+- 대표 h1: `68-80px` (웹보다 크게 — 이건 포스터다)
+- 섹션 라벨: `15-18px` 대문자, letter-spacing `0.06em`
+- 카드 글자: `16-20px`
+- 본문: `20-24px`
 
-**Common mistake:** Making a scrolling page and screenshotting it. That's NOT a poster — it's a webpage screenshot. A poster is a fixed canvas where every pixel is intentional.
+**흔한 실수:** 스크롤하는 페이지를 만들고 스크린샷을 찍는 것. 그건 포스터가 NOT 아니라 웹페이지 스크린샷이다. 포스터는 픽셀 하나하나가 의도된 고정 캔버스다.
 
-## Slide Deck Rules
+## Slide Deck Rules — 슬라이드 덱 규칙
 
-Slides are the most common request. Get these right:
+슬라이드는 가장 흔한 요청이다. 아래를 지킨다:
 
-- **16:9 aspect ratio** — `100vw × 100vh`, content centered
-- **Responsive breakpoints** — Use `clamp()` and container queries for mobile-friendly slides:
+- **16:9 화면비** — `100vw × 100vh`, 내용은 가운데 정렬
+- **반응형 분기점** — 모바일에서도 쓸 수 있게 `clamp()`와 컨테이너 쿼리를 쓴다:
   ```css
   .slide-container { container-type: inline-size; }
   .slide-title { font-size: clamp(2rem, 8vw, 4rem); }
   @container (width < 768px) { .slide-content { padding: 1rem; } }
   ```
-- **One idea per slide** — if you need a second thought, make a second slide
-- **Max 40 words per slide** — more than that, split or use visuals
-- **Headlines max 6 words** — short, punchy, memorable
-- **Big number + small label** for stat slides — number at 3-5rem, label at 0.875rem
-- **Keyboard nav** — ← → arrows, Space, Enter
-- **Touch nav** — swipe left/right
-- **Click nav** — left third = prev, right two-thirds = next
-- **Progress bar** — thin gradient bar at top showing position
-- **Slide counter** — "3 / 12" in bottom nav
-- **Mobile navigation prominence** — Ensure navigation controls are clearly visible on mobile. Use larger touch targets (min 44px), contrasting colors, and backdrop-blur for floating nav
-- **Smooth transitions** — `transform: translateX()` with 500ms cubic-bezier
-- **Entrance animations** — elements within slides animate in with staggered delays
-- **Speaker notes** — `data-notes` attribute, visible in print only
+- **슬라이드 하나에 아이디어 하나** — 생각이 하나 더 필요하면 슬라이드를 하나 더 만든다
+- **슬라이드당 최대 40단어** — 그보다 많으면 나누거나 시각물을 쓴다
+- **제목은 최대 6단어** — 짧고 강하고 기억에 남게
+- 통계 슬라이드는 **큰 숫자 + 작은 라벨** — 숫자 3~5rem, 라벨 0.875rem
+- **키보드 내비게이션** — ← → 방향키, Space, Enter
+- **터치 내비게이션** — 좌우 스와이프
+- **클릭 내비게이션** — 왼쪽 1/3 = 이전, 오른쪽 2/3 = 다음
+- **진행 바** — 위쪽에 위치를 보여 주는 가는 그라디언트 바
+- **슬라이드 카운터** — 아래 내비게이션에 "3 / 12"
+- **모바일 내비게이션의 존재감** — 모바일에서 내비게이션 컨트롤이 분명히 보이게 한다. 터치 대상을 크게 잡고(최소 44px), 대비되는 색을 쓰고, 떠 있는 내비게이션에는 backdrop-blur를 쓴다
+- **부드러운 전환** — `transform: translateX()`에 500ms cubic-bezier
+- **진입 애니메이션** — 슬라이드 안 요소들이 시차를 두고 등장한다
+- **발표자 노트** — `data-notes` 속성, 인쇄할 때만 보인다
 
-### High-Impact Presentation Slides (Business Context)
-For investor presentations, startup pitches, and executive briefings:
-- **Hero slide visual weight** — Use stronger gradients, larger typography (4-6rem), and compelling statistics prominently displayed
-- **Value proposition clarity** — Hero should communicate core value in under 5 seconds
-- **Professional credibility** — Ensure typography, spacing, and color choices match enterprise/investment-grade expectations
-- **Data storytelling** — Each chart slide should have clear insight callouts, not just raw data visualization
+### High-Impact Presentation Slides — 임팩트가 큰 발표 슬라이드 (비즈니스 맥락)
+투자 발표, 스타트업 피치, 경영진 브리핑에서는:
+- **첫 슬라이드의 시각적 무게** — 더 강한 그라디언트, 더 큰 타이포그래피(4~6rem), 설득력 있는 통계를 눈에 띄게 배치한다
+- **가치 제안의 명료함** — 첫 슬라이드가 5초 안에 핵심 가치를 전달해야 한다
+- **전문적인 신뢰감** — 타이포그래피, 간격, 색 선택이 기업·투자 수준의 기대치에 맞아야 한다
+- **데이터로 이야기하기** — 차트 슬라이드마다 원시 데이터 나열이 아니라 분명한 통찰을 짚어 준다
 
-### Theme-Aware Slide Gradients (CRITICAL)
+### Theme-Aware Slide Gradients — 테마에 반응하는 슬라이드 그라디언트 (CRITICAL)
 
-Slide decks MUST look visually distinct in dark vs light themes. Gradient backgrounds must change:
+슬라이드 덱은 다크와 라이트에서 시각적으로 확실히 달라 보여야 한다 (MUST). 그라디언트 배경이 바뀌어야 한다:
 
 ```css
 /* Dark theme: deep, saturated gradients */
@@ -414,25 +414,25 @@ Slide decks MUST look visually distinct in dark vs light themes. Gradient backgr
 .theme-light .slide-content { background: var(--bg); }
 ```
 
-Rules:
-- Title/section slides: use theme-specific gradient pairs (dark=deep+saturated, light=soft+pastel). **Choose gradient colors that evoke the content's subject matter** — a tech pitch uses cool blues, a game pitch uses vibrant purples/cyans, a healthcare deck uses calming greens/teals.
-- Content slides: use `var(--bg)` or `var(--surface)` — NOT hardcoded dark backgrounds
-- Data cards on slides: use `var(--surface)` with `var(--border)` — they auto-adapt
-- Never hardcode `#1a1a2e` or similar dark colors on slide content — use CSS variables
-- Test: toggle theme and every slide should look intentionally designed for that mode
+규칙:
+- 제목·구분 슬라이드: 테마별 그라디언트 짝을 쓴다 (다크=깊고 진하게, 라이트=부드럽고 파스텔로). **내용의 주제를 연상시키는 그라디언트 색을 고른다** — 기술 피치는 차가운 파랑, 게임 피치는 선명한 보라·청록, 헬스케어 덱은 차분한 초록·틸.
+- 본문 슬라이드: `var(--bg)` 또는 `var(--surface)`를 쓴다 — 하드코딩한 어두운 배경은 NOT 안 된다
+- 슬라이드 위 데이터 카드: `var(--surface)`와 `var(--border)`를 쓴다 — 자동으로 맞춰진다
+- 슬라이드 내용에 `#1a1a2e` 같은 어두운 색을 하드코딩하지 않는다 (Never) — CSS 변수를 쓴다
+- 확인 방법: 테마를 전환했을 때 모든 슬라이드가 그 모드에 맞게 의도적으로 설계된 것처럼 보여야 한다
 
-### Slide Types
-1. **Title** — theme-aware gradient background, big headline, subtitle. Center aligned.
-2. **Content** — heading + bullets OR heading + visual. Never text-heavy.
-3. **Section divider** — full-bleed accent color, section title only.
-4. **Stat** — one big number, one label, one insight sentence.
-5. **Chart** — Chart.js visualization with title and key takeaway. MUST use chart-container wrapper class.
-6. **Two-column** — split layout for comparisons, text+visual.
-7. **Quote** — large pull quote with attribution.
-8. **Closing** — CTA, contact info, or summary + social links.
+### Slide Types — 슬라이드 유형
+1. **Title** — 테마에 반응하는 그라디언트 배경, 큰 제목, 부제. 가운데 정렬.
+2. **Content** — 제목 + 항목 또는 제목 + 시각물. 글이 많아서는 안 된다 (Never).
+3. **Section divider** — 화면을 꽉 채운 강조색에 구역 제목만.
+4. **Stat** — 큰 숫자 하나, 라벨 하나, 통찰 문장 하나.
+5. **Chart** — 제목과 핵심 요지가 있는 Chart.js 시각화. chart-container 래퍼 클래스를 MUST 써야 한다.
+6. **Two-column** — 비교나 글+시각물을 위한 분할 레이아웃.
+7. **Quote** — 출처가 붙은 큰 인용문.
+8. **Closing** — 행동 유도, 연락처, 또는 요약 + 소셜 링크.
 
-### Slide Deck Chart Requirements (CRITICAL)
-Chart slides in presentations MUST follow the same container standards as dashboards:
+### Slide Deck Chart Requirements — 슬라이드 덱 차트 요구사항 (CRITICAL)
+발표의 차트 슬라이드는 대시보드와 같은 컨테이너 기준을 따라야 한다 (MUST):
 ```html
 <div class="chart-slide-container">
   <h2>Chart Title</h2>
@@ -441,57 +441,57 @@ Chart slides in presentations MUST follow the same container standards as dashbo
   </div>
 </div>
 ```
-- **Use chart-container class** — maintains evaluation consistency across formats
-- **Minimum height 400px** for slide charts — larger than dashboard charts for presentation readability
-- **maintainAspectRatio: false** — required for proper sizing in slide layouts
+- **chart-container 클래스를 쓴다** — 형식이 달라도 평가 기준이 일관되게 유지된다
+- 슬라이드 차트는 **최소 높이 400px** — 발표에서 읽히도록 대시보드 차트보다 크게
+- **maintainAspectRatio: false** — 슬라이드 레이아웃에서 크기가 제대로 잡히려면 필요하다
 
-## Data Ingestion
+## Data Ingestion — 데이터 받아들이기
 
-When user provides data:
-- **CSV** — parse with JS, auto-detect headers, render appropriate chart type
-- **JSON** — extract keys as labels, values as data, nested objects as series
-- **Tables** — convert to visual comparison or chart
-- **Numbers in text** — extract and highlight as stat cards
-- **URLs** — crawl, extract key info, visualize as summary
+사용자가 데이터를 줄 때:
+- **CSV** — JS로 파싱하고, 헤더를 자동 감지하고, 알맞은 차트 유형으로 그린다
+- **JSON** — 키를 라벨로, 값을 데이터로, 중첩 객체를 계열로 뽑는다
+- **표** — 시각적 비교나 차트로 바꾼다
+- **글 속의 숫자** — 뽑아내서 통계 카드로 강조한다
+- **URL** — 크롤링하고, 핵심 정보를 뽑아, 요약으로 시각화한다
 
-## Context Awareness
+## Context Awareness — 맥락 활용
 
-This skill is used mid-conversation. Leverage everything:
+이 스킬은 대화 도중에 쓰인다. 가진 것을 전부 활용한다:
 
-- **Conversation context** — summarize, structure, or visualize what's been discussed
-- **URLs/links** — crawl and extract content, then visualize
-- **Pasted data** — CSV, JSON, tables → charts, dashboards
-- **Ideas/concepts** — turn abstract discussions into visual diagrams
-- **Code/architecture** — visualize system designs, data flows
+- **대화 맥락** — 지금까지 나눈 이야기를 요약하거나 구조화하거나 시각화한다
+- **URL·링크** — 크롤링해서 내용을 뽑은 뒤 시각화한다
+- **붙여 넣은 데이터** — CSV, JSON, 표 → 차트, 대시보드
+- **아이디어·개념** — 추상적인 논의를 시각적 도식으로 바꾼다
+- **코드·아키텍처** — 시스템 설계와 데이터 흐름을 시각화한다
 
-Always use real content. Never generate placeholder data when real context exists.
+항상 실제 내용을 쓴다. 실제 맥락이 있는데 자리표시자 데이터를 만들지 않는다 (Never).
 
-## Type-Specific Interactivity (Mandatory)
+## Type-Specific Interactivity — 형식별 인터랙션 (Mandatory)
 
-Every file MUST have at least ONE meaningful interaction beyond theme toggle + menu. Static-feeling pages score low on interactivity.
+모든 파일에는 테마 전환과 메뉴 외에 의미 있는 인터랙션이 최소 ONE 하나는 있어야 한다 (MUST). 정적인 느낌의 페이지는 인터랙션 점수가 낮다.
 
-| Type | Required Interaction |
+| Type | 필요한 인터랙션 |
 |------|---------------------|
-| **Cheatsheet** | Search/filter input + copy-to-clipboard on code blocks. Use `<details name="...">` for collapsible groups. |
-| **Dashboard** | Filter toolbar or metric drill-down. At minimum: date range or category filter. |
-| **Status Report** | Collapsible detail sections (use `<details>`). Progress bars animate on scroll. |
-| **Quote Card** | Auto-cycling quotes OR swipeable carousel. Share/copy button. |
-| **Event Poster** | Animated countdown timer (days/hours/min/sec). RSVP/register button. |
-| **Process Guide** | Steps as exclusive accordion (`<details name="steps">`). Or interactive progress tracker. |
-| **Architecture** | Clickable nodes with popover details (use Popover API). Hover highlights connections. |
-| **Timeline** | Filter by era/category. Or click to expand event details. |
-| **Comparison** | Toggle categories on/off. Or highlight winner per row. |
-| **Carousel** | Touch swipe + keyboard + auto-advance option. Card counter always visible. |
-| **Slide Deck** | Already interactive (nav). Add: presenter timer, slide overview grid. |
+| **Cheatsheet** | 검색·필터 입력 + 코드 블록 클립보드 복사. 접이식 묶음에는 `<details name="...">`를 쓴다. |
+| **Dashboard** | 필터 도구 모음 또는 지표 상세 보기. 최소한 기간이나 범주 필터. |
+| **Status Report** | 접이식 상세 구역 (`<details>` 사용). 진행 바가 스크롤 시 애니메이션. |
+| **Quote Card** | 인용문 자동 순환 또는 스와이프 캐러셀. 공유·복사 버튼. |
+| **Event Poster** | 애니메이션 카운트다운 타이머 (일/시/분/초). 참석 신청·등록 버튼. |
+| **Process Guide** | 단계를 배타적 아코디언으로 (`<details name="steps">`). 또는 인터랙티브 진행 추적기. |
+| **Architecture** | 클릭하면 팝오버로 상세가 뜨는 노드 (Popover API 사용). 호버 시 연결선 강조. |
+| **Timeline** | 시기·범주로 필터. 또는 클릭하면 사건 상세가 펼쳐짐. |
+| **Comparison** | 범주 켜고 끄기. 또는 행마다 우세한 쪽 강조. |
+| **Carousel** | 터치 스와이프 + 키보드 + 자동 넘김 옵션. 카드 카운터는 항상 보이게. |
+| **Slide Deck** | 이미 인터랙티브함(내비게이션). 추가할 것: 발표자 타이머, 슬라이드 개요 격자. |
 
-If a type isn't listed, add at minimum: a filter, search, sort, or expand/collapse interaction.
+표에 없는 형식이라면 최소한 필터, 검색, 정렬, 펼치기·접기 중 하나는 넣는다.
 
-## Layout Variation (CRITICAL)
+## Layout Variation — 레이아웃 변주 (CRITICAL)
 
-Every file must feel like a UNIQUE design, not a template with different text. Vary these per file type:
-- **Grid structure**: Mix 1-col, 2-col, 3-col. Use CSS Grid `span 2` for featured cards. **CRITICAL: Always test at 768px and 375px - no horizontal overflow allowed.**
+모든 파일이 글자만 바꾼 템플릿이 아니라 UNIQUE 고유한 디자인처럼 느껴져야 한다. 파일 형식에 따라 아래를 달리한다:
+- **그리드 구조**: 1열, 2열, 3열을 섞는다. 강조할 카드에는 CSS Grid `span 2`를 쓴다. **CRITICAL: 항상 768px와 375px에서 확인한다 - 가로 오버플로는 허용되지 않는다.**
 
-**Mobile-First Responsive Pattern (MANDATORY):**
+**모바일 우선 반응형 패턴 (MANDATORY):**
 ```css
 .grid { 
   display: grid; 
@@ -507,92 +507,92 @@ Every file must feel like a UNIQUE design, not a template with different text. V
   .stat-value { font-size: 2rem; }
 }
 ```
-- **Section rhythm**: Alternate between full-width sections, card grids, and single-focus sections.
-- **Content density**: More content at smaller sizes looks more professional than sparse content at large sizes. A dashboard with 8 KPI cards + 4 charts feels real; 4 KPI cards + 2 charts feels like a demo.
-- **Visual focal point**: Every file needs ONE visually dominant element (hero stat, key chart, primary message) — not everything at equal weight.
-- **No orphaned grid items**: When a grid has an odd number of items where the last row isn't full, use `grid-column: span 2` on the last item or adjust `grid-template-columns` to avoid a single card stranded alone on a row.
+- **섹션 리듬**: 전체 너비 섹션, 카드 그리드, 하나에 집중한 섹션을 번갈아 배치한다.
+- **내용 밀도**: 큰 크기로 듬성듬성한 것보다 작은 크기로 내용이 많은 편이 더 전문적으로 보인다. KPI 카드 8개 + 차트 4개인 대시보드는 진짜처럼 느껴지고, KPI 카드 4개 + 차트 2개는 데모처럼 느껴진다.
+- **시각적 초점**: 모든 파일에는 시각적으로 지배적인 요소가 ONE 하나 필요하다 (대표 통계, 핵심 차트, 주요 메시지) — 전부가 같은 무게여서는 안 된다.
+- **격자에 홀로 남는 항목 금지**: 항목 수가 홀수라 마지막 줄이 차지 않으면, 마지막 항목에 `grid-column: span 2`를 주거나 `grid-template-columns`를 조정해 카드 하나가 한 줄에 덩그러니 남지 않게 한다.
 
-## Anti-Patterns
+## Anti-Patterns — 안티패턴
 
-- ❌ Walls of text — if it reads like a document, it's not a visualization
-- ❌ Tiny fonts — minimum 14px body, 20px+ for presentation headings
-- ❌ Rainbow colors — stick to 2-3 colors from the palette + neutrals
-- ❌ Placeholder content — never use "Lorem ipsum" or fake data
-- ❌ Over-engineering — simplest approach that looks stunning
-- ❌ Cramped layouts — when in doubt, add more whitespace
-- ❌ Generic design — each visualization should feel intentional, not templated
-- ❌ Missing menu — every output needs the hamburger menu
-- ❌ Broken print — always include `@media print` styles
+- ❌ 빽빽한 글 — 문서처럼 읽힌다면 그건 시각화가 아니다
+- ❌ 너무 작은 글꼴 — 본문 최소 14px, 발표 제목은 20px 이상
+- ❌ 무지개 색 — 팔레트에서 2~3색 + 중립색만 쓴다
+- ❌ 자리표시자 내용 — "Lorem ipsum"이나 가짜 데이터를 쓰지 않는다 (never)
+- ❌ 과한 설계 — 멋져 보이는 가장 단순한 방법을 쓴다
+- ❌ 답답한 레이아웃 — 망설여지면 여백을 더 넣는다
+- ❌ 특징 없는 디자인 — 시각화마다 템플릿이 아니라 의도된 것으로 느껴져야 한다
+- ❌ 메뉴 누락 — 모든 결과물에 햄버거 메뉴가 필요하다
+- ❌ 깨진 인쇄 — `@media print` 스타일을 항상 넣는다
 
-## Advanced Techniques
+## Advanced Techniques — 고급 기법
 
-Use these when they add value. See [references/css-techniques.md](references/css-techniques.md) for code snippets.
+도움이 될 때만 쓴다. 코드 조각은 [references/css-techniques.md](references/css-techniques.md)를 보라.
 
-- **Glass morphism** — `backdrop-blur-md bg-white/5 border border-white/10` for floating cards
-- **Gradient text** — `background: linear-gradient(...); -webkit-background-clip: text` for hero headlines
-- **Scroll-snap** — `scroll-snap-type: y mandatory` as alternative slide navigation (no JS needed)
-- **Conic gradients** — `conic-gradient()` for pure CSS pie/donut charts
-- **Number animations** — animate counters from 0 to target value on scroll
-- **Spring easing** — `cubic-bezier(0.34, 1.56, 0.64, 1)` for playful micro-interactions
-- **Animate to auto** — `interpolate-size: allow-keywords` on `:root` enables smooth `height: auto` transitions (Chrome 129+)
-- **CSS counters** — auto-numbering for step-by-step processes
-- **View Transitions API** — smooth theme switching animations
-- **Inline SVG icons** — draw simple icons as `<svg>` paths, no icon library needed
+- **Glass morphism** — 떠 있는 카드에 `backdrop-blur-md bg-white/5 border border-white/10`
+- **Gradient text** — 대표 제목에 `background: linear-gradient(...); -webkit-background-clip: text`
+- **Scroll-snap** — 슬라이드 내비게이션의 대안으로 `scroll-snap-type: y mandatory` (JS 불필요)
+- **Conic gradients** — 순수 CSS 원·도넛 차트에 `conic-gradient()`
+- **Number animations** — 스크롤 시 카운터를 0에서 목표값까지 애니메이션
+- **Spring easing** — 경쾌한 마이크로 인터랙션에 `cubic-bezier(0.34, 1.56, 0.64, 1)`
+- **Animate to auto** — `:root`에 `interpolate-size: allow-keywords`를 주면 `height: auto` 전환이 부드러워진다 (Chrome 129+)
+- **CSS counters** — 단계별 절차의 자동 번호 매기기
+- **View Transitions API** — 부드러운 테마 전환 애니메이션
+- **Inline SVG icons** — 단순한 아이콘을 `<svg>` 경로로 직접 그린다. 아이콘 라이브러리 불필요
 
-## Mandatory HTML Skeleton
+## Mandatory HTML Skeleton — 필수 HTML 스켈레톤
 
-**EVERY visualization MUST start from the skeleton.** Copy it, then add content.
+**EVERY visualization MUST start from the skeleton.** 복사한 다음 내용을 추가한다.
 
-**Full skeleton code:** See [references/skeleton.md](references/skeleton.md) for the complete copy-paste HTML template with themes, print styles, Inter font, animations, menu, and hover effects.
+**스켈레톤 전체 코드:** 테마, 인쇄 스타일, Inter 글꼴, 애니메이션, 메뉴, 호버 효과가 들어간 복사·붙여넣기용 HTML 템플릿은 [references/skeleton.md](references/skeleton.md)를 보라.
 
-The skeleton provides:
-- Class-based dark/light theming (OS detection on first visit, localStorage persistence)
-- CSS @keyframes animations (fadeInUp, fadeIn, slideInLeft, slideInRight) + .animate/.delay-N classes
-- Scroll-reveal via data-reveal attribute + IntersectionObserver
-- Number counter via data-count attribute
-- Hamburger menu with theme toggle, PNG download (html-to-image), print/PDF
-- Popover and details accordion CSS (Chrome 114+/120+)
-- Print styles with @page margin boxes
-- prefers-reduced-motion support
+스켈레톤이 제공하는 것:
+- 클래스 기반 다크/라이트 테마 (첫 방문 시 OS 설정 감지, localStorage에 저장)
+- CSS @keyframes 애니메이션 (fadeInUp, fadeIn, slideInLeft, slideInRight) + .animate/.delay-N 클래스
+- data-reveal 속성 + IntersectionObserver를 이용한 스크롤 등장
+- data-count 속성을 이용한 숫자 카운터
+- 테마 전환, PNG 내려받기(html-to-image), 인쇄/PDF가 있는 햄버거 메뉴
+- Popover와 details 아코디언 CSS (Chrome 114+/120+)
+- @page 여백 상자가 있는 인쇄 스타일
+- prefers-reduced-motion 지원
 
-### Skeleton Rules
-- Use `var` for all top-level JS variables (prevents TDZ errors)
-- MANDATORY: Use `data-reveal` for scroll animation OR `.animate.delay-N` for page-load entrance. Add JavaScript scroll observer for `.reveal` classes.
-- Define `function onThemeChange() {}` to re-render charts on theme toggle
-- Use semantic HTML: `<main>`, `<section>`, `<header>`, `<article>`
-- Don't use `let`/`const` at script top level
+### Skeleton Rules — 스켈레톤 규칙
+- 최상위 JS 변수는 전부 `var`를 쓴다 (TDZ 오류를 막는다)
+- MANDATORY: 스크롤 애니메이션에는 `data-reveal`을, 페이지 로드 진입에는 `.animate.delay-N`을 쓴다. `.reveal` 클래스를 위한 JavaScript 스크롤 감시자를 넣는다.
+- 테마 전환 시 차트를 다시 그리도록 `function onThemeChange() {}`를 정의한다
+- 시맨틱 HTML을 쓴다: `<main>`, `<section>`, `<header>`, `<article>`
+- 스크립트 최상위에서 `let`/`const`를 쓰지 않는다
 
-## Minimum Sizing Rules
+## Minimum Sizing Rules — 최소 크기 규칙
 
-Elements must be large enough to read and feel substantial:
+요소는 읽히고 존재감이 있을 만큼 커야 한다:
 
-- **Timeline cards:** minimum width 280px, minimum padding 20px
-- **Timeline layout:** Distribute timeline items evenly to prevent large gaps. If you have 5 items but only fill 60% of the vertical space, add more content sections (like investment breakdown or impact metrics) to fill the remaining 40%. Never leave massive empty spaces below the last timeline item.
-- **Chart containers:** minimum 60% of parent width, minimum height 300px (360px+ for dashboards). In grid layouts, charts should use `flex-grow: 1` to fill available space — 300px is a floor, not a target.
-- **Stat numbers:** minimum font-size 2rem (32px), bold/extrabold weight
-- **Card content area:** minimum padding 24px
-- **Section spacing:** **MANDATORY minimum 48px between major sections** — use `margin-bottom: 48px` or larger on section elements
-- **Slide headings:** minimum 2rem (32px), maximum 6 words
-- **Body text:** minimum 1rem (16px), never smaller
+- **타임라인 카드:** 최소 너비 280px, 최소 여백 20px
+- **타임라인 레이아웃:** 큰 빈틈이 생기지 않도록 항목을 고르게 분배한다. 항목이 5개인데 세로 공간의 60%만 찬다면, 남은 40%를 채울 내용 구역(투자 내역이나 성과 지표 같은 것)을 더 넣는다. 마지막 타임라인 항목 아래에 거대한 빈 공간을 남기지 않는다 (Never).
+- **차트 컨테이너:** 부모 너비의 최소 60%, 최소 높이 300px (대시보드는 360px 이상). 그리드 레이아웃에서는 차트에 `flex-grow: 1`을 줘서 남는 공간을 채운다 — 300px는 목표가 아니라 하한이다.
+- **통계 숫자:** 최소 글꼴 크기 2rem (32px), bold/extrabold 굵기
+- **카드 내용 영역:** 최소 여백 24px
+- **섹션 간격:** **MANDATORY 주요 섹션 사이 최소 48px** — 섹션 요소에 `margin-bottom: 48px` 이상을 준다
+- **슬라이드 제목:** 최소 2rem (32px), 최대 6단어
+- **본문:** 최소 1rem (16px), 그보다 작게는 절대 쓰지 않는다
 
-**If content feels too small, it IS too small. Err on the side of larger.**
+**내용이 너무 작아 보인다면 실제로 작은 것이다. 망설여지면 더 크게 간다.**
 
-## Text Visibility Rules
+## Text Visibility Rules — 글자 가시성 규칙
 
-**Text must ALWAYS be visible.** This is the #1 cause of broken outputs.
+**글자는 ALWAYS 항상 보여야 한다.** 결과물이 깨지는 원인 1위다.
 
-- Dark theme: text MUST use `var(--text)` which resolves to `#f9fafb` (near-white)
-- Light theme: text MUST use `var(--text)` which resolves to `#0f172a` (near-black)
-- On gradient backgrounds: add `text-shadow: 0 1px 3px rgba(0,0,0,0.3)` for readability
-- On hero slides with gradient/image backgrounds: use a dark overlay (`rgba(0,0,0,0.5)`)
-- NEVER set text color to a value close to the background color
-- Test mentally: "would this text be visible on BOTH dark (#030712) and light (#f8fafc) backgrounds?"
+- 다크 테마: 글자는 `var(--text)`를 MUST 써야 하며 `#f9fafb`(거의 흰색)로 해석된다
+- 라이트 테마: 글자는 `var(--text)`를 MUST 써야 하며 `#0f172a`(거의 검정)로 해석된다
+- 그라디언트 배경 위: 가독성을 위해 `text-shadow: 0 1px 3px rgba(0,0,0,0.3)`을 넣는다
+- 그라디언트·이미지 배경의 대표 슬라이드: 어두운 오버레이(`rgba(0,0,0,0.5)`)를 쓴다
+- 배경색과 가까운 값으로 글자 색을 정하지 않는다 (NEVER)
+- 머릿속으로 확인: "이 글자가 다크(#030712)와 라이트(#f8fafc) 배경 BOTH 양쪽에서 보이는가?"
 
-## Chart.js Integration Rules (CRITICAL — MOST COMMON FAILURE)
+## Chart.js Integration Rules — Chart.js 연동 규칙 (CRITICAL — MOST COMMON FAILURE)
 
-Charts are the second most common failure. These rules are MANDATORY for every chart:
+차트는 두 번째로 흔한 실패 원인이다. 아래 규칙은 모든 차트에 MANDATORY다:
 
-### 1. Container Structure (REQUIRED)
+### 1. 컨테이너 구조 (REQUIRED)
 ```html
 <!-- MANDATORY PATTERN FOR EVERY CHART -->
 <div role="img" aria-label="Detailed description of chart data and insights">
@@ -602,13 +602,13 @@ Charts are the second most common failure. These rules are MANDATORY for every c
 </div>
 ```
 
-### 2. Canvas Dimensions (REQUIRED)
-- **Container must have explicit height:** minimum 360px for dashboards, 300px for other types
-- **Canvas element needs no sizing** — Chart.js handles this when `maintainAspectRatio: false`
-- **Container padding:** 40px internal padding for professional spacing
-- **Container border-radius:** 12px for modern card appearance
+### 2. 캔버스 크기 (REQUIRED)
+- **컨테이너에 높이를 명시해야 한다:** 대시보드는 최소 360px, 그 외 형식은 300px
+- **canvas 요소에는 크기를 지정할 필요가 없다** — `maintainAspectRatio: false`면 Chart.js가 알아서 처리한다
+- **컨테이너 여백:** 전문적인 간격을 위해 내부 여백 40px
+- **컨테이너 모서리 반지름:** 현대적인 카드 느낌을 위해 12px
 
-### 3. Chart.js Initialization (MANDATORY PATTERN)
+### 3. Chart.js 초기화 (MANDATORY PATTERN)
 ```javascript
 // REQUIRED: Chart destruction and canvas reset to prevent "Canvas already in use" errors
 var chartsBuilt = false; // Guard flag
@@ -664,7 +664,7 @@ function onThemeChange() {
   setTimeout(buildCharts, 100); // Slight delay for CSS variable updates
 }
 ```
-- **MANDATORY: Hover tooltips enabled** — never disable Chart.js tooltips:
+- **MANDATORY: 호버 툴팁을 켠다** — Chart.js 툴팁을 끄지 않는다 (never):
   ```javascript
   options: {
     plugins: {
@@ -676,22 +676,22 @@ function onThemeChange() {
     }
   }
   ```
-- **Minimum chart height:** 300px on desktop, 250px on mobile
-- **Font size defaults:** Axis tick labels at 13px minimum, axis titles at 14px, chart titles at 16px minimum. Legend at 13px.
-- **Chart padding:** Add `layout: { padding: { top: 20, right: 20, bottom: 20, left: 20 } }` for breathing room
-- **Axis tick config:** `maxRotation: 0` to keep labels horizontal. If labels overflow, use `maxTicksLimit` to reduce count
-- **Grid lines:** Very faint — `rgba(255,255,255,0.04)` in dark, `rgba(0,0,0,0.06)` in light
-- **Tooltip styling:** `padding: 12`, `cornerRadius: 8`, `titleFont: { size: 14 }`, `bodyFont: { size: 13 }`
-- **Point radius:** 0 by default, 6 on hover — cleaner line charts
-- **Set `maintainAspectRatio: false`** and control size via CSS container
-- **Use theme-aware colors:** read CSS vars at render time, re-render on theme change
-- **Chart text colors:** set `Chart.defaults.color = getComputedStyle(root).getPropertyValue('--text-secondary').trim()`
-- **Grid line colors:** use `var(--border)` value
-- **Legend position:** 'top' for horizontal charts, 'right' for vertical with space
-- **Axis labels:** Keep horizontal when possible - avoid rotation unless absolutely necessary
-- **Donut/pie charts:** Always include percentage labels on segments
-- **Responsive:** `responsive: true` is default, but container must have explicit dimensions
-- **High contrast colors:** Ensure sufficient color difference between data series for accessibility
+- **최소 차트 높이:** 데스크톱 300px, 모바일 250px
+- **글꼴 크기 기본값:** 축 눈금 라벨 최소 13px, 축 제목 14px, 차트 제목 최소 16px. 범례 13px.
+- **차트 여백:** 숨 쉴 공간을 위해 `layout: { padding: { top: 20, right: 20, bottom: 20, left: 20 } }`를 넣는다
+- **축 눈금 설정:** 라벨을 가로로 유지하려면 `maxRotation: 0`. 라벨이 넘치면 `maxTicksLimit`으로 개수를 줄인다
+- **격자선:** 아주 희미하게 — 다크는 `rgba(255,255,255,0.04)`, 라이트는 `rgba(0,0,0,0.06)`
+- **툴팁 스타일:** `padding: 12`, `cornerRadius: 8`, `titleFont: { size: 14 }`, `bodyFont: { size: 13 }`
+- **점 반지름:** 기본 0, 호버 시 6 — 선 차트가 깔끔해진다
+- **`maintainAspectRatio: false`를 설정하고** 크기는 CSS 컨테이너로 제어한다
+- **테마에 반응하는 색을 쓴다:** 렌더 시점에 CSS 변수를 읽고, 테마가 바뀌면 다시 그린다
+- **차트 글자 색:** `Chart.defaults.color = getComputedStyle(root).getPropertyValue('--text-secondary').trim()`으로 설정한다
+- **격자선 색:** `var(--border)` 값을 쓴다
+- **범례 위치:** 가로형 차트는 'top', 공간이 있는 세로형은 'right'
+- **축 라벨:** 가능하면 가로로 유지한다 - 꼭 필요한 게 아니면 회전시키지 않는다
+- **도넛·원 차트:** 조각에 퍼센트 라벨을 항상 넣는다
+- **반응형:** `responsive: true`가 기본이지만 컨테이너에 크기가 명시되어 있어야 한다
+- **고대비 색:** 접근성을 위해 데이터 계열 간 색 차이를 충분히 둔다
 
 ```javascript
 // Theme-aware Chart.js setup (include in every chart visualization)
@@ -741,10 +741,10 @@ function buildCharts() {
 }
 ```
 
-## Critical Debugging Patterns
+## Critical Debugging Patterns — 핵심 디버깅 패턴
 
-### Counter Animation Debug Pattern
-If KPI values show "0%" instead of animating, add this debug pattern:
+### 카운터 애니메이션 디버깅 패턴
+KPI 값이 애니메이션되지 않고 "0%"로 멈춰 있으면 아래 디버깅 패턴을 넣는다:
 ```javascript
 // DEBUG: Add after counter observer setup to verify intersection
 var counterEl = document.querySelector('[data-count]');
@@ -766,8 +766,8 @@ if (counterEl) {
 }
 ```
 
-### Chart.js Integration Safety Pattern
-MANDATORY for all Chart.js usage to prevent console errors:
+### Chart.js 연동 안전 패턴
+콘솔 오류를 막기 위해 모든 Chart.js 사용에 MANDATORY:
 ```javascript
 // STEP 1: Global variables - MUST use var, never let/const
 var chartsBuilt = false;
@@ -839,8 +839,8 @@ function onThemeChange() {
 }
 ```
 
-### Menu Outside-Click Fix
-Ensure menu closes when clicking outside by strengthening the event handler:
+### 메뉴 바깥 클릭 처리
+이벤트 핸들러를 보강해 바깥을 클릭했을 때 메뉴가 닫히도록 한다:
 ```javascript
 document.addEventListener('click', function(e) { 
   var menu = document.querySelector('.viz-menu');
@@ -851,33 +851,33 @@ document.addEventListener('click', function(e) {
 });
 ```
 
-## Process
+## Process — 작업 절차
 
-1. **Understand** — what's the message? Who's the audience? What format fits?
-2. **Start from skeleton** — copy the Mandatory HTML Skeleton above. NEVER start from a blank file.
-3. **Structure** — outline content/sections BEFORE filling in the skeleton
-4. **Build** — add content, charts, styles. Keep all colors as CSS vars.
-5. **Verify checklist:**
-   - [ ] `html.theme-dark` and `html.theme-light` class-based theme selectors (NO @media prefers-color-scheme)?
-   - [ ] JS detects OS preference on first visit, stores in localStorage?
-   - [ ] All text uses `var(--text)` or `var(--text-secondary)`?
-   - [ ] `@media print` hides menu, shows all content?
-   - [ ] `@media (prefers-reduced-motion: reduce)` present?
-   - [ ] `.viz-menu` with toggle, theme, download, print?
-   - [ ] Correct font loaded? (Inter default, Noto Sans KR for Korean, etc.)
-   - [ ] Non-Latin content has appropriate CJK/RTL font?
-   - [ ] Entrance animations via `.animate` classes (CSS @keyframes)?
-   - [ ] Scroll sections use `data-reveal` (visible without JS)?
-   - [ ] `.card:hover` has transform effect?
-   - [ ] All top-level JS variables use `var` (not `let`/`const`)?
-   - [ ] Charts use `var` declarations + `onThemeChange` hook?
-   - [ ] **MANDATORY:** All charts wrapped with `role="img" aria-label="..."`?
-   - [ ] **MANDATORY:** All charts have hover tooltips enabled (never disabled)?
-   - [ ] Animated number counters use `data-count` where stats exist?
-   - [ ] Semantic HTML: `<main>`, `<section>`, `<header>`, `<article>`?
-   - [ ] All charts have explicit container sizing (≥300px height)?
-   - [ ] Hero/title text visible on both themes?
-   - [ ] Minimum sizing rules followed (cards 280px+, text 16px+)?
-   - [ ] Zero console errors on load?
+1. **이해한다** — 메시지가 무엇인가? 대상이 누구인가? 어떤 형식이 맞는가?
+2. **스켈레톤에서 시작한다** — 위의 Mandatory HTML Skeleton을 복사한다. 빈 파일에서 시작하지 않는다 (NEVER).
+3. **구조를 잡는다** — 스켈레톤을 채우기 BEFORE 전에 내용과 구역의 개요를 짠다
+4. **만든다** — 내용, 차트, 스타일을 넣는다. 색은 전부 CSS 변수로 유지한다.
+5. **점검 목록으로 확인한다:**
+   - [ ] `html.theme-dark`와 `html.theme-light` 클래스 기반 테마 선택자를 썼는가 (NO @media prefers-color-scheme)?
+   - [ ] JS가 첫 방문 시 OS 설정을 감지하고 localStorage에 저장하는가?
+   - [ ] 모든 글자가 `var(--text)` 또는 `var(--text-secondary)`를 쓰는가?
+   - [ ] `@media print`가 메뉴를 숨기고 모든 내용을 보여 주는가?
+   - [ ] `@media (prefers-reduced-motion: reduce)`가 있는가?
+   - [ ] `.viz-menu`에 토글, 테마, 내려받기, 인쇄가 있는가?
+   - [ ] 알맞은 글꼴을 불러왔는가? (기본은 Inter, 한글은 Noto Sans KR 등)
+   - [ ] 라틴 문자가 아닌 내용에 알맞은 CJK/RTL 글꼴이 있는가?
+   - [ ] `.animate` 클래스로 진입 애니메이션을 넣었는가 (CSS @keyframes)?
+   - [ ] 스크롤 구역이 `data-reveal`을 쓰는가 (JS 없이도 보이는가)?
+   - [ ] `.card:hover`에 transform 효과가 있는가?
+   - [ ] 최상위 JS 변수가 전부 `var`인가 (`let`/`const`가 아닌가)?
+   - [ ] 차트가 `var` 선언 + `onThemeChange` 훅을 쓰는가?
+   - [ ] **MANDATORY:** 모든 차트를 `role="img" aria-label="..."`로 감쌌는가?
+   - [ ] **MANDATORY:** 모든 차트에 호버 툴팁이 켜져 있는가 (끄지 않았는가)?
+   - [ ] 통계가 있는 곳에 `data-count` 숫자 카운터 애니메이션을 넣었는가?
+   - [ ] 시맨틱 HTML을 썼는가: `<main>`, `<section>`, `<header>`, `<article>`?
+   - [ ] 모든 차트에 컨테이너 크기를 명시했는가 (높이 300px 이상)?
+   - [ ] 대표·제목 글자가 두 테마 모두에서 보이는가?
+   - [ ] 최소 크기 규칙을 지켰는가 (카드 280px 이상, 글자 16px 이상)?
+   - [ ] 로드 시 콘솔 오류가 0건인가?
 
-The quality bar: **"good, period"** — not "good for AI-generated."
+품질 기준: **"good, period"** (그냥 좋다) — "AI가 만든 것치고 좋다"가 아니다.
