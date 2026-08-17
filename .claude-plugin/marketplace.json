@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "Visualization skills for Claude Code",
-    "version": "0.4.0"
+    "version": "0.4.1"
   },
   "plugins": [
     {
       "name": "visualize",
       "source": "./",
       "description": "Create beautiful, self-contained HTML visualizations from any content or idea. Slide decks, dashboards, infographics, flowcharts, timelines, and more.",
-      "version": "0.4.0",
+      "version": "0.4.1",
       "author": {
         "name": "Career Hacker Alex"
       },

@@ -186,6 +186,30 @@ git commit -m "eval: round {N} fixes — {one-line summary}"
 git push origin main
 ```
 
+4. **Publish the fix to the installed plugin — do NOT skip this.**
+   `claude -p` in Step 5 reads the *installed* copy of the skill, not this working
+   tree. `claude plugin update` compares version numbers only: if the version is
+   unchanged it reports "already at the latest version" and copies nothing, so the
+   re-test would silently measure the OLD skill and the fix would look ineffective.
+
+```bash
+# Bump the patch version in BOTH manifests — they must agree
+#   .claude-plugin/plugin.json      → "version"
+#   .claude-plugin/marketplace.json → metadata.version AND plugins[0].version
+
+claude plugin marketplace update careerhackeralex
+claude plugin update visualize@careerhackeralex
+```
+
+   Confirm the copy actually changed before continuing:
+```bash
+diff -q ~/.claude/plugins/cache/careerhackeralex/visualize/{NEW_VERSION}/skills/visualize/SKILL.md \
+        skills/visualize/SKILL.md
+```
+
+   The CLI prints "Restart to apply changes." A fresh `claude -p` process picks up
+   the new copy on its own, so Step 5 works without restarting this session.
+
 ## Step 5: Re-test
 
 1. Re-generate the **worst-scoring output** from Step 1 (one line — no backslash continuation):
