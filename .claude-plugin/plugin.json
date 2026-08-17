@@ -3,11 +3,11 @@
   "description": "Create beautiful, self-contained HTML visualizations from any content or idea. Use for slide decks, dashboards, infographics, flowcharts, timelines, cheat sheets, posters, and more.",
   "version": "0.4.0",
   "author": {
-    "name": "careerhackeralex",
-    "email": "careerhackeralex@gmail.com"
+    "name": "kdongik-ops",
+    "email": "kdongik@gmail.com"
   },
-  "homepage": "https://github.com/careerhackeralex/visualize",
-  "repository": "https://github.com/careerhackeralex/visualize",
+  "homepage": "https://github.com/kdongik-ops/visualize",
+  "repository": "https://github.com/kdongik-ops/visualize",
   "license": "MIT",
   "keywords": ["visualization", "html", "slides", "dashboard", "infographic", "design"]
 }

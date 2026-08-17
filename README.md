@@ -77,7 +77,7 @@ Every visualization includes:
 
 ```bash
 # Step 1: Add the marketplace (one-time)
-claude plugin marketplace add careerhackeralex/visualize
+claude plugin marketplace add kdongik-ops/visualize
 
 # Step 2: Install the plugin
 claude plugin install visualize@careerhackeralex
@@ -92,7 +92,7 @@ claude plugin update visualize@careerhackeralex
 
 ```bash
 # Clone the repo
-git clone https://github.com/careerhackeralex/visualize.git
+git clone https://github.com/kdongik-ops/visualize.git
 
 # Claude Code auto-discovers plugins with .claude-plugin/plugin.json
 # Just open Claude Code in the cloned directory, or add it as a plugin dir:
@@ -168,10 +168,9 @@ The bar is not "good for AI-generated." The bar is **"good, period."**
 
 ## License
 
-MIT — use it however you want.
+MIT — see [`LICENSE`](LICENSE). Copyright (c) 2025 SangHyeon (Alex) Ahn.
 
 ## Credits
 
-Built by [Career Hacker Alex](https://youtube.com/@CareerHackerAlex) (커리어해커 알렉스)
-
-기술로 선한영향력을 만들고 싶습니다 — Create positive impact through technology.
+This is a fork of [visualize](https://github.com/careerhackeralex/visualize), originally built by
+[Career Hacker Alex](https://youtube.com/@CareerHackerAlex) (커리어해커 알렉스) and released under MIT.

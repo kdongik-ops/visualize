@@ -1,6 +1,6 @@
 # Visualize Improvement Loop (v6 — Install & Pipeline)
 
-The git repo (`https://github.com/careerhackeralex/visualize`) is the **source of truth**.
+The git repo (`https://github.com/kdongik-ops/visualize`) is the **source of truth**.
 Every iteration installs the plugin from GitHub, invokes it through Claude Code, evaluates real output with the automated pipeline, fixes the skill, and pushes improvements back.
 
 ## Architecture
@@ -28,7 +28,7 @@ Loop fires (manual or cron)
 
 ```bash
 # Add marketplace (if not already added)
-claude plugin marketplace add careerhackeralex/visualize
+claude plugin marketplace add kdongik-ops/visualize
 
 # Install the plugin
 claude plugin install visualize@careerhackeralex
@@ -41,7 +41,7 @@ This is exactly what a real user does. We test what they get.
 # Clone repo separately just to read state
 WORK_DIR=$(mktemp -d)
 cd "$WORK_DIR"
-git clone https://github.com/careerhackeralex/visualize.git
+git clone https://github.com/kdongik-ops/visualize.git
 ```
 - Read `eval/loop-state.json`
 - If gate is SHIP or VIRAL → report status, cleanup, exit

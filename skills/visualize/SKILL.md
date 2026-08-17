@@ -10,7 +10,7 @@ description: >
   or any request to present information in a visual HTML format.
 license: MIT
 metadata:
-  author: careerhackeralex
+  author: kdongik-ops
   version: 0.3.0
   category: document-creation
   tags: [visualization, html, slides, dashboard, infographic]

@@ -24,5 +24,8 @@ eval/pipeline/package-lock.json
 eval/rounds/*/generated/
 eval/rounds/*/screenshots/
 
+# Scratch output when run.js is called without --round
+eval/rounds/round-latest/
+
 # Research (internal)
 research/

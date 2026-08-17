@@ -11,11 +11,11 @@ Create a recurring cron job that runs every 3 hours to improve the Visualize Cla
 
 ## What This Job Does
 
-Each run executes one round of a self-improvement loop for an open-source Claude Code plugin (https://github.com/careerhackeralex/visualize). The loop generates HTML visualizations using the plugin, scores them with an automated eval pipeline, identifies weaknesses in the skill instructions, fixes them, and pushes improvements back to GitHub.
+Each run executes one round of a self-improvement loop for an open-source Claude Code plugin (https://github.com/kdongik-ops/visualize). The loop generates HTML visualizations using the plugin, scores them with an automated eval pipeline, identifies weaknesses in the skill instructions, fixes them, and pushes improvements back to GitHub.
 
 ## Setup
 
-1. Clone the repo: `git clone https://github.com/careerhackeralex/visualize.git`
+1. Clone the repo: `git clone https://github.com/kdongik-ops/visualize.git`
 2. The full agent prompt is at: `eval/pipeline/LOOP-PROMPT.md`
 3. Pass the ENTIRE contents of that file as the agent prompt for each run
 
@@ -30,7 +30,7 @@ Each run executes one round of a self-improvement loop for an open-source Claude
 The agent running each job needs:
 - **Shell access** — to run git, node, and claude CLI commands
 - **File system access** — to read/write files in the cloned repo
-- **Git push access** — to push commits to https://github.com/careerhackeralex/visualize.git (configure SSH key or token)
+- **Git push access** — to push commits to https://github.com/kdongik-ops/visualize.git (configure SSH key or token)
 - **Claude Code CLI** — `claude` must be in PATH (the harness handles authentication)
 - **Node.js** — `node` and `npm` must be available (for the eval pipeline)
 - **Playwright** — installed via `cd eval/pipeline && npm install` on first run
@@ -58,7 +58,7 @@ Stop scheduling new runs when:
 
 ## Environment Variables Needed
 
-- Git credentials (SSH key or GitHub token) with push access to careerhackeralex/visualize
+- Git credentials (SSH key or GitHub token) with push access to kdongik-ops/visualize
 ```
 
 ---

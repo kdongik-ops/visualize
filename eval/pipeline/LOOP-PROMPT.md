@@ -10,18 +10,22 @@ You are running one round of the Visualize plugin's self-improvement loop. Follo
 
 ## Step 0: Setup
 
-```bash
-# 1. Create a working directory
-WORK_DIR=$(mktemp -d)
-cd "$WORK_DIR"
+Run the loop in the local working copy — do NOT clone into a temp directory.
+A fresh clone would discard uncommitted local improvements.
 
-# 2. Clone the repo
-git clone https://github.com/careerhackeralex/visualize.git
-cd visualize
+```bash
+# 1. Go to the local repo
+cd D:/Agent/visualize
+
+# 2. Sync with the fork (origin = kdongik-ops/visualize)
+git pull
 
 # 3. Read current state
 cat eval/loop-state.json
 ```
+
+**Shell:** use the Bash tool for every command in this prompt. The PowerShell tool
+does not accept `\` line continuation or heredocs.
 
 **Check gate:** If `gate` is `VIRAL`, report the status and STOP — no improvement needed. If `gate` is `SHIP`, continue running — the goal is now VIRAL (≥9.5, all ≥9).
 
@@ -51,12 +55,11 @@ From this persona, generate **3 natural-language prompts** they would realistica
 
 **Generate each output:**
 ```bash
-mkdir -p eval/rounds/round-{N}/generated
-cd eval/rounds/round-{N}/generated
+mkdir -p D:/Agent/visualize/eval/rounds/round-{N}/generated
+cd D:/Agent/visualize/eval/rounds/round-{N}/generated
 
-# For each of the 3 prompts:
-claude -p --dangerously-skip-permissions --model sonnet \
-  "PROMPT_TEXT_HERE. Save as descriptive-name.html"
+# For each of the 3 prompts (one line — no backslash continuation):
+claude -p --dangerously-skip-permissions --model sonnet "PROMPT_TEXT_HERE. Save as descriptive-name.html"
 ```
 
 Each prompt should instruct Claude to save the file with a descriptive kebab-case name.
@@ -67,7 +70,7 @@ The generated HTML files end up in `eval/rounds/round-{N}/generated/`.
 ### Layer 1 & 2 (automated)
 
 ```bash
-cd eval/pipeline
+cd D:/Agent/visualize/eval/pipeline
 
 # Install dependencies if needed
 npm install
@@ -75,6 +78,10 @@ npm install
 # Run the automated pipeline (Layer 1 format detection + Layer 2 DOM checks)
 node run.js --dir ../rounds/round-{N}/generated/ --round {N}
 ```
+
+**`--round {N}` is mandatory.** Without it every result lands in
+`eval/rounds/round-latest/`, where the next run silently overwrites `scores.json`
+while leaving the previous run's screenshots in place — producing a mismatched round.
 
 This automatically:
 1. **Layer 1:** Detects format from DOM (slide-deck, dashboard, infographic, etc.)
@@ -172,7 +179,7 @@ Write your analysis to `eval/rounds/round-{N}/analysis.md` with this structure:
    - `references/design-system.md` (affects visual quality)
    - Other references as needed
 
-3. Commit:
+3. Commit (`origin` must be the `kdongik-ops` fork — verify with `git remote -v`):
 ```bash
 git add -A
 git commit -m "eval: round {N} fixes — {one-line summary}"
@@ -181,15 +188,14 @@ git push origin main
 
 ## Step 5: Re-test
 
-1. Re-generate the **worst-scoring output** from Step 1:
+1. Re-generate the **worst-scoring output** from Step 1 (one line — no backslash continuation):
 ```bash
-claude -p --dangerously-skip-permissions --model sonnet \
-  "ORIGINAL_PROMPT_FOR_WORST_FILE"
+claude -p --dangerously-skip-permissions --model sonnet "ORIGINAL_PROMPT_FOR_WORST_FILE"
 ```
 
-2. Re-evaluate with the pipeline:
+2. Re-evaluate with the pipeline (`--round` is mandatory — see Step 2):
 ```bash
-cd eval/pipeline
+cd D:/Agent/visualize/eval/pipeline
 node run.js --file path/to/regenerated.html --round {N}-retest
 ```
 
@@ -213,7 +219,7 @@ node run.js --file path/to/regenerated.html --round {N}-retest
 }
 ```
 
-2. Commit and push:
+2. Commit and push (`origin` = `kdongik-ops/visualize` fork):
 ```bash
 git add -A
 git commit -m "eval: round {N} complete — avg {score}, gate {gate}"

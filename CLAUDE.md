@@ -47,12 +47,17 @@ visualize/
 
 ```bash
 # Via Claude Code plugin system
-/plugin marketplace add careerhackeralex/visualize
+/plugin marketplace add kdongik-ops/visualize
 /plugin install visualize@careerhackeralex
 
 # Or clone directly
-git clone https://github.com/careerhackeralex/visualize.git
+git clone https://github.com/kdongik-ops/visualize.git
 ```
+
+The repo path and the marketplace name differ on purpose: the repo moved to the
+`kdongik-ops` fork, but `.claude-plugin/marketplace.json` still declares
+`"name": "careerhackeralex"`, so the plugin id stays `visualize@careerhackeralex`.
+Renaming it would break the currently installed copy.
 
 ## Key Decisions
 
