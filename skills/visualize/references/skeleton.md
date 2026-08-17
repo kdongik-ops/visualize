@@ -1,8 +1,8 @@
-## Mandatory HTML Skeleton
+## Mandatory HTML Skeleton — 필수 HTML 스켈레톤
 
-**EVERY visualization MUST start from this skeleton.** Copy it, then add content. This gives you themes, print styles, Inter font, animations, menu, and hover effects — all working out of the box.
+**EVERY visualization MUST start from this skeleton.** 이것을 복사한 다음 내용을 추가한다. 테마, 인쇄 스타일, Inter 글꼴, 애니메이션, 메뉴, 호버 효과가 이미 전부 동작하는 상태로 들어 있다.
 
-**Design philosophy: CSS-first, JS-minimal.** Animations use CSS `@keyframes` and `transition` (always reliable). JavaScript is only for: menu, theme toggle, scroll observer, number counters, and PNG download. No animation libraries required.
+**설계 원칙: CSS 우선, JS 최소.** 애니메이션은 CSS `@keyframes`와 `transition`으로 처리한다(항상 안정적이다). JavaScript는 메뉴, 테마 전환, 스크롤 감시, 숫자 카운터, PNG 내려받기에만 쓴다. 애니메이션 라이브러리는 필요 없다.
 
 ```html
 <!DOCTYPE html>
@@ -306,22 +306,22 @@
 </html>
 ```
 
-### Skeleton Rules
+### Skeleton Rules — 스켈레톤 규칙
 
-**Do:**
-- Use `var` for all top-level variables (avoids TDZ errors when functions are hoisted)
-- Use `data-reveal` attribute on sections/cards for scroll animation
-- Use `data-count="77" data-suffix="%"` for animated number counters
-- Use `.animate.delay-N` classes for page-load entrance animations
-- Use CSS `:hover` for hover effects (baked into `.card` already)
-- Define `function onThemeChange() {}` to re-render charts on theme toggle
-- Use `<main>`, `<section>`, `<header>`, `<article>` for semantic HTML
-- Keep all chart variables as `var` (not `let`/`const`) at script top level
+**해야 할 것:**
+- 최상위 변수는 전부 `var`로 선언한다 (함수 호이스팅 시 TDZ 오류를 피한다)
+- 스크롤 애니메이션이 필요한 섹션·카드에 `data-reveal` 속성을 쓴다
+- 숫자 카운터 애니메이션에는 `data-count="77" data-suffix="%"`를 쓴다
+- 페이지 로드 진입 애니메이션에는 `.animate.delay-N` 클래스를 쓴다
+- 호버 효과는 CSS `:hover`로 처리한다 (`.card`에는 이미 들어 있다)
+- 테마 전환 시 차트를 다시 그리려면 `function onThemeChange() {}`를 정의한다
+- 시맨틱 HTML로 `<main>`, `<section>`, `<header>`, `<article>`을 쓴다
+- 차트 관련 변수는 스크립트 최상위에서 전부 `var`로 유지한다 (`let`/`const` 금지)
 
-**Don't:**
-- Don't include Motion.js unless you specifically need spring physics
-- Don't hide content via JS/CSS for animation — use `data-reveal` pattern instead
-- Don't use `let`/`const` for variables that might be referenced before declaration
-- Don't use `.finished` Promise chains for sequencing — use `setTimeout`
-- Don't put animation logic that could crash before nav/chart setup code
+**하지 말 것:**
+- 스프링 물리 효과가 꼭 필요한 게 아니라면 Motion.js를 넣지 않는다
+- 애니메이션을 위해 JS/CSS로 내용을 숨기지 않는다 — `data-reveal` 패턴을 쓴다
+- 선언 전에 참조될 수 있는 변수에 `let`/`const`를 쓰지 않는다
+- 순서 제어에 `.finished` 프로미스 체인을 쓰지 않는다 — `setTimeout`을 쓴다
+- 내비게이션·차트 설정 코드보다 앞에 크래시할 수 있는 애니메이션 로직을 두지 않는다
 

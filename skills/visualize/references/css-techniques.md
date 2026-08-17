@@ -1,10 +1,12 @@
-# Round 2: Advanced CSS & HTML Techniques for Stunning Visualizations
+# Round 2: Advanced CSS & HTML Techniques — 고급 CSS·HTML 기법 모음
 
-> Compiled 2026-02-25. Every snippet is self-contained and production-ready.
+> 2026-02-25 정리. 모든 코드 조각은 그 자체로 완결되어 있고 바로 쓸 수 있다.
+>
+> 기법 이름(### 제목)은 업계 표준 용어라 원문 그대로 둔다.
 
 ---
 
-## 1. CSS-Only Techniques
+## 1. CSS만으로 하는 기법 (CSS-Only Techniques)
 
 ### 1.1 Scroll-Snap Presentation (Slide Deck)
 
@@ -253,7 +255,7 @@ function navigate(newHTML) {
 
 ---
 
-## 2. SVG Animation
+## 2. SVG 애니메이션 (SVG Animation)
 
 ### 2.1 Stroke Drawing Animation (stroke-dasharray)
 
@@ -351,7 +353,7 @@ function navigate(newHTML) {
 
 ---
 
-## 3. Modern CSS Features
+## 3. 최신 CSS 기능 (Modern CSS Features)
 
 ### 3.1 @layer (Cascade Layers)
 
@@ -514,7 +516,7 @@ function navigate(newHTML) {
 
 ---
 
-## 4. Print CSS Mastery
+## 4. 인쇄용 CSS (Print CSS Mastery)
 
 ### 4.1 Complete Print Stylesheet
 
@@ -618,7 +620,7 @@ function navigate(newHTML) {
 
 ---
 
-## 5. Micro-Interactions
+## 5. 마이크로 인터랙션 (Micro-Interactions)
 
 ### 5.1 Magnetic Hover Button
 
@@ -787,7 +789,7 @@ function ripple(e) {
 
 ---
 
-## 6. Data Visualization Without Libraries
+## 6. 라이브러리 없는 데이터 시각화 (Data Visualization Without Libraries)
 
 ### 6.1 Pure CSS Bar Chart
 
@@ -963,7 +965,7 @@ function ripple(e) {
 
 ---
 
-## 7. Typography Tricks
+## 7. 타이포그래피 기법 (Typography Tricks)
 
 ### 7.1 Fluid Type with clamp()
 
@@ -1047,7 +1049,7 @@ small { font-size: var(--fs-sm); }
 
 ---
 
-## 8. Design Trends in CSS
+## 8. CSS로 구현하는 디자인 트렌드 (Design Trends in CSS)
 
 ### 8.1 Glassmorphism
 
@@ -1142,7 +1144,7 @@ small { font-size: var(--fs-sm); }
 
 ---
 
-## 9. Dark Mode Best Practices
+## 9. 다크 모드 모범 사례 (Dark Mode Best Practices)
 
 ### 9.1 Complete Dark Mode System
 
@@ -1231,7 +1233,7 @@ body {
 
 ---
 
-## 10. Performance
+## 10. 성능 (Performance)
 
 ### 10.1 CSS Containment
 
@@ -1343,7 +1345,7 @@ body {
 
 ---
 
-## Bonus: Composable Utility Patterns
+## 보너스: 조합 가능한 유틸리티 패턴 (Composable Utility Patterns)
 
 ### Animation Composition
 
