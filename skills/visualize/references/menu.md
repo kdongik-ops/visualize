@@ -1,21 +1,21 @@
-# Hamburger Menu Component
+# 햄버거 메뉴 컴포넌트 (Hamburger Menu Component)
 
-Every visualization MUST include a hamburger menu in the top-right corner with these features:
-1. **Theme toggle** — dark/light mode (or multi-theme selector)
-2. **Download as image** — PNG export via html-to-image
-3. **Print as PDF** — browser print with optimized print styles
+모든 시각화는 오른쪽 위에 햄버거 메뉴를 반드시 포함해야 하며, 다음 기능을 갖춘다.
+1. **테마 전환** — 다크/라이트 모드 (또는 여러 테마 중 선택)
+2. **이미지로 내려받기** — html-to-image를 이용한 PNG 내보내기
+3. **PDF로 인쇄** — 인쇄 스타일이 최적화된 브라우저 인쇄
 
-## Required CDN
+## 필수 CDN
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
 ```
 
-## Complete Menu Implementation
+## 메뉴 전체 구현
 
-Paste this into every visualization. Customize theme colors to match the visualization's palette.
+모든 시각화에 그대로 붙여 넣는다. 테마 색은 해당 시각화의 팔레트에 맞춰 조정한다.
 
-### HTML (place just inside `<body>`)
+### HTML (`<body>` 바로 안에 배치)
 
 ```html
 <!-- Hamburger Menu -->
@@ -223,9 +223,9 @@ function printPDF() {
 }
 ```
 
-## Theme CSS Pattern
+## 테마 CSS 패턴
 
-Define theme variables on `:root` for dark (default), and override on `.theme-light`:
+다크(기본값)용 테마 변수를 `:root`에 정의하고, `.theme-light`에서 덮어쓴다.
 
 ```css
 :root, .theme-dark {
@@ -276,9 +276,9 @@ Define theme variables on `:root` for dark (default), and override on `.theme-li
 }
 ```
 
-## Print Styles
+## 인쇄 스타일
 
-Always include optimized print styles:
+최적화된 인쇄 스타일을 항상 포함한다.
 
 ```css
 @media print {
@@ -307,22 +307,22 @@ Always include optimized print styles:
 }
 ```
 
-## Best Practices
+## 모범 사례
 
-1. **html-to-image over html2canvas** — better SVG support, smaller bundle, handles CSS custom properties
-2. **pixelRatio: 2** for retina-quality exports
-3. **Hide UI elements** during capture (menu, nav, progress bars)
-4. **cacheBust: true** to avoid stale image caching issues
-5. **filter function** to exclude interactive elements from the export
-6. **Fallback** — if html-to-image fails (CORS, complex SVG), suggest Print → Save as PDF
-7. **localStorage** for theme persistence across page reloads
-8. **Backdrop-filter** on the menu for frosted glass effect
-9. **print-color-adjust: exact** to preserve colors when printing
-10. **Page breaks** for slide decks so each slide is a separate PDF page
+1. **html2canvas 대신 html-to-image** — SVG 지원이 낫고, 번들이 작고, CSS 사용자 정의 속성을 제대로 처리한다
+2. **`pixelRatio: 2`** — 레티나 품질로 내보내기 위함
+3. **캡처 중 UI 요소 숨기기** (메뉴, 내비게이션, 진행 바)
+4. **`cacheBust: true`** — 오래된 이미지 캐시 문제를 피한다
+5. **`filter` 함수** — 인터랙티브 요소를 내보내기에서 제외한다
+6. **대체 수단** — html-to-image가 실패하면(CORS, 복잡한 SVG) 인쇄 → PDF로 저장을 안내한다
+7. **`localStorage`** — 페이지를 새로 고쳐도 테마가 유지되도록 한다
+8. **`backdrop-filter`** — 메뉴에 서리 유리 효과를 준다
+9. **`print-color-adjust: exact`** — 인쇄할 때 색을 보존한다
+10. **페이지 나누기** — 슬라이드 덱에서 각 슬라이드가 PDF 한 페이지가 되도록 한다
 
-## Slide Deck Special Handling
+## 슬라이드 덱 예외 처리
 
-For slide decks, the Download button should capture only the **current slide**, not the entire page:
+슬라이드 덱에서는 내려받기 버튼이 페이지 전체가 아니라 **현재 슬라이드만** 캡처해야 한다.
 
 ```javascript
 async function downloadImage() {

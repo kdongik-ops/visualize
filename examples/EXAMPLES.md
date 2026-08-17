@@ -1,51 +1,51 @@
-# Visualization Examples – Quality Self-Assessment
+# 시각화 예시 — 품질 자체 평가
 
-## 1. 🍳 Startup Pitch Deck (`startup-pitch-deck.html`)
-**Rating: 9/10**
-- 10-slide deck with keyboard/swipe navigation, smooth transitions
-- Chart.js market size bar chart and traction line chart
-- Strong visual hierarchy with gradient big numbers, card-based layouts, team avatars
-- 16:9 full-viewport slides, nav dots, slide counter
-- Could improve: slide transition variety, more animation polish on chart entrance
+## 1. 🍳 스타트업 피치덱 (`startup-pitch-deck.html`)
+**평점: 9/10**
+- 키보드·스와이프 내비게이션과 부드러운 전환이 있는 10장짜리 덱
+- Chart.js 시장 규모 막대 차트와 성장 추이 선 차트
+- 그라디언트 큰 숫자, 카드 기반 레이아웃, 팀 아바타로 강한 시각적 위계
+- 16:9 전체 화면 슬라이드, 내비게이션 점, 슬라이드 카운터
+- 개선 여지: 슬라이드 전환의 다양성, 차트 등장 애니메이션의 완성도
 
-## 2. 📊 SaaS Dashboard (`saas-dashboard.html`)
-**Rating: 9/10**
-- 6 KPIs with color-coded left borders and trend indicators
-- 4 charts: revenue line, churn donut, user growth bar, revenue by plan donut
-- Responsive grid, fade-up animations, auto-updating date
-- Clean data visualization hierarchy
-- Could improve: sparklines in KPI cards, time range selector
+## 2. 📊 SaaS 대시보드 (`saas-dashboard.html`)
+**평점: 9/10**
+- 색으로 구분된 좌측 테두리와 추세 표시가 있는 KPI 6개
+- 차트 4개: 매출 선형, 이탈률 도넛, 사용자 증가 막대, 요금제별 매출 도넛
+- 반응형 그리드, 페이드업 애니메이션, 자동 갱신 날짜
+- 깔끔한 데이터 시각화 위계
+- 개선 여지: KPI 카드 안 스파크라인, 기간 선택기
 
-## 3. 🤖 AI Timeline (`ai-timeline.html`)
-**Rating: 8.5/10**
-- 15 milestones from 1950–2025, alternating left/right layout
-- Scroll-triggered fade-in animations via IntersectionObserver
-- Central connecting line with accent dot markers
-- Emoji icons per milestone, gradient hero title
-- Could improve: replace emoji with proper inline SVG icons, add parallax effects
+## 3. 🤖 AI 타임라인 (`ai-timeline.html`)
+**평점: 8.5/10**
+- 1950~2025년 마일스톤 15개, 좌우 교차 배치
+- IntersectionObserver를 이용한 스크롤 페이드인 애니메이션
+- 강조색 점 표시가 있는 중앙 연결선
+- 마일스톤마다 이모지 아이콘, 그라디언트 대표 제목
+- 개선 여지: 이모지를 인라인 SVG 아이콘으로 교체, 패럴랙스 효과 추가
 
-## 4. 🏠 Comparison Infographic (`comparison-infographic.html`)
-**Rating: 8.5/10**
-- Long-scroll format with big stats, pros/cons columns, charts, icon cards
-- Radar chart for satisfaction comparison, horizontal bar for productivity
-- Color-coded remote (teal) vs office (purple) throughout
-- Scroll-triggered section animations
-- Could improve: animated counters for big numbers, more visual variety between sections
+## 4. 🏠 비교 인포그래픽 (`comparison-infographic.html`)
+**평점: 8.5/10**
+- 큰 통계, 장단점 열, 차트, 아이콘 카드를 담은 긴 스크롤 형식
+- 만족도 비교용 레이더 차트, 생산성 비교용 가로 막대 차트
+- 전체에 걸쳐 원격(청록) 대 사무실(보라)로 색 구분
+- 스크롤에 반응하는 섹션 애니메이션
+- 개선 여지: 큰 숫자에 카운터 애니메이션, 섹션 간 시각적 변화 확대
 
-## 5. 🏗️ System Architecture (`system-architecture.html`)
-**Rating: 8/10**
-- Mermaid.js diagram: Clients → API Gateway → 4 Services → Data Layer → External APIs
-- Subgraph grouping with color-coded borders
-- Legend + 4 annotation cards with architectural details
-- Clean professional layout
-- Could improve: Mermaid theme toggle is fragile, could add interactive tooltips on hover
+## 5. 🏗️ 시스템 아키텍처 (`system-architecture.html`)
+**평점: 8/10**
+- Mermaid.js 다이어그램: 클라이언트 → API 게이트웨이 → 서비스 4개 → 데이터 계층 → 외부 API
+- 색으로 구분된 테두리를 가진 하위 그래프 묶음
+- 범례 + 아키텍처 세부 설명 주석 카드 4개
+- 깔끔하고 전문적인 레이아웃
+- 개선 여지: Mermaid 테마 전환이 불안정함, 호버 시 인터랙티브 툴팁 추가 가능
 
 ---
 
-## Common Features (all 5 files)
-✅ Hamburger menu with theme toggle, PNG download, print/PDF
-✅ Dark/light theme via CSS custom properties + `data-theme`
-✅ HSL color system, system fonts, responsive design
-✅ html-to-image CDN for PNG export
-✅ Single self-contained HTML files (no external deps except CDN)
-✅ WCAG AA contrast ratios maintained in both themes
+## 공통 기능 (5개 파일 전부)
+✅ 테마 전환, PNG 내려받기, 인쇄/PDF가 있는 햄버거 메뉴
+✅ CSS 사용자 정의 속성 + `data-theme`을 이용한 다크/라이트 테마
+✅ HSL 색 체계, 시스템 글꼴, 반응형 디자인
+✅ PNG 내보내기용 html-to-image CDN
+✅ 단일 자립형 HTML 파일 (CDN 외 외부 의존성 없음)
+✅ 두 테마 모두 WCAG AA 명도 대비 유지

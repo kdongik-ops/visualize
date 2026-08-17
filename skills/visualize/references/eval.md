@@ -1,58 +1,58 @@
-# Evaluation Rubric — Quick Reference
+# 평가 루브릭 — 빠른 참조 (Evaluation Rubric)
 
-Condensed scoring guide. Full protocol in `eval/SKILL.md`.
+채점 기준 요약본. 전체 절차는 `eval/SKILL.md` 참조.
 
-## 8 Dimensions
+## 8개 평가 항목
 
-| # | Dimension | Weight | What to Check |
+| # | 항목 | 가중치 | 확인할 것 |
 |---|-----------|--------|---------------|
-| D1 | First Impression | 15% | 2-second gut reaction. Professional? Clear focal point? |
-| D2 | Typography | 15% | Hierarchy, sizes, line-height, max 2 fonts |
-| D3 | Color | 10% | Harmonious palette, WCAG AA, accent purpose, both themes |
-| D4 | Layout | 15% | Consistent spacing, whitespace, responsive, alignment |
-| D5 | Content | 15% | Accurate, clear message in 5s, right density, zero filler |
-| D6 | Interactivity | 10% | Menu, theme, download, print, navigation, hover states |
-| D7 | Technical | 10% | Zero errors, <200KB, semantic HTML, print CSS, a11y |
-| D8 | Shareability | 10% | Would you tweet this? Better than Gamma/Canva? |
+| D1 | First Impression (첫인상) | 15% | 2초 안의 직관적 반응. 전문적인가? 시선이 모이는 지점이 분명한가? |
+| D2 | Typography (타이포그래피) | 15% | 위계, 크기, 행간, 글꼴 최대 2종 |
+| D3 | Color (색) | 10% | 조화로운 팔레트, WCAG AA, 강조색의 목적, 두 테마 모두 |
+| D4 | Layout (레이아웃) | 15% | 일관된 간격, 여백, 반응형, 정렬 |
+| D5 | Content (내용) | 15% | 정확성, 5초 안에 전달되는 메시지, 적절한 밀도, 채움용 문구 없음 |
+| D6 | Interactivity (인터랙션) | 10% | 메뉴, 테마, 내려받기, 인쇄, 내비게이션, 호버 상태 |
+| D7 | Technical (기술) | 10% | 오류 0건, 200KB 미만, 시맨틱 HTML, 인쇄 CSS, 접근성 |
+| D8 | Shareability (공유 가치) | 10% | 이걸 공유하고 싶은가? Gamma/Canva보다 나은가? |
 
-## Scoring Anchor Points
+## 점수 기준점
 
-| Score | Meaning | Comparable To |
+| 점수 | 의미 | 비교 대상 |
 |-------|---------|---------------|
-| 10 | Perfection | Apple keynote, NYT data viz |
-| 9 | Impressive | Stripe's blog, top Dribbble shot |
-| 8 | Professional | Good Gamma template, polished Figma prototype |
-| 7 | Acceptable | Average corporate deck, basic Canva output |
-| 6 | Mediocre | Default PowerPoint, generic template |
-| 5 | Poor | Ugly but functional |
-| ≤4 | Broken | Layout issues, missing features, embarrassing |
+| 10 | 완벽 | 애플 키노트, NYT 데이터 시각화 |
+| 9 | 인상적 | Stripe 블로그, 상위권 Dribbble 작업물 |
+| 8 | 전문적 | 잘 만든 Gamma 템플릿, 다듬어진 Figma 프로토타입 |
+| 7 | 수용 가능 | 평범한 사내 발표 자료, 기본 Canva 결과물 |
+| 6 | 평범 | 기본 PowerPoint, 일반 템플릿 |
+| 5 | 미흡 | 보기 나쁘지만 동작은 함 |
+| 4 이하 | 파손 | 레이아웃 문제, 기능 누락, 내놓기 민망한 수준 |
 
-## Quality Gates
+## 품질 게이트
 
-| Gate | Overall | Min per Dimension | Action |
+| 게이트 | 종합 | 항목별 최저 | 조치 |
 |------|---------|-------------------|--------|
-| 🚀 VIRAL | ≥ 9.5 | ≥ 9 | Ship + promote everywhere |
-| ✅ SHIP | ≥ 9.0 | ≥ 8 | Ready for release |
-| ⚠️ GOOD | ≥ 8.0 | ≥ 7 | Fix before featuring |
-| 🔧 NEEDS WORK | ≥ 7.0 | any < 7 | Fix + re-evaluate |
-| ❌ FAIL | < 7.0 | any < 5 | Major rework |
+| 🚀 VIRAL | 9.5 이상 | 9 이상 | 출시 후 적극 홍보 |
+| ✅ SHIP | 9.0 이상 | 8 이상 | 출시 준비 완료 |
+| ⚠️ GOOD | 8.0 이상 | 7 이상 | 대표 사례로 쓰기 전 수정 |
+| 🔧 NEEDS WORK | 7.0 이상 | 하나라도 7 미만 | 수정 후 재평가 |
+| ❌ FAIL | 7.0 미만 | 하나라도 5 미만 | 대규모 재작업 |
 
-## Target: SHIP (≥ 9.0) for all outputs. VIRAL (≥ 9.5) for showcase examples.
+## 목표: 모든 결과물 SHIP (9.0 이상). 대표 예시는 VIRAL (9.5 이상).
 
-## Common Deductions
+## 자주 나오는 감점
 
-| Issue | Dimension | Points Lost |
+| 문제 | 항목 | 감점 |
 |-------|-----------|-------------|
-| Menu missing | D6 | -4 |
-| Placeholder/lorem ipsum | D5 | -5 |
-| Broken at mobile | D4 | -3 |
-| No entrance animations | D1, D8 | -2 each |
-| Clashing colors | D3 | -3 |
-| All text same size | D2 | -3 |
-| Console errors | D7 | -2 each |
-| Light theme broken | D3, D6 | -2 each |
-| Too much text per slide | D5 | -3 |
-| No hover states | D6 | -1 |
-| No print styles | D7 | -2 |
-| Cramped spacing | D4 | -3 |
-| Generic/forgettable | D1, D8 | -2 each |
+| 메뉴 누락 | D6 | -4 |
+| 자리표시자 / lorem ipsum | D5 | -5 |
+| 모바일에서 깨짐 | D4 | -3 |
+| 진입 애니메이션 없음 | D1, D8 | 각 -2 |
+| 색이 서로 충돌함 | D3 | -3 |
+| 모든 텍스트 크기가 같음 | D2 | -3 |
+| 콘솔 오류 | D7 | 각 -2 |
+| 라이트 테마 깨짐 | D3, D6 | 각 -2 |
+| 슬라이드당 글이 너무 많음 | D5 | -3 |
+| 호버 상태 없음 | D6 | -1 |
+| 인쇄 스타일 없음 | D7 | -2 |
+| 간격이 답답함 | D4 | -3 |
+| 특징 없고 기억에 안 남음 | D1, D8 | 각 -2 |
