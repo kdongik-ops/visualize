@@ -1,66 +1,66 @@
-## Design System
+## Design System — 디자인 시스템
 
-Apply these defaults. They are opinionated and tested — override only when user requests it.
+여기 적힌 기본값을 적용한다. 의도적으로 정해졌고 검증된 값이므로, 사용자가 요청할 때만 덮어쓴다.
 
-### Design Notes
-- **Use inline SVG for icons, NOT emojis.** Simple path-based SVGs for a professional look. See the Icons section above.
-- **Chart.js charts MUST be destroyed and recreated on theme toggle** — not just CSS variable swaps. Colors are read at render time, so the chart must be rebuilt with new computed values.
-- **Chart.js: DISABLE default animation** — Add `Chart.defaults.animation = false;` before creating charts. Default animations cause charts to appear blank/broken in screenshots, Playwright tests, and initial renders. This is a recurring bug that caused "broken charts" in rounds 13-25.
-- **Chart.js: Use explicit color values** — Don't concatenate CSS variable values with hex alpha suffixes (e.g., `c.remote + '18'`). Use explicit `rgba()` values instead: `'rgba(12, 206, 107, 0.15)'`.
-- **Chart.js: Don't use resetCanvas** — Just reuse the same canvas element. Destroy the old chart instance with `.destroy()` then create a new one on the same canvas.
-- **Chart.js: Build after layout is stable** — Use `window.addEventListener('load', ...)` with a short `setTimeout(200)` and trigger `window.dispatchEvent(new Event('resize'))` after building.
+### 설계 메모 (Design Notes)
+- **아이콘은 인라인 SVG를 쓰고 이모지는 쓰지 않는다.** 경로 기반의 단순한 SVG가 전문적으로 보인다. 아래 Icons 절 참조.
+- **Chart.js 차트는 테마 전환 시 반드시 파기하고 다시 만들어야 한다** — CSS 변수만 바꿔서는 안 된다. 색은 렌더 시점에 읽히므로 새로 계산된 값으로 차트를 다시 만들어야 한다.
+- **Chart.js: 기본 애니메이션을 끈다** — 차트를 만들기 전에 `Chart.defaults.animation = false;`를 넣는다. 기본 애니메이션 때문에 스크린샷, Playwright 테스트, 초기 렌더에서 차트가 빈 칸으로 보이거나 깨진다. 13~25라운드에서 "차트 깨짐"으로 반복되던 버그다.
+- **Chart.js: 색은 명시적인 값으로** — CSS 변수 값에 16진수 투명도를 이어 붙이지 않는다 (예: `c.remote + '18'`). 대신 `rgba()` 값을 그대로 쓴다: `'rgba(12, 206, 107, 0.15)'`.
+- **Chart.js: resetCanvas를 쓰지 않는다** — 같은 canvas 요소를 그대로 재사용한다. 이전 차트 인스턴스를 `.destroy()`로 없앤 다음 같은 canvas에 새로 만든다.
+- **Chart.js: 레이아웃이 안정된 뒤에 만든다** — `window.addEventListener('load', ...)`에 짧은 `setTimeout(200)`을 주고, 만든 뒤 `window.dispatchEvent(new Event('resize'))`를 발생시킨다.
 
-### Typography
-- **Primary font:** Inter via Google Fonts CDN — `https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap`
-- **Professional letter-spacing (Apple/Stripe-inspired):**
-  - **Hero headings (h1):** `letter-spacing: -0.03em` — tight like Apple keynote titles
-  - **Section headings (h2-h3):** `letter-spacing: -0.02em`
-  - **Body text:** `letter-spacing: -0.011em` for refined readability
-  - **Labels/caps:** `letter-spacing: 0.05em` for small uppercase text
-  - **Font features:** `font-feature-settings: 'cv11', 'ss01';` for Inter's stylistic alternates
-- **Font-weight hierarchy (Stripe-inspired):**
-  - **h1:** `font-weight: 700` (bold, not 800 — optically cleaner at large sizes)
-  - **h2:** `font-weight: 600` (semibold)
-  - **Card titles:** `font-weight: 600`
-  - **Body text:** `font-weight: 400` (regular)
-  - **Labels:** `font-weight: 500` (medium)
-- **Text colors (Vercel-inspired):** Never pure white. Use `#ededed` or `var(--text)` which maps to `#f5f5f7` in dark mode. Secondary text at 60% opacity feel (`#888` or `var(--text-secondary)`)
-- **NO gradient text on headings** — use solid colors only. Gradient text looks cheap at scale.
-- **Multilingual support:** When content includes non-Latin text (Korean, Japanese, Chinese, etc.), add the appropriate Google Fonts:
-  - **Korean:** Noto Sans KR — `https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap`
-  - **Japanese:** Noto Sans JP — `https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;800;900&display=swap`
-  - **Chinese (Simplified):** Noto Sans SC — `https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;800;900&display=swap`
-  - **Arabic:** Noto Sans Arabic — `https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800;900&display=swap`
-  - Set `font-family: 'Noto Sans KR', 'Inter', sans-serif;` (CJK font first, then Inter fallback for numbers/Latin)
-  - Set `<html lang="ko">` (or appropriate language code)
-- **Custom fonts:** When the user requests a specific font or vibe:
-  - **Serif/editorial:** Lora, Playfair Display, Source Serif Pro
-  - **Monospace/code:** JetBrains Mono, Fira Code, Source Code Pro
-  - **Display/creative:** Space Grotesk, Outfit, Sora, Poppins
-  - **Handwritten:** Caveat, Patrick Hand
-  - Always load via Google Fonts CDN: `https://fonts.googleapis.com/css2?family=FONTNAME:wght@WEIGHTS&display=swap`
-  - Update the `--font-primary` CSS var and `body { font-family: ... }` accordingly
-- **Light mode text optimization:** Use softer text colors, not harsh black:
-  - Primary text: `#1a1a1a` (not #000000) for better readability
-  - Secondary text: `#666666` for proper hierarchy
-  - Never pure black text on white backgrounds - it's too harsh
-- **Font detection:** Infer the right font from context:
-  - Korean/Japanese/Chinese content → auto-add Noto Sans KR/JP/SC
-  - Code-heavy content (cheat sheets) → add JetBrains Mono for code blocks
-  - Formal/editorial content → consider a serif font for headings
-  - Playful/creative content → consider display fonts
-- **Monospace:** JetBrains Mono or system `'SF Mono', 'Fira Code', 'Consolas', monospace`
-- **Fallback:** `-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`
-- **Type scale (dramatic):** Make hero titles bigger, body should breathe more — 14 → 16 → 20 → 25 → 31 → 39 → 49px
-- **Line-height:** 1.5–1.7 for body, 1.1 for headings (tight for professional feel)
-- **Max line width:** 65–75 characters for readability
-- Use `clamp()` for fluid responsive sizing: `clamp(1rem, 2.5vw, 1.25rem)`
+### 타이포그래피 (Typography)
+- **기본 글꼴:** Inter via Google Fonts CDN — `https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap`
+- **전문적인 자간 (Apple/Stripe 참고):**
+  - **대표 제목 (h1):** `letter-spacing: -0.03em` — Apple 키노트 제목처럼 빡빡하게
+  - **섹션 제목 (h2-h3):** `letter-spacing: -0.02em`
+  - **본문:** `letter-spacing: -0.011em` — 가독성이 정제된다
+  - **라벨·대문자:** 작은 대문자 텍스트에 `letter-spacing: 0.05em`
+  - **글꼴 기능:** Inter의 대체 자형을 쓰려면 `font-feature-settings: 'cv11', 'ss01';`
+- **글꼴 굵기 위계 (Stripe 참고):**
+  - **h1:** `font-weight: 700` (800이 아니라 700 — 큰 크기에서 시각적으로 더 깔끔하다)
+  - **h2:** `font-weight: 600` (세미볼드)
+  - **카드 제목:** `font-weight: 600`
+  - **본문:** `font-weight: 400` (레귤러)
+  - **라벨:** `font-weight: 500` (미디엄)
+- **글자 색 (Vercel 참고):** 순백은 쓰지 않는다. `#ededed` 또는 다크 모드에서 `#f5f5f7`로 매핑되는 `var(--text)`를 쓴다. 보조 글자는 불투명도 60% 느낌으로 (`#888` 또는 `var(--text-secondary)`)
+- **제목에 그라디언트 텍스트 금지** — 단색만 쓴다. 그라디언트 텍스트는 크게 넣을수록 싸구려 보인다.
+- **다국어 지원:** 내용에 라틴 문자가 아닌 글자(한국어, 일본어, 중국어 등)가 들어가면 알맞은 Google Fonts를 추가한다:
+  - **한국어:** Noto Sans KR — `https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap`
+  - **일본어:** Noto Sans JP — `https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;800;900&display=swap`
+  - **중국어 (간체):** Noto Sans SC — `https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;800;900&display=swap`
+  - **아랍어:** Noto Sans Arabic — `https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800;900&display=swap`
+  - `font-family: 'Noto Sans KR', 'Inter', sans-serif;`로 설정한다 (CJK 글꼴을 앞에, 숫자·라틴은 Inter가 받는다)
+  - `<html lang="ko">`로 설정한다 (또는 해당 언어 코드)
+- **맞춤 글꼴:** 사용자가 특정 글꼴이나 분위기를 요청할 때:
+  - **세리프·편집물 느낌:** Lora, Playfair Display, Source Serif Pro
+  - **고정폭·코드:** JetBrains Mono, Fira Code, Source Code Pro
+  - **디스플레이·창의적:** Space Grotesk, Outfit, Sora, Poppins
+  - **손글씨:** Caveat, Patrick Hand
+  - 항상 Google Fonts CDN으로 불러온다: `https://fonts.googleapis.com/css2?family=FONTNAME:wght@WEIGHTS&display=swap`
+  - `--font-primary` CSS 변수와 `body { font-family: ... }`를 거기 맞게 고친다
+- **라이트 모드 글자 최적화:** 강한 검정 대신 부드러운 글자 색을 쓴다:
+  - 본문 글자: `#1a1a1a` (#000000이 아니다) — 가독성이 낫다
+  - 보조 글자: `#666666` — 위계를 살린다
+  - 흰 배경에 순수 검정 글자는 쓰지 않는다 — 너무 강하다
+- **글꼴 자동 판단:** 맥락으로 알맞은 글꼴을 고른다:
+  - 한국어·일본어·중국어 내용 → Noto Sans KR/JP/SC를 자동으로 추가
+  - 코드가 많은 내용(치트시트) → 코드 블록에 JetBrains Mono 추가
+  - 격식 있거나 편집물 성격의 내용 → 제목에 세리프 글꼴 검토
+  - 경쾌하거나 창의적인 내용 → 디스플레이 글꼴 검토
+- **고정폭 글꼴:** JetBrains Mono 또는 시스템 글꼴 `'SF Mono', 'Fira Code', 'Consolas', monospace`
+- **대체 글꼴:** `-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`
+- **크기 배율 (과감하게):** 대표 제목은 더 크게, 본문은 더 숨 쉬게 — 14 → 16 → 20 → 25 → 31 → 39 → 49px
+- **행간:** 본문 1.5~1.7, 제목 1.1 (빡빡해야 전문적으로 보인다)
+- **최대 줄 너비:** 가독성을 위해 65~75자
+- 유동적인 반응형 크기에는 `clamp()`를 쓴다: `clamp(1rem, 2.5vw, 1.25rem)`
 
-### Modern CSS Techniques (Chrome 105+)
+### 최신 CSS 기법 (Chrome 105+)
 
-Use these cutting-edge CSS features where supported for better UX:
+지원되는 환경에서는 아래 최신 CSS 기능을 써서 사용성을 높인다:
 
-**Popover API** (Chrome 114+) — Zero-JS tooltips, info panels, and modals:
+**Popover API** (Chrome 114+) — JS 없이 만드는 툴팁, 정보 패널, 모달:
 ```html
 <button popovertarget="info-panel">ℹ Details</button>
 <div id="info-panel" popover>
@@ -76,16 +76,16 @@ Use these cutting-edge CSS features where supported for better UX:
 }
 [popover]::backdrop { background: rgba(0,0,0,0.3); }
 ```
-Use for: dashboard metric details, architecture node info, chart annotations.
+쓰는 곳: 대시보드 지표 상세, 아키텍처 노드 정보, 차트 주석.
 
-**Exclusive `<details>` Accordion** (Chrome 120+) — Collapsible sections, no JS:
+**Exclusive `<details>` Accordion** (Chrome 120+) — JS 없는 접이식 섹션:
 ```html
 <details name="faq" open><summary>Section 1</summary><p>Content</p></details>
 <details name="faq"><summary>Section 2</summary><p>Content</p></details>
 ```
-Same `name` attribute = only one open at a time. Use for: cheatsheets, process guides, FAQs, any content with collapsible groups.
+`name` 속성이 같으면 한 번에 하나만 열린다. 쓰는 곳: 치트시트, 절차 안내, FAQ 등 접었다 펼 수 있는 묶음이 있는 모든 내용.
 
-**`::details-content` Styling** (Chrome 131+) — Animate accordion open/close:
+**`::details-content` Styling** (Chrome 131+) — 아코디언 열고 닫기 애니메이션:
 ```css
 details { overflow: hidden; }
 ::details-content {
@@ -97,7 +97,7 @@ details[open]::details-content {
 }
 ```
 
-**CSS Anchor Positioning** (Chrome 125+) — Position tooltips relative to elements:
+**CSS Anchor Positioning** (Chrome 125+) — 요소를 기준으로 툴팁 위치 잡기:
 ```css
 .node { anchor-name: --node-tooltip; }
 .tooltip {
@@ -105,9 +105,9 @@ details[open]::details-content {
   position-area: block-start; margin-bottom: 8px;
 }
 ```
-Use for: architecture diagrams, org charts, any element needing positioned annotations.
+쓰는 곳: 아키텍처 다이어그램, 조직도, 위치를 잡아야 하는 주석이 필요한 모든 요소.
 
-**Container Queries** — Size elements based on their container, not viewport:
+**Container Queries** — 뷰포트가 아니라 컨테이너 크기에 맞춰 요소 크기 결정:
 ```css
 .card-container {
   container-type: inline-size;
@@ -118,7 +118,7 @@ Use for: architecture diagrams, org charts, any element needing positioned annot
 }
 ```
 
-**:has() Parent Selector** — Style elements based on their children:
+**:has() Parent Selector** — 자식 요소를 기준으로 부모에 스타일 적용:
 ```css
 /* Style card if it contains an image */
 .card:has(img) { padding-block: 2rem; }
@@ -126,20 +126,20 @@ Use for: architecture diagrams, org charts, any element needing positioned annot
 h1:has(+ h2) { margin-bottom: 0.25rem; }
 ```
 
-**color-mix() Function** — Dynamic color generation:
+**color-mix() Function** — 색을 동적으로 만들어 낸다:
 ```css
 background: color-mix(in oklch, var(--accent), transparent 20%);
 border-color: color-mix(in srgb, var(--text), var(--bg) 85%);
 ```
 
-**light-dark() Function** (Chrome 123+) — Single-property theme switching:
+**light-dark() Function** (Chrome 123+) — 속성 하나로 테마 전환:
 ```css
 :root { color-scheme: light dark; }
 background: light-dark(white, #1a1a1a);
 color: light-dark(#333, #fff);
 ```
 
-**@starting-style** (Chrome 117+) — Entry animations for new elements:
+**@starting-style** (Chrome 117+) — 새로 나타나는 요소의 진입 애니메이션:
 ```css
 .modal {
   opacity: 1; transform: scale(1);
@@ -150,9 +150,9 @@ color: light-dark(#333, #fff);
 }
 ```
 
-### Color System (Class-Based Theming — NO @media prefers-color-scheme)
+### 색 체계 (클래스 기반 테마 — NO @media prefers-color-scheme)
 
-**CRITICAL: Do NOT use `@media (prefers-color-scheme)` for theme variables.** It fights with class-based `.theme-dark`/`.theme-light` and causes themes to break when OS mode differs from selected theme. Use ONLY class-based selectors on `html`:
+**CRITICAL: 테마 변수에 `@media (prefers-color-scheme)`를 쓰지 말 것.** 클래스 기반 `.theme-dark`/`.theme-light`와 충돌해서, OS 설정과 선택한 테마가 다를 때 테마가 깨진다. `html`에 붙는 클래스 선택자만 쓴다:
 
 ```css
 /* Theme via class on <html> — JS detects prefers-color-scheme on first load */
@@ -188,42 +188,42 @@ html.theme-light {
 }
 ```
 
-**JS theme init** detects OS preference on first visit, then uses localStorage override:
+**JS 테마 초기화**는 첫 방문 시 OS 설정을 감지하고, 이후에는 localStorage 값을 우선한다:
 ```javascript
 var saved = localStorage.getItem('viz-theme');
 var initial = saved || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
 applyTheme(initial);
 ```
 
-Chart color sequence: `#3b82f6, #8b5cf6, #ec4899, #f59e0b, #10b981, #06b6d4, #f43f5e`
+차트 색 순서: `#3b82f6, #8b5cf6, #ec4899, #f59e0b, #10b981, #06b6d4, #f43f5e`
 
-### Semantic Color Usage (Professional Standards)
+### 의미 있는 색 사용 (Semantic Color Usage)
 
-Use colors with semantic meaning, not decoration:
+장식이 아니라 의미를 담아 색을 쓴다:
 
-**Success/Positive Metrics** — `var(--positive)` (green):
-- Revenue growth, user acquisition, completion rates
-- Up arrows, positive percentages, "good" status indicators
+**성공·긍정 지표** — `var(--positive)` (초록):
+- 매출 성장, 사용자 유치, 완료율
+- 위쪽 화살표, 양수 퍼센트, "양호" 상태 표시
 
-**Warning/Caution** — `var(--warning)` (amber):
-- Metrics approaching thresholds, pending statuses
-- Neutral alerts, "attention needed" indicators
+**경고·주의** — `var(--warning)` (앰버):
+- 임계값에 가까워진 지표, 대기 상태
+- 중립적 알림, "확인 필요" 표시
 
-**Error/Negative Metrics** — `var(--negative)` (red):
-- Declining metrics, failures, critical alerts
-- Down arrows, negative percentages, error states
+**오류·부정 지표** — `var(--negative)` (빨강):
+- 하락하는 지표, 실패, 심각 알림
+- 아래쪽 화살표, 음수 퍼센트, 오류 상태
 
-**Info/Primary Actions** — `var(--info)` (blue):
-- Primary CTAs, informational highlights, process steps
+**정보·주요 동작** — `var(--info)` (파랑):
+- 주요 행동 유도 버튼, 정보성 강조, 절차 단계
 
-**Accent Restraint Rules**:
-- **KPI grids with 4+ cards:** Use at most 2 accent colors — `var(--accent)` for the single most important metric, `var(--text)` for others
-- **Never colorize numbers randomly** — color must indicate semantic meaning
-- **Delta indicators only:** Use `var(--positive)`/`var(--negative)` for arrows and percentages, not main values
+**강조색 절제 규칙**:
+- **카드 4개 이상인 KPI 그리드:** 강조색은 최대 2개 — 가장 중요한 지표 하나에만 `var(--accent)`, 나머지는 `var(--text)`
+- **숫자에 임의로 색을 입히지 않는다** — 색은 반드시 의미를 나타내야 한다
+- **변화량 표시에만:** `var(--positive)`/`var(--negative)`는 화살표와 퍼센트에 쓰고, 카드의 주요 수치에는 쓰지 않는다
 
-### Professional Card System
+### 카드 체계 (Professional Card System)
 
-Modern card styling beyond basic borders:
+단순한 테두리를 넘어선 현대적 카드 스타일:
 
 ```css
 .card {
@@ -256,15 +256,15 @@ Modern card styling beyond basic borders:
 }
 ```
 
-**Key principles:**
-- 12px border radius for premium feel (not 8px)
-- Light mode emphasizes shadows, dark mode emphasizes borders
-- Consistent 24px internal padding
-- Hover states enhance the existing visual style
+**핵심 원칙:**
+- 고급스러운 느낌을 위해 모서리 반지름 12px (8px가 아니다)
+- 라이트 모드는 그림자를, 다크 모드는 테두리를 살린다
+- 내부 여백은 24px로 일정하게
+- 호버 상태는 기존 시각 스타일을 강화하는 방향으로
 
-### Chart.js Professional Styling
+### Chart.js 전문가용 스타일링
 
-Beyond library defaults — apply these to every chart:
+라이브러리 기본값을 넘어 모든 차트에 적용한다:
 
 ```css
 .chart-container {
@@ -281,22 +281,22 @@ Beyond library defaults — apply these to every chart:
 }
 ```
 
-**Chart configuration enhancements:**
-- Custom padding: `layout: { padding: { top: 30, right: 30, bottom: 30, left: 30 } }`
-- Rounded corners on bars: `borderRadius: 4`
-- Professional grid opacity: Light mode `rgba(0,0,0,0.04)`, Dark mode `rgba(255,255,255,0.02)`
-- Thoughtful color palettes matching theme accent
-- Axis label sizing: minimum 13px for readability
-- Remove default animations: `Chart.defaults.animation = false`
+**차트 설정 보강:**
+- 여백 지정: `layout: { padding: { top: 30, right: 30, bottom: 30, left: 30 } }`
+- 막대 모서리 둥글게: `borderRadius: 4`
+- 격자선 불투명도: 라이트 모드 `rgba(0,0,0,0.04)`, 다크 모드 `rgba(255,255,255,0.02)`
+- 테마 강조색과 어울리는 색 팔레트
+- 축 라벨 크기: 가독성을 위해 최소 13px
+- 기본 애니메이션 제거: `Chart.defaults.animation = false`
 
-### Spacing
-- **8px grid** — all spacing in multiples: 4, 8, 12, 16, 24, 32, 48, 64, 96px
-- **Generous padding** — `p-6` to `p-8` on cards, `px-8` on containers
-- **Container:** `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`
-- **Card gaps:** `gap-6` minimum
+### 간격 (Spacing)
+- **8px 그리드** — 모든 간격은 배수로: 4, 8, 12, 16, 24, 32, 48, 64, 96px
+- **여유 있는 여백** — 카드는 `p-6`~`p-8`, 컨테이너는 `px-8`
+- **컨테이너:** `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`
+- **카드 간격:** 최소 `gap-6`
 
-### Mobile Responsiveness (Critical)
-**All visualizations must work flawlessly on mobile. No horizontal overflow allowed.**
+### 모바일 반응형 (Critical)
+**모든 시각화는 모바일에서 흔들림 없이 동작해야 한다. 가로 오버플로는 허용되지 않는다.**
 
 ```css
 /* Required mobile breakpoints */
@@ -327,15 +327,15 @@ Beyond library defaults — apply these to every chart:
 }
 ```
 
-**Testing checklist:**
-- ✅ No horizontal scrolling at 768px viewport
-- ✅ No horizontal scrolling at 375px viewport  
-- ✅ All text remains readable (min 16px)
-- ✅ Touch targets are ≥44px
-- ✅ Charts resize appropriately
+**점검 목록:**
+- ✅ 768px 뷰포트에서 가로 스크롤 없음
+- ✅ 375px 뷰포트에서 가로 스크롤 없음  
+- ✅ 모든 글자가 읽힌다 (최소 16px)
+- ✅ 터치 대상 영역이 44px 이상
+- ✅ 차트가 알맞게 크기 조정됨
 
-### Card Hover Microinteractions
-All cards should have subtle hover effects — shadow elevation ONLY, no transforms:
+### 카드 호버 마이크로인터랙션
+모든 카드에 은은한 호버 효과를 둔다 — 그림자 높이기만 하고 변형은 쓰지 않는다:
 ```css
 .card, .stat-card, .kpi-card, .stat-item, .chart-container {
   transition: box-shadow 0.2s ease;
@@ -344,13 +344,13 @@ All cards should have subtle hover effects — shadow elevation ONLY, no transfo
   box-shadow: 0 0 0 1px var(--border), 0 8px 16px rgba(0,0,0,0.08);
 }
 ```
-- NO `translateY` or `scale` on card hover — it looks cheap
-- Timeline items: subtle background highlight on hover
-- Architecture nodes: subtle shadow elevation on hover
-- List items: subtle background tint on hover, not translateX
+- 카드 호버에 `translateY`나 `scale` 쓰지 않기 — 싸구려 보인다
+- 타임라인 항목: 호버 시 은은한 배경 강조
+- 아키텍처 노드: 호버 시 은은한 그림자 높이기
+- 목록 항목: 호버 시 translateX가 아니라 은은한 배경 톤 변화
 
-### :focus-visible Standard
-Every file MUST include:
+### :focus-visible 표준
+모든 파일이 반드시 포함해야 한다:
 ```css
 *:focus-visible {
   outline: 2px solid var(--accent);
@@ -359,8 +359,8 @@ Every file MUST include:
 }
 ```
 
-### SVG Chart Hover Pattern
-For inline SVG chart elements (bars, donut segments, data points):
+### SVG 차트 호버 패턴
+인라인 SVG 차트 요소(막대, 도넛 조각, 데이터 지점)에:
 ```css
 svg rect, svg circle, svg path.data-element {
   transition: opacity 0.2s, transform 0.2s;
@@ -370,27 +370,27 @@ svg rect:hover, svg circle:hover {
   filter: brightness(1.1);
 }
 ```
-Always add `<title>` elements inside SVG shapes for native browser tooltips:
+브라우저 기본 툴팁을 위해 SVG 도형 안에 `<title>` 요소를 항상 넣는다:
 ```html
 <rect x="10" y="20" width="50" height="100">
   <title>Revenue: $142K</title>
 </rect>
 ```
 
-### Visual Polish (Stripe/Vercel-level)
-- **Border radius:** `8px` consistently (not 12px, not 16px — Stripe uses 8px)
-- **Shadows (dark mode):** Almost none — `box-shadow: 0 0 0 1px var(--border)` is sufficient. Let borders do the work.
-- **Shadows (light mode):** Subtle layers — `box-shadow: 0 0 0 1px rgba(0,0,0,0.03), 0 2px 4px rgba(0,0,0,0.05)`
-- **Card hover:** Shadow deepens slightly. NO translateY, NO scale transforms. Just: `box-shadow: 0 0 0 1px rgba(0,0,0,0.03), 0 8px 16px rgba(0,0,0,0.08)`
-- **Clean card borders:** `border: 1px solid var(--border)` — no gradient borders, no colored left/top borders
-- **Glass morphism:** Use sparingly, only for floating UI elements (menus, tooltips), not cards
-- **Restrained accents:** Use accent color for ONE thing per section (a button, a link, an icon) — not everywhere
-- **Transitions:** `transition: box-shadow 0.2s ease` — only animate what changes
+### 시각적 완성도 (Stripe/Vercel 수준)
+- **모서리 반지름:** 일관되게 `8px` (12px도 16px도 아니다 — Stripe가 8px를 쓴다)
+- **그림자 (다크 모드):** 거의 쓰지 않는다 — `box-shadow: 0 0 0 1px var(--border)`면 충분하다. 테두리가 일하게 둔다.
+- **그림자 (라이트 모드):** 은은한 겹 — `box-shadow: 0 0 0 1px rgba(0,0,0,0.03), 0 2px 4px rgba(0,0,0,0.05)`
+- **카드 호버:** 그림자만 살짝 진해진다. NO translateY, NO scale transforms. 이것만: `box-shadow: 0 0 0 1px rgba(0,0,0,0.03), 0 8px 16px rgba(0,0,0,0.08)`
+- **깔끔한 카드 테두리:** `border: 1px solid var(--border)` — 그라디언트 테두리 금지, 왼쪽·윗쪽 색 테두리 금지
+- **글래스 모피즘:** 아껴서 쓴다. 떠 있는 UI 요소(메뉴, 툴팁)에만 쓰고 카드에는 쓰지 않는다
+- **강조색 절제:** 섹션당 한 가지에만 강조색을 쓴다 (버튼 하나, 링크 하나, 아이콘 하나) — 여기저기 쓰지 않는다
+- **전환:** `transition: box-shadow 0.2s ease` — 변하는 것만 애니메이션한다
 
-### Background Atmosphere (Avoid Generic Dark)
-Every visualization should have a SUBTLE background personality. Avoid flat `--bg` backgrounds that look like every dark template. Choose ONE technique per file:
+### 배경 분위기 (흔한 다크를 피할 것)
+모든 시각화에는 은은한 배경 개성이 있어야 한다. 흔한 다크 템플릿처럼 보이는 밋밋한 `--bg` 배경은 피한다. 파일당 한 가지 기법만 고른다:
 
-1. **Subtle radial gradient** — a single, very faint radial gradient from the center:
+1. **은은한 방사형 그라디언트** — 가운데에서 퍼지는 아주 희미한 방사형 그라디언트 하나:
    ```css
    body { background: var(--bg); }
    body::before {
@@ -399,23 +399,23 @@ Every visualization should have a SUBTLE background personality. Avoid flat `--b
        color-mix(in srgb, var(--accent), transparent 92%), transparent);
    }
    ```
-2. **Noise/grain texture** (Vercel-style): use a tiny inline SVG noise filter:
+2. **노이즈·입자감 질감** (Vercel 방식): 작은 인라인 SVG 노이즈 필터를 쓴다:
    ```css
    body::after {
      content: ''; position: fixed; inset: 0; z-index: -1; opacity: 0.03;
      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
    }
    ```
-3. **Dot grid** (use sparingly, only for tech/architecture files):
+3. **점 격자** (아껴서 쓰고, 기술·아키텍처 문서에만):
    ```css
    body { background-image: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
      background-size: 24px 24px; }
    ```
 
-Choose the technique that matches the content personality. Timelines → radial gradient. Dashboards → grain. Architecture → dot grid. Slide decks → radial gradient with content-specific accent color.
+내용의 성격에 맞는 기법을 고른다. 타임라인 → 방사형 그라디언트. 대시보드 → 입자감. 아키텍처 → 점 격자. 슬라이드 덱 → 내용에 맞는 강조색을 쓴 방사형 그라디언트.
 
-### Dropdown Menu Styling (Mandatory)
-The settings/export dropdown MUST look polished:
+### 드롭다운 메뉴 스타일 (Mandatory)
+설정·내보내기 드롭다운은 반드시 다듬어진 모습이어야 한다:
 ```css
 .dropdown-menu {
   background: var(--surface);
@@ -441,8 +441,8 @@ The settings/export dropdown MUST look polished:
 }
 ```
 
-### Entrance Animations (Mandatory for All Files)
-Every file MUST have subtle entrance animations. Static-feeling pages score low on interactivity. Use CSS-only `@keyframes` on page load:
+### 진입 애니메이션 (모든 파일에 Mandatory)
+모든 파일에 은은한 진입 애니메이션이 반드시 있어야 한다. 정적인 느낌의 페이지는 인터랙션 점수가 낮다. 페이지 로드 시 CSS `@keyframes`만 쓴다:
 ```css
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(12px); }
@@ -457,7 +457,7 @@ Every file MUST have subtle entrance animations. Static-feeling pages score low 
 .card:nth-child(3) { animation-delay: 0.16s; }
 .card:nth-child(4) { animation-delay: 0.24s; }
 ```
-Also add hover states on ALL cards/items — even "static" content like cheatsheets and quote cards:
+치트시트나 인용 카드처럼 "정적인" 내용을 포함해 모든 카드·항목에 호버 상태를 넣는다:
 ```css
 .card:hover, .command-group:hover, blockquote:hover {
   background: var(--surface-hover);
@@ -465,8 +465,8 @@ Also add hover states on ALL cards/items — even "static" content like cheatshe
 }
 ```
 
-### Theme-Adaptive Content (Carousels, Posters)
-When cards use decorative gradients (e.g., Instagram-style pastel slides), the gradients MUST adapt to the theme. Don't use fixed pastel colors that look identical in dark/light mode:
+### 테마에 반응하는 콘텐츠 (캐러셀, 포스터)
+카드가 장식용 그라디언트를 쓸 때(예: 인스타그램풍 파스텔 슬라이드), 그라디언트는 반드시 테마에 따라 바뀌어야 한다. 다크와 라이트에서 똑같아 보이는 고정 파스텔 색은 쓰지 않는다:
 ```css
 /* BAD — same gradient in both themes */
 .card { background: linear-gradient(135deg, #ff9a9e, #fecfef); }
@@ -476,83 +476,83 @@ When cards use decorative gradients (e.g., Instagram-style pastel slides), the g
 .theme-light .card-1 { background: linear-gradient(135deg, #ff9a9e, #fecfef); }
 ```
 
-### Slide Deck Light Mode
-Slide decks are designed dark-first, but light mode must NOT feel like an afterthought. For presentations in light mode:
-- Use a subtle warm gray background (`#f5f5f0`) not pure white
-- Add a faint top-down gradient for depth
-- Ensure headings use dark text with sufficient weight
-- Grid/glow backgrounds should switch to subtle dot patterns or soft gradients in light mode
+### 슬라이드 덱의 라이트 모드
+슬라이드 덱은 다크를 먼저 생각하고 설계하지만, 라이트 모드가 곁다리로 느껴져서는 안 된다. 라이트 모드 발표에서는:
+- 순백 대신 은은한 따뜻한 회색 배경(`#f5f5f0`)을 쓴다
+- 깊이감을 위해 위에서 아래로 희미한 그라디언트를 넣는다
+- 제목은 충분한 굵기의 어두운 글자를 쓴다
+- 격자·발광 배경은 라이트 모드에서 은은한 점 패턴이나 부드러운 그라디언트로 바꾸어야 한다
 
-### Chart Accessibility (Mandatory)
-All CSS-only charts (bars, radar, donut) and Chart.js charts MUST expose data to screen readers:
+### 차트 접근성 (Mandatory)
+CSS로만 만든 차트(막대, 레이더, 도넛)와 Chart.js 차트는 모두 반드시 스크린 리더에 데이터를 노출해야 한다:
 ```html
 <div role="img" aria-label="Bar chart showing React at 85%, Vue at 72%, Angular at 58%">
   <!-- visual chart here -->
   <div class="sr-only">React: 85%. Vue: 72%. Angular: 58%.</div>
 </div>
 ```
-Add `.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }` to every file.
+모든 파일에 `.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }`를 추가한다.
 
-### Visual Restraint Anti-Patterns (NEVER DO)
-- ❌ **Floating gradient orbs** — decorative blurred circles behind content look amateurish
-- ❌ **Rainbow/gradient borders** — colored top-borders or left-borders on cards scream "template"
-- ❌ **Gradient text** on headings — use solid colors. Gradient text is a 2020 trend that aged poorly
-- ❌ **Scale transforms on hover** — `scale(1.02)` on cards feels janky, not premium
-- ❌ **Glow effects** — `box-shadow: 0 0 20px rgba(blue)` never looks good
-- ❌ **Decorative animations** — spinning rings, floating particles, pulsing dots are noise
-- ❌ **Color-coded borders** — left/top colored borders on cards feel like Bootstrap components
-- ❌ **Stat numbers with gradient text** — use a solid accent color or var(--text) instead
+### 시각적 절제 — 안티패턴 (NEVER DO)
+- ❌ **떠다니는 그라디언트 구** — 내용 뒤에 깔아 둔 장식용 원은 아마추어처럼 보인다
+- ❌ **무지개·그라디언트 테두리** — 카드의 윗줄·왼줄 색 테두리는 "템플릿"이라고 소리치는 꼴이다
+- ❌ **제목의 그라디언트 텍스트** — 단색을 쓴다. 그라디언트 텍스트는 2020년대 유행이고 오래 가지 못했다
+- ❌ **호버 시 확대 변형** — 카드에 `scale(1.02)`를 주면 고급스럽기는커녕 어설프다
+- ❌ **발광 효과** — `box-shadow: 0 0 20px rgba(blue)`는 예뻐 보인 적이 없다
+- ❌ **장식용 애니메이션** — 도는 고리, 떠다니는 입자, 깜빡이는 점은 소음이다
+- ❌ **색으로 구분한 테두리** — 카드 왼쪽·윗쪽 색 테두리는 Bootstrap 컴포넌트 같아 보인다
+- ❌ **그라디언트 텍스트를 쓴 통계 숫자** — 단색 강조색이나 var(--text)를 쓴다
 
-### Accessibility (Mandatory)
+### 접근성 (Mandatory)
 
-Every visualization MUST meet these baseline accessibility requirements:
+모든 시각화는 아래 기본 접근성 요구사항을 반드시 충족해야 한다:
 
-**Minimum Accessibility Checklist:**
-- [ ] Skip-to-content link present
-- [ ] `role="region"` on all major sections with `aria-label`
-- [ ] `role="group"` on comparison sections, architecture layers, slide groups
-- [ ] `role="list"` / `role="listitem"` on timeline sections and items
-- [ ] `aria-label` on all icon-only buttons
-- [ ] `aria-describedby` on chart sections linking to data descriptions
-- [ ] `:focus-visible` with `border-radius: 4px` on all interactive elements
-- [ ] `aria-live="polite"` on slide counters / dynamic content
+**최소 접근성 점검 목록:**
+- [ ] 본문 바로가기 링크가 있다
+- [ ] 모든 주요 섹션에 `aria-label`과 함께 `role="region"`
+- [ ] 비교 섹션, 아키텍처 계층, 슬라이드 묶음에 `role="group"`
+- [ ] 타임라인 섹션과 항목에 `role="list"` / `role="listitem"`
+- [ ] 아이콘만 있는 모든 버튼에 `aria-label`
+- [ ] 차트 섹션에 데이터 설명을 가리키는 `aria-describedby`
+- [ ] 모든 인터랙티브 요소에 `border-radius: 4px`를 가진 `:focus-visible`
+- [ ] 슬라이드 카운터·동적 콘텐츠에 `aria-live="polite"`
 
-- **Skip navigation:** Add `<a href="#main-content" class="skip-link">Skip to content</a>` at the top of `<body>`. Style: visually hidden, visible on focus.
-- **Landmark roles:** Use `<main>`, `<nav>`, `<header>`, `<footer>`, `<section>` with `aria-label` where there are multiple of the same landmark.
-- **Interactive elements:** All buttons, links, and controls must have `aria-label` if their text content is not descriptive (e.g., icon-only buttons).
-- **Focus indicators:** Add visible `:focus-visible` styles on all interactive elements: `outline: 2px solid var(--accent); outline-offset: 2px;`
-- **Color-only indicators:** Status dots, colored badges, etc. MUST have a text alternative. E.g., a green status dot should also show "Healthy" text or `aria-label="Status: Healthy"`.
-- **Charts and diagrams (MANDATORY):** 
-  - Wrap chart canvas in container with `role="img" aria-label="Description of what the chart shows"`
-  - **ALL charts MUST have hover tooltips enabled** — never disable Chart.js tooltips
-  - Include data table alternative or visually-hidden summary for screen readers
-  - Use high contrast colors with sufficient color difference between data series
-- **Screen reader descriptions:** Add `aria-description` or visually-hidden text describing key takeaways for complex visualizations.
-- **Slide decks:** Use `aria-live="polite"` on the slide counter, and `aria-label` on navigation buttons.
+- **본문 바로가기:** `<body>` 맨 위에 `<a href="#main-content" class="skip-link">Skip to content</a>`를 넣는다. 스타일은 평소에 숨기고 포커스를 받을 때 보이게.
+- **랜드마크 역할:** `<main>`, `<nav>`, `<header>`, `<footer>`, `<section>`을 쓰고, 같은 랜드마크가 여럿이면 `aria-label`을 붙인다.
+- **인터랙티브 요소:** 버튼·링크·컨트롤의 글자만으로 설명이 되지 않으면(예: 아이콘만 있는 버튼) `aria-label`을 반드시 붙인다.
+- **포커스 표시:** 모든 인터랙티브 요소에 눈에 보이는 `:focus-visible` 스타일을 넣는다: `outline: 2px solid var(--accent); outline-offset: 2px;`
+- **색으로만 된 표시:** 상태 점, 색 배지 등은 반드시 글자 대체물을 갖춰야 한다. 예를 들어 초록 상태 점에는 "Healthy" 글자나 `aria-label="Status: Healthy"`를 함께 둔다.
+- **차트와 다이어그램 (MANDATORY):** 
+  - 차트 canvas를 `role="img" aria-label="Description of what the chart shows"`를 가진 컨테이너로 감싼다
+  - **모든 차트에 호버 툴팁이 켜져 있어야 한다** — Chart.js 툴팁을 끄지 않는다
+  - 스크린 리더를 위해 데이터 표 대체물이나 시각적으로 숨긴 요약을 넣는다
+  - 데이터 계열 간 색 차이가 충분한 고대비 색을 쓴다
+- **스크린 리더 설명:** 복잡한 시각화에는 핵심 내용을 설명하는 `aria-description`이나 시각적으로 숨긴 글을 추가한다.
+- **슬라이드 덱:** 슬라이드 카운터에 `aria-live="polite"`를, 내비게이션 버튼에 `aria-label`을 둔다.
 
-### Icons (Inline SVG Only)
+### 아이콘 (인라인 SVG만)
 
-Use inline SVG for all icons. **Never use emoji as icons** — they look unprofessional and render inconsistently.
+모든 아이콘은 인라인 SVG로 넣는다. **이모지를 아이콘으로 쓰지 않는다** — 전문적이지 않아 보이고 환경마다 다르게 렌더된다.
 
-Use simple Lucide-style paths: 24x24 viewBox, stroke-based, `stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"`.
+단순한 Lucide 스타일 경로를 쓴다: 24x24 viewBox, 선 기반, `stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"`.
 
-Common icons to use:
-- Moon/Sun for theme toggle
-- Download arrow for PNG export  
-- Printer for print
-- Arrow left/right for navigation
-- Check/X for pros/cons
-- Globe, Smartphone, Monitor for device types
+자주 쓰는 아이콘:
+- 테마 전환은 달·해
+- PNG 내보내기는 내려받기 화살표  
+- 인쇄는 프린터
+- 내비게이션은 좌우 화살표
+- 장단점은 체크·X
+- 기기 종류는 지구·스마트폰·모니터
 
-### Animations (CSS-First with Modern Features)
+### 애니메이션 (CSS 우선 + 최신 기능)
 
-**CSS animations are the primary system.** They're reliable, performant, and never break from JS scoping issues.
+**CSS 애니메이션이 주 수단이다.** 안정적이고 성능이 좋으며 JS 스코프 문제로 깨지지 않는다.
 
-See [references/animations.md](references/animations.md) for complete patterns.
+전체 패턴은 [references/animations.md](references/animations.md)를 보라.
 
-**Modern CSS Animation Features (Progressive Enhancement):**
+**최신 CSS 애니메이션 기능 (점진적 향상):**
 
-**Scroll-driven animations** (Chrome 115+) — Replace JS scroll listeners:
+**Scroll-driven animations** (Chrome 115+) — JS 스크롤 리스너를 대체한다:
 ```css
 .scroll-reveal {
   animation: fadeInUp 1ms linear;
@@ -564,34 +564,34 @@ See [references/animations.md](references/animations.md) for complete patterns.
 }
 ```
 
-**Three animation techniques (all baked into the skeleton):**
+**세 가지 애니메이션 기법 (전부 스켈레톤에 들어 있다):**
 
-1. **Page-load entrance:** Add class `animate` (+ `delay-1` through `delay-6` for stagger)
+1. **페이지 로드 진입:** `animate` 클래스를 붙인다 (시차를 두려면 `delay-1`~`delay-6` 추가)
    ```html
    <h1 class="animate">Title</h1>
    <div class="card animate delay-1">Card 1</div>
    <div class="card animate delay-2">Card 2</div>
    ```
 
-2. **Scroll reveal:** Add `data-reveal` attribute. JS adds `.reveal` class (opacity:0), then `.visible` on scroll.
+2. **스크롤 등장:** `data-reveal` 속성을 붙인다. JS가 `.reveal` 클래스(opacity:0)를 붙이고, 스크롤 시 `.visible`을 추가한다.
    ```html
    <section data-reveal>This fades in when scrolled into view</section>
    ```
 
-3. **Number counters:** Add `data-count` attribute. JS animates from 0 to target.
+3. **숫자 카운터:** `data-count` 속성을 붙인다. JS가 0에서 목표값까지 애니메이션한다.
    ```html
    <span data-count="77" data-suffix="%">77%</span>
    ```
 
-**Hover effects** are pure CSS, baked into `.card` (translateY + scale on :hover).
+**호버 효과**는 순수 CSS로 `.card`에 들어 있다 (:hover에 translateY + scale).
 
-**Rules:**
-- Content is ALWAYS visible in CSS — JS animations are progressive enhancement
-- Use `@keyframes` for page-load animations, CSS `transition` for hover/state changes
-- `data-reveal` elements show their final content if JS fails (no blank sections)
-- `prefers-reduced-motion` disables all animations automatically
-- `data-reveal` elements MUST have `opacity: 1` as their default CSS state. JS adds `.reveal` class (which sets `opacity: 0`), then `.visible` restores it. If JS fails, content stays visible.
-- On page load, trigger ALL reveal elements visible after a short delay (500ms) so full-page screenshots and PNG exports capture all content:
+**규칙:**
+- 내용은 CSS 상태에서 ALWAYS 보인다 — JS 애니메이션은 점진적 향상일 뿐이다
+- 페이지 로드 애니메이션은 `@keyframes`, 호버·상태 변화는 CSS `transition`을 쓴다
+- JS가 실패해도 `data-reveal` 요소는 최종 내용을 보여 준다 (빈 섹션이 생기지 않는다)
+- `prefers-reduced-motion`이 모든 애니메이션을 자동으로 끈다
+- `data-reveal` 요소는 CSS 기본 상태가 반드시 `opacity: 1`이어야 한다. JS가 `.reveal` 클래스(`opacity: 0`)를 붙이고 `.visible`이 되돌린다. JS가 실패하면 내용은 그대로 보인다.
+- 페이지 로드 후 짧은 지연(500ms)을 두고 모든 reveal 요소를 보이게 만든다. 그래야 전체 페이지 스크린샷과 PNG 내보내기가 모든 내용을 담는다:
   ```javascript
   setTimeout(function() { document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('visible'); }); }, 500);
   ```

@@ -1,8 +1,10 @@
-# Visualization Type Patterns
+# Visualization Type Patterns — 시각화 형식별 패턴
 
-Detailed patterns for each visualization type. Load only the section relevant to the current task.
+시각화 형식마다의 상세 패턴. 지금 작업에 해당하는 절만 읽으면 된다.
 
-## Table of Contents
+형식 이름(## 제목)은 SKILL.md의 형식 표 및 Layer 1 형식 판정과 짝을 이루므로 원문 그대로 둔다.
+
+## 목차
 - [Slide Deck](#slide-deck)
 - [Infographic](#infographic)
 - [Dashboard](#dashboard)
@@ -18,7 +20,7 @@ Detailed patterns for each visualization type. Load only the section relevant to
 
 ## Slide Deck
 
-### Structure
+### 구조 (Structure)
 ```html
 <div class="deck">
   <section class="slide" data-notes="Speaker notes here">
@@ -27,7 +29,7 @@ Detailed patterns for each visualization type. Load only the section relevant to
 </div>
 ```
 
-### Navigation Pattern
+### 내비게이션 패턴 (Navigation Pattern)
 ```javascript
 // Keyboard: ← → arrows, Space, Enter
 // Click: left third = prev, right two-thirds = next
@@ -35,35 +37,35 @@ Detailed patterns for each visualization type. Load only the section relevant to
 // URL hash: #slide-3 for direct linking
 ```
 
-### Slide Types
-1. **Title Slide** — big title, subtitle, optional author/date. Centered. Impactful.
-2. **Content Slide** — heading + bullets or heading + visual. Never both walls of text AND a visual.
-3. **Section Divider** — full-bleed color/gradient with section title. Breaks up the flow.
-4. **Image/Visual Slide** — full-bleed image or large SVG diagram with minimal text.
-5. **Two-Column** — split layout for comparisons, text+image, or code+explanation.
-6. **Quote Slide** — large pull quote with attribution. Elegant typography.
-7. **Data Slide** — chart/graph with one key insight called out.
-8. **Closing Slide** — CTA, contact info, or summary. Memorable.
+### 슬라이드 유형 (Slide Types)
+1. **Title Slide** — 큰 제목, 부제, 필요하면 작성자·날짜. 가운데 정렬. 강한 인상.
+2. **Content Slide** — 제목 + 항목, 또는 제목 + 시각물. 빽빽한 글과 시각물을 한꺼번에 넣지 않는다.
+3. **Section Divider** — 화면을 꽉 채운 색이나 그라디언트에 섹션 제목만. 흐름을 끊어 준다.
+4. **Image/Visual Slide** — 화면을 꽉 채운 이미지나 큰 SVG 도식에 글은 최소로.
+5. **Two-Column** — 비교, 글+이미지, 코드+설명을 위한 분할 레이아웃.
+6. **Quote Slide** — 큰 인용구와 출처. 우아한 타이포그래피.
+7. **Data Slide** — 차트·그래프 하나에 핵심 통찰 하나를 짚어 준다.
+8. **Closing Slide** — 행동 유도, 연락처, 또는 요약. 기억에 남게.
 
-### Best Practices
-- First slide hooks attention — bold statement or question
-- One idea per slide
-- Use progressive reveal within slides (CSS animation delays) for builds
-- Consistent positioning: titles always same spot, content always same region
-- Slide transitions: `transform: translateX()` with `transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)`
+### 모범 사례 (Best Practices)
+- 첫 슬라이드가 시선을 붙잡는다 — 단정적인 문장이나 질문
+- 슬라이드 하나에 아이디어 하나
+- 슬라이드 안에서는 단계적 등장을 쓴다 (CSS 애니메이션 지연)
+- 위치를 일관되게: 제목은 항상 같은 자리, 본문은 항상 같은 영역
+- 슬라이드 전환: `transform: translateX()` + `transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)`
 
 ---
 
 ## Infographic
 
-### Structure
-- Single long-scroll page
-- Clear visual hierarchy with sections
-- Use icons (inline SVG) to break up text
-- Number callouts for statistics
-- Color-coded sections
+### 구조 (Structure)
+- 길게 스크롤하는 한 페이지
+- 섹션으로 나뉜 분명한 시각적 위계
+- 아이콘(인라인 SVG)으로 글의 흐름을 끊어 준다
+- 통계는 숫자를 크게 뽑아 강조한다
+- 섹션마다 색을 구분한다
 
-### Layout Pattern
+### 레이아웃 패턴 (Layout Pattern)
 ```
 ┌─────────────────────────┐
 │      HERO / TITLE       │
@@ -85,25 +87,25 @@ Detailed patterns for each visualization type. Load only the section relevant to
 └─────────────────────────┘
 ```
 
-### Best Practices
-- Max width 800px, centered
-- Use scroll-triggered animations (IntersectionObserver)
-- Big numbers: 48px+ font size, bold, accent color
-- Source citations at bottom
-- Shareable: looks good when screenshotted
+### 모범 사례 (Best Practices)
+- 최대 너비 800px, 가운데 정렬
+- 스크롤 연동 애니메이션을 쓴다 (IntersectionObserver)
+- 큰 숫자: 48px 이상, 굵게, 강조색
+- 출처는 맨 아래에
+- 공유 가능하게: 스크린샷으로 찍었을 때 보기 좋아야 한다
 
 ---
 
 ## Dashboard
 
-### Structure
-- CSS Grid layout with cards
-- Header with title + date/time
-- KPI cards at top (3-5 key metrics)
-- Charts/tables below in grid
-- Optional sidebar for filters
+### 구조 (Structure)
+- 카드를 배치한 CSS Grid 레이아웃
+- 제목 + 날짜·시각이 있는 헤더
+- 위쪽에 KPI 카드 (핵심 지표 3~5개)
+- 아래쪽 그리드에 차트·표
+- 필요하면 필터용 사이드바
 
-### KPI Card Pattern
+### KPI 카드 패턴 (KPI Card Pattern)
 ```html
 <div class="kpi-card">
   <span class="kpi-label">Revenue</span>
@@ -112,27 +114,27 @@ Detailed patterns for each visualization type. Load only the section relevant to
 </div>
 ```
 
-### Chart Patterns (SVG)
-- **Bar chart**: `<rect>` elements with CSS transitions on height
-- **Line chart**: `<polyline>` or `<path>` with stroke-dasharray animation
-- **Donut chart**: `<circle>` with stroke-dasharray/stroke-dashoffset
-- **Sparkline**: tiny `<polyline>` in KPI cards
+### 차트 패턴 (SVG)
+- **막대 차트**: `<rect>` 요소에 height CSS 전환
+- **선 차트**: `<polyline>` 또는 `<path>`에 stroke-dasharray 애니메이션
+- **도넛 차트**: `<circle>`에 stroke-dasharray/stroke-dashoffset
+- **스파크라인**: KPI 카드 안의 작은 `<polyline>`
 
-### Best Practices
-- Use CSS Grid with `auto-fit` and `minmax()` for responsive cards
-- Subtle card shadows, no borders
-- Color-code positive (green) and negative (red) changes
-- Tooltips on hover for data points
-- Auto-refresh indicator (even if static — sells the "live" feel)
+### 모범 사례 (Best Practices)
+- 반응형 카드에는 CSS Grid의 `auto-fit`과 `minmax()`를 쓴다
+- 카드 그림자는 은은하게, 테두리는 없이
+- 증가(초록)와 감소(빨강)를 색으로 구분한다
+- 데이터 지점에 호버 툴팁을 단다
+- 자동 갱신 표시 (정적이어도 살아 있는 느낌을 준다)
 
 ---
 
 ## Flowchart / Diagram
 
-### Approach
-Use SVG for the diagram. Position nodes with CSS Grid or absolute positioning within an SVG viewBox.
+### 접근 방식 (Approach)
+다이어그램은 SVG로 그린다. 노드는 CSS Grid나 SVG viewBox 안의 절대 위치로 배치한다.
 
-### Node Types
+### 노드 유형 (Node Types)
 ```svg
 <!-- Rounded rectangle (process) -->
 <rect rx="8" />
@@ -144,28 +146,28 @@ Use SVG for the diagram. Position nodes with CSS Grid or absolute positioning wi
 <polygon points="20,0 100,0 80,50 0,50" />
 ```
 
-### Connection Lines
-- Use `<path>` with cubic bezier curves for smooth connections
-- Arrow markers: `<marker>` element with `<polygon>` arrowhead
-- Elbow connectors for orthogonal layouts
+### 연결선 (Connection Lines)
+- 부드러운 연결에는 3차 베지어 곡선을 쓴 `<path>`를 쓴다
+- 화살표 표시: `<polygon>` 화살촉을 담은 `<marker>` 요소
+- 직각 레이아웃에는 꺾은선 연결자를 쓴다
 
-### Best Practices
-- Left-to-right or top-to-bottom flow
-- Consistent node sizes
-- Labels centered in nodes
-- Color-code different paths (success=green, error=red)
-- Keep it simple: max 15-20 nodes before splitting into sub-diagrams
+### 모범 사례 (Best Practices)
+- 흐름은 왼쪽에서 오른쪽, 또는 위에서 아래
+- 노드 크기를 일정하게
+- 라벨은 노드 안 가운데에
+- 경로마다 색을 구분한다 (성공=초록, 오류=빨강)
+- 단순하게 유지한다: 15~20개를 넘으면 하위 다이어그램으로 나눈다
 
 ---
 
 ## Timeline
 
-### Layout Options
-1. **Vertical** — line down the center, events alternate left/right
-2. **Horizontal** — scrollable timeline for fewer events
-3. **Compact** — single column with dots and lines
+### 레이아웃 선택지 (Layout Options)
+1. **세로형** — 가운데 선을 두고 사건을 좌우로 번갈아 배치
+2. **가로형** — 사건 수가 적을 때 쓰는 스크롤 타임라인
+3. **압축형** — 점과 선만 있는 단일 열
 
-### Vertical Timeline Pattern
+### 세로 타임라인 패턴 (Vertical Timeline Pattern)
 ```
      ┌──────────┐
      │ Event 1  │──── ●
@@ -180,103 +182,103 @@ Use SVG for the diagram. Position nodes with CSS Grid or absolute positioning wi
      └──────────┘
 ```
 
-### Best Practices
-- Alternating sides for visual balance
-- Dates prominently displayed
-- Color/icon differentiation for event types
-- Scroll-triggered entrance animations
-- "Now" marker for roadmaps
+### 모범 사례 (Best Practices)
+- 시각적 균형을 위해 좌우를 번갈아 배치한다
+- 날짜를 눈에 띄게 표시한다
+- 사건 유형을 색·아이콘으로 구분한다
+- 스크롤에 연동된 진입 애니메이션
+- 로드맵에는 "현재" 표시를 넣는다
 
 ---
 
 ## Comparison
 
-### Layout Options
-1. **Side-by-side cards** — 2-3 options in columns
-2. **Feature matrix** — rows = features, columns = options, checkmarks/values
-3. **Before/After** — split screen
+### 레이아웃 선택지 (Layout Options)
+1. **나란한 카드** — 선택지 2~3개를 열로 배치
+2. **기능 매트릭스** — 행 = 기능, 열 = 선택지, 체크 표시나 값
+3. **전/후 비교** — 화면 분할
 
-### Feature Matrix Pattern
-- Sticky header row
-- Alternating row backgrounds
-- ✓ / ✗ icons (SVG) instead of text
-- Highlight recommended option with accent border/badge
+### 기능 매트릭스 패턴 (Feature Matrix Pattern)
+- 헤더 행을 고정한다
+- 행 배경색을 번갈아 준다
+- 글자 대신 ✓ / ✗ 아이콘(SVG)을 쓴다
+- 추천 선택지는 강조 테두리나 배지로 표시한다
 
-### Best Practices
-- Max 4 comparison columns (more = overwhelming)
-- Highlight key differentiators
-- Use icons for quick scanning
-- Color-code to guide toward recommended option (subtle, not pushy)
+### 모범 사례 (Best Practices)
+- 비교 열은 최대 4개 (그 이상은 부담스럽다)
+- 핵심 차이점을 강조한다
+- 빠르게 훑을 수 있게 아이콘을 쓴다
+- 추천 선택지로 시선이 가도록 색을 쓴다 (은은하게, 밀어붙이지 않게)
 
 ---
 
 ## Data Visualization
 
-### Chart Types (all SVG-based)
-- **Bar**: vertical or horizontal, grouped or stacked
-- **Line**: single or multi-series, area fills
-- **Pie/Donut**: max 6 segments, label percentages
-- **Scatter**: for correlations, size for third dimension
-- **Heatmap**: grid of colored cells
+### 차트 유형 (전부 SVG 기반)
+- **막대**: 세로 또는 가로, 그룹형 또는 누적형
+- **선**: 단일 또는 다중 계열, 영역 채우기
+- **원/도넛**: 최대 6조각, 퍼센트 라벨 표기
+- **산점도**: 상관관계용, 크기로 세 번째 차원을 표현
+- **히트맵**: 색이 입혀진 격자
 
-### SVG Chart Essentials
-- Always include axes with labels
-- Grid lines: subtle (`stroke: #eee`, `stroke-dasharray: 4`)
-- Legend: positioned consistently (top-right or bottom)
-- Responsive viewBox: `viewBox="0 0 600 400"` with `preserveAspectRatio`
-- Animate on load: stroke-dasharray for lines, scaleY for bars
+### SVG 차트 필수 사항 (SVG Chart Essentials)
+- 축과 축 라벨은 항상 넣는다
+- 격자선은 은은하게 (`stroke: #eee`, `stroke-dasharray: 4`)
+- 범례 위치를 일관되게 둔다 (오른쪽 위 또는 아래)
+- 반응형 viewBox: `viewBox="0 0 600 400"` + `preserveAspectRatio`
+- 로드 시 애니메이션: 선은 stroke-dasharray, 막대는 scaleY
 
-### Best Practices
-- Lead with the insight, not the data
-- Annotate key data points directly on the chart
-- Don't use 3D effects
-- Start y-axis at 0 for bar charts (line charts can break this rule)
-- Max 5-7 data series per chart
+### 모범 사례 (Best Practices)
+- 데이터가 아니라 통찰을 앞세운다
+- 핵심 데이터 지점은 차트 위에 직접 주석을 단다
+- 3D 효과는 쓰지 않는다
+- 막대 차트는 y축을 0에서 시작한다 (선 차트는 예외를 둘 수 있다)
+- 차트 하나에 데이터 계열은 최대 5~7개
 
 ---
 
 ## One-Pager
 
-### Structure
-- Hero section with headline + subtext
-- 3-4 content sections
-- Clear CTA or conclusion
-- Max viewport: feels complete without scrolling (or minimal scroll)
+### 구조 (Structure)
+- 큰 제목과 보조 문구가 있는 대표 영역
+- 본문 섹션 3~4개
+- 분명한 행동 유도나 결론
+- 화면 한 장: 스크롤 없이(또는 최소한의 스크롤로) 완결된 느낌
 
-### Best Practices
-- Large hero text (48px+)
-- Icon + text pairs for features
-- Centered layout, max-width 960px
-- Professional but not boring — one bold design choice
-- Works as a screenshot/PDF
+### 모범 사례 (Best Practices)
+- 큰 대표 문구 (48px 이상)
+- 기능은 아이콘 + 글 짝으로
+- 가운데 정렬, 최대 너비 960px
+- 전문적이되 지루하지 않게 — 과감한 디자인 선택 하나
+- 스크린샷이나 PDF로도 통해야 한다
 
 ---
 
 ## Mind Map
 
-### Approach
-- Central node with radiating branches
-- SVG with `<path>` curved connections
-- Color-code branches by category
-- Nodes expand on click (optional interactivity)
+### 접근 방식 (Approach)
+- 중심 노드에서 가지가 뻗어 나가는 형태
+- SVG의 `<path>`로 곡선 연결
+- 갈래마다 범주별로 색을 구분한다
+- 클릭하면 노드가 펼쳐진다 (선택적 인터랙션)
 
-### Layout Algorithm (simplified)
-- Center node at viewBox center
-- First-level nodes in a circle around center
-- Second-level nodes branch outward from their parent
-- Use polar coordinates for positioning
+### 배치 알고리즘 (단순화)
+- 중심 노드를 viewBox 가운데에 둔다
+- 1단계 노드는 중심 주위에 원형으로 배치한다
+- 2단계 노드는 부모에서 바깥쪽으로 뻗는다
+- 위치 계산에는 극좌표를 쓴다
 
-### Best Practices
-- Max 2-3 levels deep for readability
-- Curved, organic-looking connections (bezier)
-- Node size reflects importance
-- Hover to highlight a branch and dim others
+### 모범 사례 (Best Practices)
+- 읽기 쉽도록 깊이는 최대 2~3단계
+- 곡선의 자연스러운 연결 (베지어)
+- 노드 크기로 중요도를 나타낸다
+- 호버하면 해당 갈래를 강조하고 나머지를 흐리게 한다
 
 ---
 
 ## Kanban Board
 
-### Structure
+### 구조 (Structure)
 ```html
 <div class="board">
   <div class="column">
@@ -294,10 +296,10 @@ Use SVG for the diagram. Position nodes with CSS Grid or absolute positioning wi
 </div>
 ```
 
-### Best Practices
-- 3-5 columns (horizontal scroll if needed)
-- Cards with title, optional tags/labels (color-coded chips), optional assignee avatar
-- Column headers with item count
-- Subtle drag-handle visual (even if not functional)
-- WIP limits indicator
-- Column background colors (very subtle) to differentiate stages
+### 모범 사례 (Best Practices)
+- 열은 3~5개 (필요하면 가로 스크롤)
+- 카드에는 제목, 필요하면 태그·라벨(색 구분 칩), 담당자 아바타
+- 열 제목에 항목 수를 표시한다
+- 은은한 드래그 손잡이 표시 (실제로 동작하지 않아도)
+- 진행 중 작업 수 제한 표시
+- 단계 구분을 위한 열 배경색 (아주 은은하게)
