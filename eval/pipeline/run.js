@@ -60,7 +60,10 @@ function parseArgs(args) {
         opts.dir = args[++i];
         break;
       case '--round':
-        opts.round = parseInt(args[++i], 10);
+        // Labels like "59-retest" must survive intact — parseInt would turn them
+        // into 59 and overwrite round 59's own results.
+        var rawRound = args[++i];
+        opts.round = /^\d+$/.test(rawRound) ? parseInt(rawRound, 10) : rawRound;
         break;
       case '--out':
         opts.outDir = args[++i];
@@ -368,7 +371,29 @@ async function main() {
 
   for (var filePath of files) {
     console.log('  Evaluating: ' + basename(filePath));
-    var result = await evaluateFile(browser, filePath, opts);
+
+    var result;
+    try {
+      result = await evaluateFile(browser, filePath, opts);
+    } catch (err) {
+      // One broken file must not discard the whole round's results.
+      console.log('    SKIPPED — evaluation threw: ' + err.message);
+      console.log('');
+      results.push({
+        file: basename(filePath),
+        path: filePath,
+        error: err.message,
+        format: { format: 'unknown', confidence: 0 },
+        layer1: { format: 'unknown', confidence: 0, passed: false },
+        layer2: { score: 0, passed: 0, totalChecks: 0, failedChecks: [] },
+        layer3: null,
+        screenshots: [],
+        slideScreenshots: [],
+        consoleErrors: [],
+        overall: 0,
+      });
+      continue;
+    }
     results.push(result);
 
     // Print summary
@@ -444,6 +469,7 @@ async function main() {
     results: results.map(function (r) {
       return {
         file: r.file,
+        error: r.error, // present only when the file could not be evaluated
         format: r.format ? r.format.format : 'unknown',
         layer2Score: r.layer2.score,
         layer3Score: r.layer3 ? r.layer3.overall : null,

@@ -452,7 +452,7 @@
     function showSlide(n) {
       if (n < 0 || n >= totalSlides) return;
       slides[currentSlide].classList.remove('active');
-      slides[currentSlide].classList.add(n > currentSlide ? 'prev' : '');
+      if (n > currentSlide) slides[currentSlide].classList.add('prev');
       currentSlide = n;
       slides[currentSlide].classList.remove('prev');
       slides[currentSlide].classList.add('active');
