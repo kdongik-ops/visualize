@@ -63,7 +63,28 @@ claude -p --dangerously-skip-permissions --model sonnet "PROMPT_TEXT_HERE. Save 
 ```
 
 Each prompt should instruct Claude to save the file with a descriptive kebab-case name.
-The generated HTML files end up in `eval/rounds/round-{N}/generated/`.
+
+**The output path is NOT reliable — sweep for the files after each generation.**
+Measured across five runs from the same working directory, the generated file
+landed in three different places: the working directory, `~/Downloads/`, and the
+repo root. `SKILL.md` says `~/Downloads/` but the behaviour varies per run.
+
+This matters because Step 2 scores with `node run.js --dir .../generated/`. A file
+that landed elsewhere is silently skipped — no error, the round just quietly has
+fewer files than you think. Collect them explicitly:
+
+```bash
+cd D:/Agent/visualize/eval/rounds/round-{N}/generated
+for f in <expected-filename-1> <expected-filename-2> <expected-filename-3>; do
+  for d in ~/Downloads /d/Agent/visualize; do
+    if [ -f "$d/$f" ] && [ ! -f "$f" ]; then mv "$d/$f" . ; fi
+  done
+done
+ls -la   # confirm the count matches the number of prompts
+```
+
+Generating agents also sometimes leave scratch files (`_verify_*.py`, screenshot
+dirs) next to the output. Delete them before scoring.
 
 ## Step 2: Evaluate — 3-Layer Pipeline
 
@@ -116,6 +137,11 @@ Score each dimension 1-10. Calculate weighted overall: `sum(score × weight)`.
 - Layer 2 failed checks (deterministic — each is a clear rule violation)
 - Layer 3 dimension scores (which dimensions scored lowest?)
 - Console errors (bugs in the generated code)
+
+**A file scored 0 with `format: unknown` was not scored — it crashed during
+evaluation.** Check its `error` field in `scores.json`. Treating it as a
+0-quality output would send you looking for design problems in a file that was
+never rendered. Fix the crash first, then re-score.
 
 ## Step 3: Analyze — Root Cause in SKILL.md
 
