@@ -24,7 +24,7 @@ Turn any idea, data, or content into a stunning single-file HTML visualization.
 
 **Always do BOTH of these after writing the HTML file:**
 
-1. **Auto-open in browser:** Run `open <filename>.html` (macOS) or `xdg-open <filename>.html` (Linux) so the user sees it immediately
+1. **Auto-open in browser:** Run `open <filename>.html` (macOS), `xdg-open <filename>.html` (Linux), or `Start-Process <filename>.html` (Windows PowerShell) so the user sees it immediately
 2. **Return the file path as a clickable URL:** Include `file://<absolute-path>` in your response so the user can click to open it
 
 Example response after creation:
