@@ -1,0 +1,412 @@
+{
+  "round": "ko-final-check",
+  "timestamp": "2026-08-18T01:57:45.004Z",
+  "filesEvaluated": 17,
+  "average": 9.21,
+  "minScore": 4.3,
+  "gate": "NEEDS WORK",
+  "results": [
+    {
+      "file": "ai-timeline.html",
+      "format": "timeline",
+      "layer2Score": 94,
+      "layer3Score": null,
+      "overall": 9.4,
+      "failedChecks": [
+        {
+          "name": "no-overflow-768",
+          "message": "No horizontal overflow at 768px viewport width (tablet)"
+        },
+        {
+          "name": "no-overflow-375",
+          "message": "No horizontal overflow at 375px viewport width (mobile)"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "file": "carousel-infographic.html",
+      "format": "poster-9x16",
+      "layer2Score": 93,
+      "layer3Score": null,
+      "overall": 9.3,
+      "failedChecks": [
+        {
+          "name": "no-overflow-375",
+          "message": "No horizontal overflow at 375px viewport width (mobile)"
+        },
+        {
+          "name": "section-spacing",
+          "message": "Adequate spacing between major sections (>= 48px)"
+        },
+        {
+          "name": "semantic-sections",
+          "message": "Semantic HTML: <section> elements are used"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "file": "carousel-korean.html",
+      "format": "poster-9x16",
+      "layer2Score": 94,
+      "layer3Score": null,
+      "overall": 9.4,
+      "failedChecks": [
+        {
+          "name": "section-spacing",
+          "message": "Adequate spacing between major sections (>= 48px)"
+        },
+        {
+          "name": "semantic-sections",
+          "message": "Semantic HTML: <section> elements are used"
+        },
+        {
+          "name": "top-level-var-only",
+          "message": "Top-level JS uses var (no let/const at top scope)"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "file": "carousel-threads.html",
+      "format": "flowchart",
+      "layer2Score": 82,
+      "layer3Score": null,
+      "overall": 8.2,
+      "failedChecks": [
+        {
+          "name": "font-size-hierarchy",
+          "message": "Clear font-size hierarchy: h1 > h2 > h3 > body"
+        },
+        {
+          "name": "h1-font-size-minimum",
+          "message": "h1 font-size is at least 20px"
+        },
+        {
+          "name": "heading-negative-tracking",
+          "message": "Headings use negative letter-spacing (tight tracking)"
+        },
+        {
+          "name": "font-weight-hierarchy",
+          "message": "Font-weight hierarchy: h1 >= 600, h2 >= 500, body = 400"
+        },
+        {
+          "name": "no-overflow-375",
+          "message": "No horizontal overflow at 375px viewport width (mobile)"
+        },
+        {
+          "name": "section-spacing",
+          "message": "Adequate spacing between major sections (>= 48px)"
+        },
+        {
+          "name": "semantic-sections",
+          "message": "Semantic HTML: <section> elements are used"
+        },
+        {
+          "name": "top-level-var-only",
+          "message": "Top-level JS uses var (no let/const at top scope)"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "file": "cheatsheet-claude-code.html",
+      "format": "cheatsheet",
+      "layer2Score": 96,
+      "layer3Score": null,
+      "overall": 9.6,
+      "failedChecks": [
+        {
+          "name": "section-spacing",
+          "message": "Adequate spacing between major sections (>= 48px)"
+        },
+        {
+          "name": "semantic-sections",
+          "message": "Semantic HTML: <section> elements are used"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "file": "cheatsheet-git.html",
+      "format": "cheatsheet",
+      "layer2Score": 100,
+      "layer3Score": null,
+      "overall": 10,
+      "failedChecks": [],
+      "consoleErrors": []
+    },
+    {
+      "file": "claude-code-poster-1x1.html",
+      "format": "poster-1x1",
+      "layer2Score": 43,
+      "layer3Score": null,
+      "overall": 4.3,
+      "failedChecks": [
+        {
+          "name": "theme-light-defined",
+          "message": ".theme-light class defined in stylesheet"
+        },
+        {
+          "name": "css-custom-properties",
+          "message": "CSS custom properties defined (--bg, --surface, --text, --accent, --border)"
+        },
+        {
+          "name": "theme-toggle-works",
+          "message": "Theme toggle changes html class"
+        },
+        {
+          "name": "menu-element-exists",
+          "message": ".viz-menu element exists in DOM"
+        },
+        {
+          "name": "menu-toggle-exists",
+          "message": ".viz-menu-toggle button exists"
+        },
+        {
+          "name": "theme-button-present",
+          "message": "Theme toggle button present in menu"
+        },
+        {
+          "name": "download-button-present",
+          "message": "Download PNG button present in menu"
+        },
+        {
+          "name": "print-button-present",
+          "message": "Print/PDF button present in menu"
+        },
+        {
+          "name": "html-to-image-loaded",
+          "message": "html-to-image CDN script loaded"
+        },
+        {
+          "name": "menu-opens-on-click",
+          "message": "Menu dropdown opens when toggle is clicked"
+        },
+        {
+          "name": "font-size-hierarchy",
+          "message": "Clear font-size hierarchy: h1 > h2 > h3 > body"
+        },
+        {
+          "name": "h1-font-size-minimum",
+          "message": "h1 font-size is at least 20px"
+        },
+        {
+          "name": "heading-negative-tracking",
+          "message": "Headings use negative letter-spacing (tight tracking)"
+        },
+        {
+          "name": "font-weight-hierarchy",
+          "message": "Font-weight hierarchy: h1 >= 600, h2 >= 500, body = 400"
+        },
+        {
+          "name": "no-overflow-768",
+          "message": "No horizontal overflow at 768px viewport width (tablet)"
+        },
+        {
+          "name": "no-overflow-375",
+          "message": "No horizontal overflow at 375px viewport width (mobile)"
+        },
+        {
+          "name": "section-spacing",
+          "message": "Adequate spacing between major sections (>= 48px)"
+        },
+        {
+          "name": "semantic-main",
+          "message": "Semantic HTML: <main> element exists"
+        },
+        {
+          "name": "semantic-sections",
+          "message": "Semantic HTML: <section> elements are used"
+        },
+        {
+          "name": "print-styles",
+          "message": "@media print styles defined in stylesheet"
+        },
+        {
+          "name": "reduced-motion",
+          "message": "@media (prefers-reduced-motion) styles defined"
+        },
+        {
+          "name": "landmarks-present",
+          "message": "Landmark roles or skip-to-content link present"
+        },
+        {
+          "name": "has-interactions",
+          "message": "At least 1 type-specific interaction beyond the menu"
+        },
+        {
+          "name": "entrance-animations",
+          "message": "Entrance animations present (.animate classes, data-reveal, or @keyframes)"
+        },
+        {
+          "name": "hover-states",
+          "message": "Hover states defined for interactive elements (:hover rules in CSS)"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "file": "comparison-infographic.html",
+      "format": "infographic",
+      "layer2Score": 95,
+      "layer3Score": null,
+      "overall": 9.5,
+      "failedChecks": [
+        {
+          "name": "font-size-hierarchy",
+          "message": "Clear font-size hierarchy: h1 > h2 > h3 > body"
+        },
+        {
+          "name": "chart-container-dimensions",
+          "message": "Chart container has explicit dimensions (height >= 300px)"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "file": "event-poster.html",
+      "format": "dashboard",
+      "layer2Score": 98,
+      "layer3Score": null,
+      "overall": 9.8,
+      "failedChecks": [
+        {
+          "name": "section-spacing",
+          "message": "Adequate spacing between major sections (>= 48px)"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "file": "neuralchef-pitch.html",
+      "format": "slide-deck",
+      "layer2Score": 95,
+      "layer3Score": null,
+      "overall": 9.5,
+      "failedChecks": [
+        {
+          "name": "card-padding",
+          "message": "Card elements have sufficient padding (>= 24px)"
+        },
+        {
+          "name": "zero-console-errors",
+          "message": "Zero console errors on page load"
+        }
+      ],
+      "consoleErrors": [
+        "Failed to create chart: can't acquire context from the given item",
+        "Failed to create chart: can't acquire context from the given item"
+      ]
+    },
+    {
+      "file": "process-guide.html",
+      "format": "infographic",
+      "layer2Score": 98,
+      "layer3Score": null,
+      "overall": 9.8,
+      "failedChecks": [
+        {
+          "name": "top-level-var-only",
+          "message": "Top-level JS uses var (no let/const at top scope)"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "file": "quote-card.html",
+      "format": "dashboard",
+      "layer2Score": 98,
+      "layer3Score": null,
+      "overall": 9.8,
+      "failedChecks": [
+        {
+          "name": "top-level-var-only",
+          "message": "Top-level JS uses var (no let/const at top scope)"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "file": "saas-dashboard.html",
+      "format": "dashboard",
+      "layer2Score": 89,
+      "layer3Score": null,
+      "overall": 8.9,
+      "failedChecks": [
+        {
+          "name": "font-size-hierarchy",
+          "message": "Clear font-size hierarchy: h1 > h2 > h3 > body"
+        },
+        {
+          "name": "no-overflow-375",
+          "message": "No horizontal overflow at 375px viewport width (mobile)"
+        },
+        {
+          "name": "section-spacing",
+          "message": "Adequate spacing between major sections (>= 48px)"
+        },
+        {
+          "name": "reduced-motion",
+          "message": "@media (prefers-reduced-motion) styles defined"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "file": "slide-deck-demo.html",
+      "format": "slide-deck",
+      "layer2Score": 100,
+      "layer3Score": null,
+      "overall": 10,
+      "failedChecks": [],
+      "consoleErrors": []
+    },
+    {
+      "file": "startup-pitch-deck.html",
+      "format": "slide-deck",
+      "layer2Score": 100,
+      "layer3Score": null,
+      "overall": 10,
+      "failedChecks": [],
+      "consoleErrors": []
+    },
+    {
+      "file": "status-report.html",
+      "format": "timeline",
+      "layer2Score": 96,
+      "layer3Score": null,
+      "overall": 9.6,
+      "failedChecks": [
+        {
+          "name": "section-spacing",
+          "message": "Adequate spacing between major sections (>= 48px)"
+        },
+        {
+          "name": "top-level-var-only",
+          "message": "Top-level JS uses var (no let/const at top scope)"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "file": "system-architecture.html",
+      "format": "infographic",
+      "layer2Score": 94,
+      "layer3Score": null,
+      "overall": 9.4,
+      "failedChecks": [
+        {
+          "name": "font-size-hierarchy",
+          "message": "Clear font-size hierarchy: h1 > h2 > h3 > body"
+        },
+        {
+          "name": "no-overflow-375",
+          "message": "No horizontal overflow at 375px viewport width (mobile)"
+        }
+      ],
+      "consoleErrors": []
+    }
+  ]
+}
