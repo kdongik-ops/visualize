@@ -1,0 +1,60 @@
+{
+  "round": "ko-replicate",
+  "timestamp": "2026-08-18T01:31:43.449Z",
+  "filesEvaluated": 3,
+  "average": 9.57,
+  "minScore": 9.5,
+  "gate": "VIRAL",
+  "results": [
+    {
+      "file": "rep-1.html",
+      "format": "comparison",
+      "layer2Score": 97,
+      "layer3Score": null,
+      "overall": 9.7,
+      "failedChecks": [
+        {
+          "name": "no-overflow-375",
+          "message": "No horizontal overflow at 375px viewport width (mobile)"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "file": "rep-2.html",
+      "format": "comparison",
+      "layer2Score": 95,
+      "layer3Score": null,
+      "overall": 9.5,
+      "failedChecks": [
+        {
+          "name": "no-overflow-375",
+          "message": "No horizontal overflow at 375px viewport width (mobile)"
+        },
+        {
+          "name": "card-padding",
+          "message": "Card elements have sufficient padding (>= 24px)"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "file": "rep-3.html",
+      "format": "dashboard",
+      "layer2Score": 95,
+      "layer3Score": null,
+      "overall": 9.5,
+      "failedChecks": [
+        {
+          "name": "no-overflow-375",
+          "message": "No horizontal overflow at 375px viewport width (mobile)"
+        },
+        {
+          "name": "card-padding",
+          "message": "Card elements have sufficient padding (>= 24px)"
+        }
+      ],
+      "consoleErrors": []
+    }
+  ]
+}

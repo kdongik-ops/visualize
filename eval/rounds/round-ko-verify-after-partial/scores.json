@@ -1,0 +1,60 @@
+{
+  "round": "ko-verify-after-partial",
+  "timestamp": "2026-08-17T21:04:45.629Z",
+  "filesEvaluated": 4,
+  "average": 9.77,
+  "minScore": 9.4,
+  "gate": "VIRAL",
+  "results": [
+    {
+      "file": "blog-announce-card.html",
+      "format": "poster-1x1",
+      "layer2Score": 94,
+      "layer3Score": null,
+      "overall": 9.4,
+      "failedChecks": [
+        {
+          "name": "no-overflow-768",
+          "message": "No horizontal overflow at 768px viewport width (tablet)"
+        },
+        {
+          "name": "no-overflow-375",
+          "message": "No horizontal overflow at 375px viewport width (mobile)"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "file": "deploy-tool-pitch.html",
+      "format": "slide-deck",
+      "layer2Score": 100,
+      "layer3Score": null,
+      "overall": 10,
+      "failedChecks": [],
+      "consoleErrors": []
+    },
+    {
+      "file": "docs-tool-comparison.html",
+      "format": "dashboard",
+      "layer2Score": 97,
+      "layer3Score": null,
+      "overall": 9.7,
+      "failedChecks": [
+        {
+          "name": "font-size-hierarchy",
+          "message": "Clear font-size hierarchy: h1 > h2 > h3 > body"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "file": "saas-q3-dashboard.html",
+      "format": "dashboard",
+      "layer2Score": 100,
+      "layer3Score": null,
+      "overall": 10,
+      "failedChecks": [],
+      "consoleErrors": []
+    }
+  ]
+}
