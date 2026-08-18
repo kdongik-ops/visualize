@@ -1,0 +1,52 @@
+{
+  "round": "ko-replicate-en",
+  "timestamp": "2026-08-18T01:50:55.855Z",
+  "filesEvaluated": 3,
+  "average": 9.7,
+  "minScore": 9.7,
+  "gate": "VIRAL",
+  "results": [
+    {
+      "file": "en-1.html",
+      "format": "dashboard",
+      "layer2Score": 97,
+      "layer3Score": null,
+      "overall": 9.7,
+      "failedChecks": [
+        {
+          "name": "no-overflow-375",
+          "message": "No horizontal overflow at 375px viewport width (mobile)"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "file": "en-2.html",
+      "format": "dashboard",
+      "layer2Score": 97,
+      "layer3Score": null,
+      "overall": 9.7,
+      "failedChecks": [
+        {
+          "name": "no-overflow-375",
+          "message": "No horizontal overflow at 375px viewport width (mobile)"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "file": "en-3.html",
+      "format": "comparison",
+      "layer2Score": 97,
+      "layer3Score": null,
+      "overall": 9.7,
+      "failedChecks": [
+        {
+          "name": "no-overflow-375",
+          "message": "No horizontal overflow at 375px viewport width (mobile)"
+        }
+      ],
+      "consoleErrors": []
+    }
+  ]
+}
