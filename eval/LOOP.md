@@ -53,8 +53,7 @@ Generate 3-5 prompts they'd realistically type, plus 2-3 fixed prompts from `eva
 For each test prompt:
 ```bash
 claude -p \
-  --dangerously-skip-permissions \
-  --allow-dangerously-skip-permissions \
+  --allowedTools "Write,Read,Edit" \
   --model sonnet \
   "{test prompt}. Save as $WORK_DIR/outputs/{filename}.html"
 ```
@@ -155,8 +154,7 @@ Re-run the **worst 2-3 prompts** from Step 2. The fixes are already live in the 
 mkdir -p "$WORK_DIR/outputs-fixed"
 cd "$WORK_DIR/visualize"   # again: the skill loads from here
 claude -p \
-  --dangerously-skip-permissions \
-  --allow-dangerously-skip-permissions \
+  --allowedTools "Write,Read,Edit" \
   --model sonnet \
   "{same prompt}. Save as $WORK_DIR/outputs-fixed/{filename}.html"
 ```

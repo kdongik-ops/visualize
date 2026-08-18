@@ -1,5 +1,5 @@
 // checks/layout.js — Layout checks (weight total ~15)
-export async function runChecks(page) {
+export async function runChecks(page, format) {
   var results = [];
 
   // Helper to check horizontal overflow at a given viewport width
@@ -266,6 +266,15 @@ export async function runChecks(page) {
       weight: 2,
       message: 'Card elements have sufficient padding (>= 24px)',
       details: 'Error: ' + e.message
+    });
+  }
+
+  // Fixed-viewport formats are specified at an exact pixel size (SKILL.md: poster
+  // rules mandate width: 1080px with overflow hidden), so narrow-viewport overflow
+  // is by design, not a defect. Drop those two checks rather than fail them.
+  if (format === 'poster-1x1' || format === 'poster-9x16') {
+    results = results.filter(function (c) {
+      return c.name !== 'no-overflow-768' && c.name !== 'no-overflow-375';
     });
   }
 

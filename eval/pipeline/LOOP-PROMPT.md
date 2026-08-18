@@ -59,7 +59,7 @@ mkdir -p D:/Agent/visualize/eval/rounds/round-{N}/generated
 cd D:/Agent/visualize/eval/rounds/round-{N}/generated
 
 # For each of the 3 prompts (one line — no backslash continuation):
-claude -p --dangerously-skip-permissions --model sonnet "PROMPT_TEXT_HERE. Save as descriptive-name.html"
+claude -p --allowedTools "Write,Read,Edit" --model sonnet "PROMPT_TEXT_HERE. Save as descriptive-name.html"
 ```
 
 Each prompt should instruct Claude to save the file with a descriptive kebab-case name.
@@ -220,7 +220,7 @@ git push origin main
 
 1. Re-generate the **worst-scoring output** from Step 1 (one line — no backslash continuation):
 ```bash
-claude -p --dangerously-skip-permissions --model sonnet "ORIGINAL_PROMPT_FOR_WORST_FILE"
+claude -p --allowedTools "Write,Read,Edit" --model sonnet "ORIGINAL_PROMPT_FOR_WORST_FILE"
 ```
 
 2. Re-evaluate with the pipeline (`--round` is mandatory — see Step 2):

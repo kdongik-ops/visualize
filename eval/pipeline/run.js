@@ -83,7 +83,7 @@ function parseArgs(args) {
 // Layer 2: Run all DOM checks
 // ============================================================
 
-async function runLayer2(page) {
+async function runLayer2(page, format) {
   var allChecks = [];
 
   var modules = [
@@ -98,7 +98,7 @@ async function runLayer2(page) {
 
   for (var mod of modules) {
     try {
-      var checks = await mod(page);
+      var checks = await mod(page, format);
       allChecks = allChecks.concat(checks);
     } catch (err) {
       allChecks.push({
@@ -284,7 +284,7 @@ async function evaluateFile(browser, htmlFilePath, opts) {
   var formatResult = await detectFormat(page);
 
   // === Layer 2: DOM Checks ===
-  var layer2 = await runLayer2(page);
+  var layer2 = await runLayer2(page, formatResult.format);
 
   // === Screenshots ===
   var screenshotDir = opts.outDir || join(__dirname, '..', 'rounds', 'round-' + (opts.round || 'latest'), 'screenshots');

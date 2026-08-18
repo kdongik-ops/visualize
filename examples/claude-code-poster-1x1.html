@@ -3,273 +3,394 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Claude Code — 노트북 하나로 모든 것을</title>
+  <title>Claude Code — 노트북 하나로 모든 것을 만든다</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { interpolate-size: allow-keywords; }
+
+    /* ===== THEMES (class-based ONLY) ===== */
+    html.theme-dark {
+      --bg: #0A0A0A; --surface: #141414; --surface-hover: #1C1C1C;
+      --border: rgba(255,255,255,0.07);
+      --text: #EDEDED; --text-secondary: #8a8a8a;
+      --accent: #d97757; --accent-secondary: #8b5cf6;
+      --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
+      --c-orange: #d97757; --c-blue: #3b82f6; --c-purple: #8b5cf6;
+      --c-green: #10b981; --c-pink: #ec4899; --c-yellow: #f59e0b;
+    }
+    html.theme-light {
+      --bg: #FAFAF9; --surface: #FFFFFF; --surface-hover: #F5F5F4;
+      --border: rgba(0,0,0,0.08);
+      --text: #0f172a; --text-secondary: #64748b;
+      --accent: #c2410c; --accent-secondary: #7c3aed;
+      --positive: #059669; --negative: #e11d48; --warning: #d97706;
+      --c-orange: #c2410c; --c-blue: #2563eb; --c-purple: #7c3aed;
+      --c-green: #059669; --c-pink: #db2777; --c-yellow: #b45309;
+    }
 
     body {
-      font-family: 'Noto Sans KR', 'Inter', sans-serif;
+      font-family: 'Noto Sans KR', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg); color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      letter-spacing: -0.01em;
+      transition: background 0.3s, color 0.3s;
       width: 1080px; height: 1080px;
       overflow: hidden;
-      background: #050505;
-      color: #f0f0f0;
-      -webkit-font-smoothing: antialiased;
+      display: flex; flex-direction: column;
       position: relative;
     }
+    h1, h2, h3 { color: var(--text); letter-spacing: -0.03em; line-height: 1.1; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
 
-    /* === Ambient glow === */
-    .glow-1 {
-      position: absolute; top: -200px; left: -200px;
-      width: 600px; height: 600px;
-      background: radial-gradient(circle, rgba(217,119,87,0.12) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    .glow-2 {
-      position: absolute; bottom: -200px; right: -150px;
-      width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba(139,92,246,0.1) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    .glow-3 {
-      position: absolute; top: 40%; left: 50%;
-      width: 400px; height: 400px;
-      transform: translate(-50%, -50%);
-      background: radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%);
-      pointer-events: none;
+    /* Single subtle ambient wash (one technique only) */
+    body::before {
+      content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      background: radial-gradient(ellipse 70% 45% at 15% 0%, color-mix(in srgb, var(--accent), transparent 90%), transparent);
     }
 
-    /* === Header === */
-    .header {
-      padding: 56px 60px 0;
-      position: relative; z-index: 1;
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .animate { animation: fadeInUp 0.6s ease-out both; }
+    .animate.delay-1 { animation-delay: 0.08s; }
+    .animate.delay-2 { animation-delay: 0.16s; }
+    .animate.delay-3 { animation-delay: 0.24s; }
+    .animate.delay-4 { animation-delay: 0.32s; }
+    .animate.delay-5 { animation-delay: 0.4s; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+
+    /* ===== PRINT ===== */
+    @media print {
+      body { width: auto !important; height: auto !important; background: white !important; color: black !important; }
+      .viz-menu { display: none !important; }
+      .cell { break-inside: avoid; border: 1px solid #ddd; }
+      * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+
+    /* ===== MENU ===== */
+    .viz-menu { position: fixed; top: 16px; right: 16px; z-index: 9999; }
+    .viz-menu-toggle {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--text); cursor: pointer; display: flex;
+      align-items: center; justify-content: center;
+      backdrop-filter: blur(12px); transition: all 0.2s;
+    }
+    .viz-menu-toggle:hover { background: var(--surface-hover); }
+    .viz-menu-dropdown {
+      position: absolute; top: 48px; right: 0; min-width: 190px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 8px;
+      opacity: 0; visibility: hidden; transform: translateY(-8px);
+      transition: all 0.2s; backdrop-filter: blur(16px);
+    }
+    .viz-menu-dropdown.open { opacity: 1; visibility: visible; transform: translateY(0); }
+    .viz-menu-dropdown button {
+      width: 100%; padding: 9px 12px; border: none; border-radius: 8px;
+      background: transparent; color: var(--text); font-size: 13px;
+      font-family: inherit; cursor: pointer; text-align: left;
+      display: flex; align-items: center; gap: 9px; transition: background 0.15s;
+    }
+    .viz-menu-dropdown button:hover { background: var(--surface-hover); }
+
+    .skip-to-content {
+      position: absolute; top: -40px; left: 6px; background: var(--accent);
+      color: white; padding: 8px 12px; text-decoration: none;
+      border-radius: 4px; opacity: 0; pointer-events: none;
+      transition: all 0.2s; z-index: 10000;
+    }
+    .skip-to-content:focus { top: 6px; opacity: 1; pointer-events: auto; }
+
+    /* ===== HEADER ===== */
+    .poster-header {
+      padding: 44px 56px 0; position: relative; z-index: 1;
     }
     .badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(217,119,87,0.1); border: 1px solid rgba(217,119,87,0.2);
+      display: inline-flex; align-items: center; gap: 7px;
+      background: color-mix(in srgb, var(--accent), transparent 90%);
+      border: 1px solid color-mix(in srgb, var(--accent), transparent 78%);
       border-radius: 100px; padding: 6px 14px;
-      font-size: 12px; font-weight: 600; color: #d97757;
-      letter-spacing: 0.02em;
-      margin-bottom: 20px;
+      font-size: 12px; font-weight: 600; color: var(--accent);
+      letter-spacing: 0.02em; margin-bottom: 18px;
     }
-    .badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #d97757; }
-    .title {
-      font-size: 42px; font-weight: 800; line-height: 1.15;
-      letter-spacing: -0.03em;
-      background: linear-gradient(135deg, #ffffff 0%, #d97757 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 10px;
+    .badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+    .poster-title {
+      font-size: 48px; font-weight: 800; line-height: 1.18;
+      letter-spacing: -0.03em; margin-bottom: 12px;
     }
-    .subtitle {
-      font-size: 16px; color: #888; font-weight: 400;
-      letter-spacing: -0.01em;
+    .poster-title .brand { color: var(--accent); }
+    .poster-subtitle {
+      font-size: 17px; color: var(--text-secondary); font-weight: 400;
+      letter-spacing: -0.01em; max-width: 640px;
     }
 
-    /* === Grid === */
+    /* ===== GRID SECTION ===== */
+    .poster-grid-section {
+      flex: 1; padding: 26px 56px 0; position: relative; z-index: 1;
+      display: flex; flex-direction: column; min-height: 0;
+    }
     .grid {
-      display: grid;
+      flex: 1; display: grid;
       grid-template-columns: repeat(4, 1fr);
       grid-template-rows: repeat(3, 1fr);
       gap: 10px;
-      padding: 32px 60px 0;
-      position: relative; z-index: 1;
-      height: 620px;
     }
     .cell {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 14px;
-      padding: 20px;
-      display: flex; flex-direction: column;
-      justify-content: space-between;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.2s;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 18px;
+      display: flex; flex-direction: column; justify-content: space-between;
+      position: relative; overflow: hidden;
+      transition: box-shadow 0.2s ease;
     }
+    .cell:hover { box-shadow: 0 0 0 1px var(--border), 0 8px 20px rgba(0,0,0,0.1); }
     .cell::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0;
-      height: 2px;
-      background: var(--cell-accent, transparent);
-      opacity: 0.6;
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: var(--cell-accent, transparent); opacity: 0.7;
     }
     .cell-icon {
-      font-size: 24px;
-      margin-bottom: 8px;
-      width: 40px; height: 40px;
+      width: 36px; height: 36px; border-radius: 9px;
       display: flex; align-items: center; justify-content: center;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.04);
+      background: color-mix(in srgb, var(--cell-accent, var(--accent)), transparent 88%);
+      color: var(--cell-accent, var(--accent));
+      margin-bottom: 10px;
     }
-    .cell-title {
-      font-size: 15px; font-weight: 700;
-      letter-spacing: -0.02em;
-      line-height: 1.3;
-      margin-bottom: 4px;
-    }
-    .cell-desc {
-      font-size: 11.5px; color: #666; font-weight: 400;
-      line-height: 1.5;
-    }
+    .cell-title { font-size: 15px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.3; margin-bottom: 4px; }
+    .cell-desc { font-size: 12px; color: var(--text-secondary); font-weight: 400; line-height: 1.5; }
     .cell-tag {
-      display: inline-block;
-      font-size: 10px; font-weight: 600;
-      padding: 3px 8px; border-radius: 4px;
-      margin-top: auto;
-      background: rgba(255,255,255,0.04);
-      color: #555;
+      display: inline-block; font-size: 10px; font-weight: 600;
+      padding: 4px 8px; border-radius: 5px; margin-top: 10px; width: fit-content;
+      background: var(--surface-hover); color: var(--text-secondary);
       letter-spacing: 0.03em;
     }
-
-    /* Feature cell — larger */
-    .cell.featured {
-      grid-column: span 2;
-      background: rgba(217,119,87,0.04);
-      border-color: rgba(217,119,87,0.1);
-      --cell-accent: #d97757;
-    }
+    .cell.featured { grid-column: span 2; }
     .cell.featured .cell-title { font-size: 18px; }
+    .cell.featured .cell-desc { font-size: 13px; }
 
-    /* Accent colors per row */
-    .cell.c-orange { --cell-accent: #d97757; }
-    .cell.c-blue { --cell-accent: #3b82f6; }
-    .cell.c-purple { --cell-accent: #8b5cf6; }
-    .cell.c-green { --cell-accent: #10b981; }
-    .cell.c-pink { --cell-accent: #ec4899; }
-    .cell.c-yellow { --cell-accent: #f59e0b; }
-
-    /* === Footer === */
-    .footer {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      padding: 0 60px 40px;
-      display: flex; justify-content: space-between; align-items: flex-end;
-      z-index: 1;
+    /* ===== FOOTER ===== */
+    .poster-footer {
+      padding: 16px 56px 34px; position: relative; z-index: 1;
+      display: flex; justify-content: space-between; align-items: center;
+      border-top: 1px solid var(--border); margin: 0 56px;
+      padding-left: 0; padding-right: 0;
     }
-    .footer-left {
-      font-size: 12px; color: #444; font-weight: 500;
-      display: flex; align-items: center; gap: 6px;
-    }
-    .footer-logo {
-      width: 16px; height: 16px; border-radius: 4px;
-      background: linear-gradient(135deg, #d97757, #c2410c);
-    }
-    .footer-right {
-      font-size: 11px; color: #333; font-weight: 400;
-    }
-    .footer-cta {
-      font-size: 13px; color: #d97757; font-weight: 600;
-      letter-spacing: -0.01em;
-    }
+    .footer-brand { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-secondary); font-weight: 500; }
+    .footer-logo { width: 16px; height: 16px; border-radius: 5px; background: linear-gradient(135deg, var(--accent), var(--c-orange)); flex-shrink: 0; }
+    .footer-cta { font-size: 14px; color: var(--accent); font-weight: 600; letter-spacing: -0.01em; }
   </style>
 </head>
 <body>
-  <div class="glow-1"></div>
-  <div class="glow-2"></div>
-  <div class="glow-3"></div>
+  <a href="#main-content" class="skip-to-content">Skip to content</a>
 
-  <div class="header">
-    <div class="badge">Claude Code</div>
-    <div class="title">노트북 하나로<br>모든 것을 만든다</div>
-    <div class="subtitle">AI 코딩 에이전트가 바꾸는 1인 개발의 새로운 기준</div>
-  </div>
-
-  <div class="grid">
-    <!-- Row 1 -->
-    <div class="cell featured c-orange">
-      <div>
-        <div class="cell-icon">🚀</div>
-        <div class="cell-title">풀스택 앱 개발</div>
-        <div class="cell-desc">프론트엔드부터 백엔드, DB 설계까지<br>"앱 만들어줘" 한 마디면 끝</div>
-      </div>
-      <div class="cell-tag">REACT · NEXT.JS · POSTGRES</div>
-    </div>
-    <div class="cell c-blue">
-      <div>
-        <div class="cell-icon">🔧</div>
-        <div class="cell-title">리팩토링 & 디버깅</div>
-        <div class="cell-desc">10만 줄 코드베이스도 한번에 분석</div>
-      </div>
-      <div class="cell-tag">레거시 → 모던</div>
-    </div>
-    <div class="cell c-purple">
-      <div>
-        <div class="cell-icon">🧪</div>
-        <div class="cell-title">테스트 자동 생성</div>
-        <div class="cell-desc">유닛 · 통합 · E2E 테스트를 알아서</div>
-      </div>
-      <div class="cell-tag">COVERAGE ↑</div>
-    </div>
-
-    <!-- Row 2 -->
-    <div class="cell c-green">
-      <div>
-        <div class="cell-icon">📊</div>
-        <div class="cell-title">데이터 분석</div>
-        <div class="cell-desc">CSV → 인사이트 → 시각화까지 원스톱</div>
-      </div>
-      <div class="cell-tag">PANDAS · D3</div>
-    </div>
-    <div class="cell c-pink">
-      <div>
-        <div class="cell-icon">🎨</div>
-        <div class="cell-title">UI/UX 디자인</div>
-        <div class="cell-desc">피그마 없이 픽셀 퍼펙트 인터페이스</div>
-      </div>
-      <div class="cell-tag">TAILWIND CSS</div>
-    </div>
-    <div class="cell featured c-blue">
-      <div>
-        <div class="cell-icon">🤖</div>
-        <div class="cell-title">멀티 에이전트 시스템</div>
-        <div class="cell-desc">AI 에이전트가 AI 에이전트를 만들고<br>스스로 개선하는 자동화 파이프라인</div>
-      </div>
-      <div class="cell-tag">AGENT → AGENT → SHIP</div>
-    </div>
-
-    <!-- Row 3 -->
-    <div class="cell c-yellow">
-      <div>
-        <div class="cell-icon">📱</div>
-        <div class="cell-title">모바일 앱</div>
-        <div class="cell-desc">React Native / Flutter 앱도 혼자서</div>
-      </div>
-      <div class="cell-tag">iOS + ANDROID</div>
-    </div>
-    <div class="cell c-purple">
-      <div>
-        <div class="cell-icon">🔐</div>
-        <div class="cell-title">인프라 & 배포</div>
-        <div class="cell-desc">Docker, CI/CD, 클라우드 셋업</div>
-      </div>
-      <div class="cell-tag">AWS · VERCEL</div>
-    </div>
-    <div class="cell c-orange">
-      <div>
-        <div class="cell-icon">✍️</div>
-        <div class="cell-title">콘텐츠 제작</div>
-        <div class="cell-desc">블로그, 문서, 프레젠테이션 자동화</div>
-      </div>
-      <div class="cell-tag">마크다운 → HTML</div>
-    </div>
-    <div class="cell c-green">
-      <div>
-        <div class="cell-icon">🧠</div>
-        <div class="cell-title">AI 모델 파인튜닝</div>
-        <div class="cell-desc">데이터 준비부터 학습, 배포까지</div>
-      </div>
-      <div class="cell-tag">ML OPS</div>
+  <div class="viz-menu">
+    <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="Menu">
+      <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/>
+      </svg>
+    </button>
+    <div class="viz-menu-dropdown" id="vizMenuDropdown">
+      <button onclick="cycleTheme()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        <span id="themeLabel">Dark</span>
+      </button>
+      <button onclick="downloadImage()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>Download PNG</span>
+      </button>
+      <button onclick="window.print()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6,9 6,2 18,2 18,9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        <span>Print / PDF</span>
+      </button>
     </div>
   </div>
 
-  <div class="footer">
-    <div class="footer-left">
-      <div class="footer-logo"></div>
-      claude code · anthropic
-    </div>
-    <div class="footer-cta">개발자 1명 = 팀 전체</div>
-    <div class="footer-right">@yourhandle</div>
-  </div>
+  <main id="main-content" role="main">
+    <header class="poster-header animate">
+      <div class="badge">Claude Code</div>
+      <h1 class="poster-title"><span class="brand">Claude Code</span> — 노트북 하나로<br>모든 것을 만든다</h1>
+      <p class="poster-subtitle">AI 코딩 에이전트가 바꾸는 1인 개발의 새로운 기준</p>
+    </header>
+
+    <section class="poster-grid-section animate delay-1" aria-labelledby="capabilities-heading">
+      <h2 id="capabilities-heading" class="sr-only">Claude Code 핵심 기능 10가지</h2>
+      <div class="grid">
+        <!-- 1: 풀스택 앱 개발 (featured) -->
+        <article class="cell featured" style="--cell-accent: var(--c-orange);">
+          <div>
+            <div class="cell-icon" aria-hidden="true">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            </div>
+            <h3 class="cell-title">풀스택 앱 개발</h3>
+            <p class="cell-desc">프론트엔드부터 백엔드, DB 설계까지, "앱 만들어줘" 한 마디면 끝</p>
+          </div>
+          <span class="cell-tag">REACT · NEXT.JS · POSTGRES</span>
+        </article>
+
+        <!-- 2: 리팩토링 & 디버깅 -->
+        <article class="cell" style="--cell-accent: var(--c-blue);">
+          <div>
+            <div class="cell-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+            </div>
+            <h3 class="cell-title">리팩토링 &amp; 디버깅</h3>
+            <p class="cell-desc">10만 줄 코드베이스도 한번에 분석</p>
+          </div>
+          <span class="cell-tag">레거시 → 모던</span>
+        </article>
+
+        <!-- 3: 테스트 자동 생성 -->
+        <article class="cell" style="--cell-accent: var(--c-purple);">
+          <div>
+            <div class="cell-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.3 2.3 4.7-5"/></svg>
+            </div>
+            <h3 class="cell-title">테스트 자동 생성</h3>
+            <p class="cell-desc">유닛 · 통합 · E2E 테스트를 알아서</p>
+          </div>
+          <span class="cell-tag">COVERAGE UP</span>
+        </article>
+
+        <!-- 4: 데이터 분석 -->
+        <article class="cell" style="--cell-accent: var(--c-green);">
+          <div>
+            <div class="cell-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="20" x2="5" y2="12"/><line x1="12" y1="20" x2="12" y2="6"/><line x1="19" y1="20" x2="19" y2="15"/></svg>
+            </div>
+            <h3 class="cell-title">데이터 분석</h3>
+            <p class="cell-desc">CSV에서 인사이트, 시각화까지 원스톱</p>
+          </div>
+          <span class="cell-tag">PANDAS · D3</span>
+        </article>
+
+        <!-- 5: UI/UX 디자인 -->
+        <article class="cell" style="--cell-accent: var(--c-pink);">
+          <div>
+            <div class="cell-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+            </div>
+            <h3 class="cell-title">UI/UX 디자인</h3>
+            <p class="cell-desc">피그마 없이 픽셀 퍼펙트 인터페이스</p>
+          </div>
+          <span class="cell-tag">TAILWIND CSS</span>
+        </article>
+
+        <!-- 6: 멀티 에이전트 시스템 (featured) -->
+        <article class="cell featured" style="--cell-accent: var(--c-blue);">
+          <div>
+            <div class="cell-icon" aria-hidden="true">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="6" r="2.5"/><circle cx="19" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M6.8 8L10.5 15.5"/><path d="M17.2 8L13.5 15.5"/><path d="M7.5 6h9"/></svg>
+            </div>
+            <h3 class="cell-title">멀티 에이전트 시스템</h3>
+            <p class="cell-desc">AI 에이전트가 AI 에이전트를 만들고 스스로 개선하는 자동화 파이프라인</p>
+          </div>
+          <span class="cell-tag">AGENT → AGENT → SHIP</span>
+        </article>
+
+        <!-- 7: 모바일 앱 -->
+        <article class="cell" style="--cell-accent: var(--c-yellow);">
+          <div>
+            <div class="cell-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><line x1="10.5" y1="18.5" x2="13.5" y2="18.5"/></svg>
+            </div>
+            <h3 class="cell-title">모바일 앱</h3>
+            <p class="cell-desc">React Native, Flutter 앱도 혼자서</p>
+          </div>
+          <span class="cell-tag">iOS + ANDROID</span>
+        </article>
+
+        <!-- 8: 인프라 & 배포 -->
+        <article class="cell" style="--cell-accent: var(--c-purple);">
+          <div>
+            <div class="cell-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z"/></svg>
+            </div>
+            <h3 class="cell-title">인프라 &amp; 배포</h3>
+            <p class="cell-desc">Docker, CI/CD, 클라우드 셋업</p>
+          </div>
+          <span class="cell-tag">AWS · VERCEL</span>
+        </article>
+
+        <!-- 9: 콘텐츠 제작 -->
+        <article class="cell" style="--cell-accent: var(--c-orange);">
+          <div>
+            <div class="cell-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
+            </div>
+            <h3 class="cell-title">콘텐츠 제작</h3>
+            <p class="cell-desc">블로그, 문서, 프레젠테이션 자동화</p>
+          </div>
+          <span class="cell-tag">마크다운 → HTML</span>
+        </article>
+
+        <!-- 10: AI 모델 파인튜닝 -->
+        <article class="cell" style="--cell-accent: var(--c-green);">
+          <div>
+            <div class="cell-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="4" x2="5" y2="20"/><circle cx="5" cy="9" r="2"/><line x1="12" y1="4" x2="12" y2="20"/><circle cx="12" cy="15" r="2"/><line x1="19" y1="4" x2="19" y2="20"/><circle cx="19" cy="7" r="2"/></svg>
+            </div>
+            <h3 class="cell-title">AI 모델 파인튜닝</h3>
+            <p class="cell-desc">데이터 준비부터 학습, 배포까지</p>
+          </div>
+          <span class="cell-tag">ML OPS</span>
+        </article>
+      </div>
+    </section>
+
+    <footer class="poster-footer animate delay-2">
+      <div class="footer-brand">
+        <span class="footer-logo" aria-hidden="true"></span>
+        <span>claude code · anthropic</span>
+      </div>
+      <div class="footer-cta">개발자 1명 = 팀 전체</div>
+    </footer>
+  </main>
+
+  <script>
+    // === Menu ===
+    function toggleMenu() {
+      var dropdown = document.getElementById('vizMenuDropdown');
+      if (dropdown) dropdown.classList.toggle('open');
+    }
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.viz-menu')) {
+        var dropdown = document.getElementById('vizMenuDropdown');
+        if (dropdown) dropdown.classList.remove('open');
+      }
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        var dropdown = document.getElementById('vizMenuDropdown');
+        if (dropdown) dropdown.classList.remove('open');
+      }
+    });
+
+    // === Theme (class-based, OS detection on first visit) ===
+    var savedTheme = localStorage.getItem('viz-theme');
+    var currentTheme = savedTheme || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    function applyTheme(t) {
+      document.documentElement.className = 'theme-' + t;
+      var label = document.getElementById('themeLabel');
+      if (label) label.textContent = t === 'dark' ? 'Dark' : 'Light';
+      localStorage.setItem('viz-theme', t);
+      currentTheme = t;
+    }
+    function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
+    applyTheme(currentTheme);
+
+    // === Download PNG ===
+    async function downloadImage() {
+      var menu = document.querySelector('.viz-menu');
+      menu.style.display = 'none';
+      try {
+        var url = await htmlToImage.toPng(document.body, { quality: 1, pixelRatio: 2, filter: function(n) { return !n.classList || !n.classList.contains('viz-menu'); } });
+        var a = document.createElement('a'); a.href = url;
+        a.download = 'claude-code-poster-1x1.png'; a.click();
+      } catch (e) { console.error('Download failed:', e); }
+      menu.style.display = '';
+    }
+  </script>
 </body>
 </html>
