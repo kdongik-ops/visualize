@@ -85,7 +85,7 @@ Instead of fixed test prompts per visualization type, the agent creates a **rand
 
 Each output is generated via:
 ```bash
-claude -p --dangerously-skip-permissions --model sonnet \
+claude -p --allowedTools "Write,Read,Edit" --model sonnet \
   "{persona prompt}"
 ```
 
