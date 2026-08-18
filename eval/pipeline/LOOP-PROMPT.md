@@ -6,7 +6,7 @@
 
 ---
 
-You are running one round of the Visualize plugin's self-improvement loop. Follow these steps exactly.
+You are running one round of the Visualize skill's self-improvement loop. Follow these steps exactly.
 
 ## Step 0: Setup
 
@@ -148,9 +148,9 @@ never rendered. Fix the crash first, then re-score.
 For EVERY issue found in Step 2, trace it back to the skill instructions:
 
 Read these files:
-- `skills/visualize/SKILL.md`
-- `skills/visualize/references/skeleton.md`
-- `skills/visualize/references/design-system.md`
+- `.claude/skills/visualize/SKILL.md`
+- `.claude/skills/visualize/references/skeleton.md`
+- `.claude/skills/visualize/references/design-system.md`
 - Other references as needed
 
 For each issue, determine:
@@ -193,7 +193,7 @@ Write your analysis to `eval/rounds/round-{N}/analysis.md` with this structure:
 
 **Critical: Fix the SKILL, not the outputs.** Individual outputs will improve when the skill instructions improve.
 
-1. Fix `skills/visualize/SKILL.md` first:
+1. Fix `.claude/skills/visualize/SKILL.md` first:
    - Add missing instructions (be concrete: "use 48px minimum" not "use appropriate spacing")
    - Clarify vague instructions with examples
    - Resolve contradictions
@@ -212,29 +212,9 @@ git commit -m "eval: round {N} fixes — {one-line summary}"
 git push origin main
 ```
 
-4. **Publish the fix to the installed plugin — do NOT skip this.**
-   `claude -p` in Step 5 reads the *installed* copy of the skill, not this working
-   tree. `claude plugin update` compares version numbers only: if the version is
-   unchanged it reports "already at the latest version" and copies nothing, so the
-   re-test would silently measure the OLD skill and the fix would look ineffective.
-
-```bash
-# Bump the patch version in BOTH manifests — they must agree
-#   .claude-plugin/plugin.json      → "version"
-#   .claude-plugin/marketplace.json → metadata.version AND plugins[0].version
-
-claude plugin marketplace update careerhackeralex
-claude plugin update visualize@careerhackeralex
-```
-
-   Confirm the copy actually changed before continuing:
-```bash
-diff -q ~/.claude/plugins/cache/careerhackeralex/visualize/{NEW_VERSION}/skills/visualize/SKILL.md \
-        skills/visualize/SKILL.md
-```
-
-   The CLI prints "Restart to apply changes." A fresh `claude -p` process picks up
-   the new copy on its own, so Step 5 works without restarting this session.
+4. **No republish step.** The skill lives at `.claude/skills/visualize/` in this
+   working tree, so `claude -p` in Step 5 reads the file you just edited. Run it
+   from the repo root — that is where Claude Code discovers the skill.
 
 ## Step 5: Re-test
 
@@ -347,4 +327,4 @@ Only run this instead of the normal loop when triggered (see Step 0).
 4. Class-based theming only (no @media prefers-color-scheme for CSS vars)
 5. Content visible by default (no JS-hidden content)
 6. Every fix goes into SKILL.md or references — never just individual outputs
-7. Plugin structure valid (.claude-plugin/plugin.json + skills/visualize/)
+7. Skill structure valid (.claude/skills/visualize/SKILL.md + references/)

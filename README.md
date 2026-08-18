@@ -73,34 +73,21 @@
 
 ## 설치
 
-### Claude Code 플러그인 (권장)
-
 ```bash
-# 1단계: 마켓플레이스 등록 (최초 1회)
-claude plugin marketplace add kdongik-ops/visualize
-
-# 2단계: 플러그인 설치
-claude plugin install visualize@careerhackeralex
-```
-
-나중에 업데이트할 때:
-```bash
-claude plugin update visualize@careerhackeralex
-```
-
-> 저장소 경로(`kdongik-ops`)와 플러그인 식별자의 마켓플레이스 이름(`careerhackeralex`)이
-> 다른 것은 의도된 것입니다. 저장소는 fork로 옮겼지만 `.claude-plugin/marketplace.json`의
-> `name`은 그대로 두었습니다. 이 이름을 바꾸면 이미 설치된 사본이 깨집니다.
-
-### 수동 설치
-
-```bash
-# 저장소 복제
 git clone https://github.com/kdongik-ops/visualize.git
+```
 
-# Claude Code는 .claude-plugin/plugin.json 이 있는 플러그인을 자동으로 인식합니다.
-# 복제한 디렉터리에서 Claude Code를 열거나, 플러그인 디렉터리로 등록하세요:
-claude plugin install --plugin-dir /path/to/visualize
+복제한 디렉터리에서 Claude Code를 열면 `.claude/skills/visualize/`의 스킬이 자동으로 잡힙니다.
+매니페스트도, 설치 명령도 필요하지 않습니다.
+
+다른 곳에서 쓰려면 스킬 폴더만 복사하세요.
+
+```bash
+# 특정 프로젝트에서만 쓰기
+cp -r visualize/.claude/skills/visualize <프로젝트>/.claude/skills/
+
+# 모든 프로젝트에서 쓰기
+cp -r visualize/.claude/skills/visualize ~/.claude/skills/
 ```
 
 ## 사용법
@@ -125,12 +112,9 @@ claude plugin install --plugin-dir /path/to/visualize
 
 ```
 visualize/
-├── .claude-plugin/
-│   └── plugin.json             # 플러그인 매니페스트
-├── skills/
-│   └── visualize/
-│       ├── SKILL.md            # 스킬 본체 지시문
-│       └── references/         # 디자인 시스템, 스켈레톤, 패턴
+├── .claude/skills/visualize/
+│   ├── SKILL.md                # 스킬 본체 지시문
+│   └── references/             # 디자인 시스템, 스켈레톤, 패턴
 ├── examples/                   # 샘플 HTML 결과물 15개
 ├── eval/                       # 품질 검증 및 개선 루프
 ├── research/                   # 디자인 리서치 노트

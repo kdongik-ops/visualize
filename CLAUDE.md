@@ -6,12 +6,9 @@
 
 ```
 visualize/
-├── .claude-plugin/
-│   └── plugin.json           # 플러그인 매니페스트 (name, version, author)
-├── skills/
-│   └── visualize/
-│       ├── SKILL.md           # 스킬 본체 (Claude Code가 로드한다)
-│       └── references/        # 상세 규격 (점진적 공개 3단계)
+├── .claude/skills/visualize/
+│   ├── SKILL.md               # 스킬 본체 (Claude Code가 로드한다)
+│   └── references/            # 상세 규격 (점진적 공개 3단계)
 │           ├── design-system.md
 │           ├── skeleton.md
 │           ├── types.md
@@ -43,21 +40,19 @@ visualize/
 └── LICENSE                    # MIT
 ```
 
-## 설치
+## 스킬을 쓰는 법
 
-```bash
-# Claude Code 플러그인 시스템으로
-/plugin marketplace add kdongik-ops/visualize
-/plugin install visualize@careerhackeralex
+스킬이 `.claude/skills/visualize/`에 있으므로 이 저장소에서 Claude Code를 열면 자동으로
+로드된다. 설치 명령도, 플러그인 매니페스트도 없다. 스킬 이름은 `visualize`다.
 
-# 또는 직접 복제
-git clone https://github.com/kdongik-ops/visualize.git
-```
+다른 곳에서 쓰려면 그 폴더를 대상 프로젝트의 `.claude/skills/`나, 전역으로 쓰려면
+`~/.claude/skills/`로 복사한다.
 
-저장소 경로와 마켓플레이스 이름이 다른 것은 의도된 것이다. 저장소는 `kdongik-ops` fork로
-옮겼지만 `.claude-plugin/marketplace.json`은 여전히 `"name": "careerhackeralex"`로 선언하고
-있어서 플러그인 식별자가 `visualize@careerhackeralex`로 유지된다. 이 이름을 바꾸면 이미
-설치된 사본이 깨진다.
+**여기서 고친 내용은 다음 세션에 바로 반영된다.** 예전에는 플러그인으로 설치해서
+`~/.claude/plugins/cache/`의 사본이 로드됐고, 버전을 올려 재설치하기 전에는 수정이
+반영되지 않았다. 그 단계는 사라졌다.
+
+플러그인 배포는 나중에 별도로 만든다.
 
 ## 주요 결정 사항
 
@@ -71,13 +66,13 @@ git clone https://github.com/kdongik-ops/visualize.git
 
 ## 이 저장소에서 작업할 때
 
-`skills/visualize/SKILL.md`를 고칠 때:
+`.claude/skills/visualize/SKILL.md`를 고칠 때:
 - **5,000단어** 미만으로 유지한다 (점진적 공개에 관한 Anthropic 모범 사례)
-- 상세 규격은 `skills/visualize/references/`로 옮기고 SKILL.md에서 링크한다
+- 상세 규격은 `.claude/skills/visualize/references/`로 옮기고 SKILL.md에서 링크한다
 - YAML 프론트매터에는 `name`과, 트리거 문구가 들어간 `description`이 있어야 한다
 
 예시를 고칠 때:
-- 항상 `skills/visualize/references/skeleton.md`의 스켈레톤에서 시작한다
+- 항상 `.claude/skills/visualize/references/skeleton.md`의 스켈레톤에서 시작한다
 - 다크와 라이트 테마를 모두 확인한다
 - 햄버거 메뉴를 확인한다 (테마 전환, PNG 내려받기, 인쇄)
 

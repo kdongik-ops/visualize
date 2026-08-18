@@ -1,17 +1,17 @@
 # OpenClaw Setup — Visualize Self-Improvement Loop
 
-> Give this prompt to OpenClaw to create a recurring job that improves the Visualize plugin automatically.
+> Give this prompt to OpenClaw to create a recurring job that improves the Visualize skill automatically.
 
 ---
 
 ## Prompt for OpenClaw
 
 ```
-Create a recurring cron job that runs every 3 hours to improve the Visualize Claude Code plugin.
+Create a recurring cron job that runs every 3 hours to improve the Visualize Claude Code skill.
 
 ## What This Job Does
 
-Each run executes one round of a self-improvement loop for an open-source Claude Code plugin (https://github.com/kdongik-ops/visualize). The loop generates HTML visualizations using the plugin, scores them with an automated eval pipeline, identifies weaknesses in the skill instructions, fixes them, and pushes improvements back to GitHub.
+Each run executes one round of a self-improvement loop for an open-source Claude Code skill (https://github.com/kdongik-ops/visualize). The loop generates HTML visualizations using the skill, scores them with an automated eval pipeline, identifies weaknesses in the skill instructions, fixes them, and pushes improvements back to GitHub.
 
 ## Setup
 

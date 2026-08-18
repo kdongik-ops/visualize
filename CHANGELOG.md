@@ -1,7 +1,21 @@
 # 변경 이력
 
-Visualize 플러그인의 주요 변경 사항을 기록합니다.
+Visualize 스킬의 주요 변경 사항을 기록합니다.
 형식은 [Keep a Changelog](https://keepachangelog.com/)를 따릅니다.
+
+## Unreleased — 플러그인에서 스킬 폴더로 (2026-08-18)
+
+### 변경
+- 플러그인 구조를 걷어내고 스킬을 `.claude/skills/visualize/`에 직접 두는 구조로 전환했다.
+  `.claude-plugin/plugin.json`과 `marketplace.json`을 제거했다. 복제한 디렉터리에서
+  Claude Code를 열면 스킬이 자동으로 잡히므로 설치 명령이 필요 없다.
+- 스킬 이름이 `visualize:visualize`에서 `visualize`로 바뀌었다.
+- 개선 루프(`eval/LOOP.md`)를 v7로 갱신했다. 플러그인 설치·제거·재설치 세 단계가
+  사라져 12단계에서 10단계가 되었다. 고친 내용이 다음 실행에 바로 반영되므로
+  버전을 올려 재설치하던 절차도 없앴다.
+
+### 제거
+- `.claude-plugin/` 매니페스트 2개 (플러그인 배포는 나중에 별도로 만든다)
 
 ## v0.3.0 — 평가 체계 성숙
 

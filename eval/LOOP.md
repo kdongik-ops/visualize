@@ -1,7 +1,9 @@
-# Visualize Improvement Loop (v6 — Install & Pipeline)
+# Visualize Improvement Loop (v7 — Clone & Pipeline)
 
 The git repo (`https://github.com/kdongik-ops/visualize`) is the **source of truth**.
-Every iteration installs the plugin from GitHub, invokes it through Claude Code, evaluates real output with the automated pipeline, fixes the skill, and pushes improvements back.
+Every iteration clones the repo from GitHub, invokes the skill through Claude Code from inside that clone, evaluates real output with the automated pipeline, fixes the skill, and pushes improvements back.
+
+The skill lives at `.claude/skills/visualize/`, so a clone is all it takes to load it — there is nothing to install and nothing to uninstall.
 
 ## Architecture
 
@@ -9,50 +11,36 @@ Every iteration installs the plugin from GitHub, invokes it through Claude Code,
 Loop fires (manual or cron)
   └── Agent starts
         │
-        ├── Step 0: Install plugin from GitHub
-        ├── Step 1: Check state (skip if SHIP/VIRAL)
+        ├── Step 1: Clone repo, check state (skip if SHIP/VIRAL)
         ├── Step 2: Generate — invoke skill via Claude Code CLI
         ├── Step 3: Evaluate — 3-layer pipeline + agent vision scoring
         ├── Step 4: Analyze — root cause, trace to SKILL.md
-        ├── Step 5: Uninstall plugin
-        ├── Step 6: Clone repo, fix SKILL.md + references
-        ├── Step 7: Push fixes to git
-        ├── Step 8: Re-install from git (gets updated version)
-        ├── Step 9: Re-generate worst prompts to verify fixes
-        ├── Step 10: Validate — pipeline re-eval + screenshots
-        ├── Step 11: Commit final results & push
-        └── Step 12: Cleanup & report
+        ├── Step 5: Fix SKILL.md + references
+        ├── Step 6: Push fixes to git
+        ├── Step 7: Re-generate worst prompts to verify fixes
+        ├── Step 8: Validate — pipeline re-eval + screenshots
+        ├── Step 9: Commit final results & push
+        └── Step 10: Cleanup & report
 ```
 
-## Step 0: Install Plugin from GitHub
+## Step 1: Clone Repo & Check State
 
 ```bash
-# Add marketplace (if not already added)
-claude plugin marketplace add kdongik-ops/visualize
-
-# Install the plugin
-claude plugin install visualize@careerhackeralex
-```
-This is exactly what a real user does. We test what they get.
-
-## Step 1: Check State
-
-```bash
-# Clone repo separately just to read state
 WORK_DIR=$(mktemp -d)
 cd "$WORK_DIR"
 git clone https://github.com/kdongik-ops/visualize.git
 ```
+This clone is both the state to read and the skill under test — exactly what a real user gets.
 - Read `eval/loop-state.json`
 - If gate is SHIP or VIRAL → report status, cleanup, exit
 - If `loopsSinceResearch >= 5` AND score plateau → research phase
 
 ## Step 2: Generate (The Real Test)
 
-Create a temp output directory and invoke the skill through Claude Code:
+Create a temp output directory, then work from **inside the clone** — Claude Code loads the skill from `.claude/skills/` in the working directory:
 ```bash
 mkdir -p "$WORK_DIR/outputs"
-cd "$WORK_DIR/outputs"
+cd "$WORK_DIR/visualize"   # MUST be here, or the skill will not load
 ```
 
 Create a random persona with:
@@ -68,10 +56,10 @@ claude -p \
   --dangerously-skip-permissions \
   --allow-dangerously-skip-permissions \
   --model sonnet \
-  "{test prompt}. Save as {filename}.html"
+  "{test prompt}. Save as $WORK_DIR/outputs/{filename}.html"
 ```
 
-**No `--plugin-dir`.** The skill is installed as a real plugin. Claude Code discovers it automatically, just like a real user.
+**No install, no `--plugin-dir`.** The skill loads from `.claude/skills/` in the working directory, exactly like a user who cloned the repo. Give an absolute output path — outputs otherwise land in the repo root or `~/Downloads/`.
 
 **Test prompt selection — always include:**
 - 1 slide deck / presentation
@@ -128,16 +116,9 @@ Don't jump to fixes. Think first:
 
 Write analysis to `eval/rounds/round-{N}/analysis.md`.
 
-## Step 5: Uninstall Plugin
+## Step 5: Fix SKILL.md + References
 
-```bash
-claude plugin uninstall visualize@careerhackeralex
-```
-Clean slate before we make fixes.
-
-## Step 6: Fix SKILL.md + References
-
-Work in the cloned repo from Step 1 (`$WORK_DIR/visualize`).
+Work in the cloned repo from Step 1 (`$WORK_DIR/visualize`). Edits take effect on the next `claude -p` run — there is no republish step.
 
 **SKILL.md (most important):**
 - Add missing instructions with concrete examples
@@ -158,7 +139,7 @@ Work in the cloned repo from Step 1 (`$WORK_DIR/visualize`).
 - Replace JS with CSS where possible
 - All top-level JS uses `var`
 
-## Step 7: Push Fixes to Git
+## Step 6: Push Fixes to Git
 
 ```bash
 cd "$WORK_DIR/visualize"
@@ -167,31 +148,21 @@ git commit -m "eval: round {N} fixes — {summary of SKILL.md changes}"
 git push origin main
 ```
 
-## Step 8: Re-install from Git
+## Step 7: Re-generate (Verify Fixes)
 
+Re-run the **worst 2-3 prompts** from Step 2. The fixes are already live in the clone:
 ```bash
-# Update marketplace to get latest
-claude plugin marketplace update careerhackeralex
-
-# Re-install (gets the fixed version)
-claude plugin install visualize@careerhackeralex
-```
-Now the installed plugin has our fixes.
-
-## Step 9: Re-generate (Verify Fixes)
-
-Re-run the **worst 2-3 prompts** from Step 2:
-```bash
-cd "$WORK_DIR/outputs-fixed"
+mkdir -p "$WORK_DIR/outputs-fixed"
+cd "$WORK_DIR/visualize"   # again: the skill loads from here
 claude -p \
   --dangerously-skip-permissions \
   --allow-dangerously-skip-permissions \
   --model sonnet \
-  "{same prompt}. Save as {filename}.html"
+  "{same prompt}. Save as $WORK_DIR/outputs-fixed/{filename}.html"
 ```
 Compare before/after. Fixes should produce noticeably better output.
 
-## Step 10: Validate
+## Step 8: Validate
 
 Run the pipeline again on re-generated files:
 ```bash
@@ -208,7 +179,7 @@ Verify:
 
 Save post-fix screenshots to `eval/rounds/round-{N}/screenshots/`.
 
-## Step 11: Commit Final Results & Push
+## Step 9: Commit Final Results & Push
 
 Copy good re-generated outputs to `examples/` if they're better than existing ones:
 ```bash
@@ -221,21 +192,17 @@ Key SKILL.md changes:
 - {change 1}
 - {change 2}
 
-Generated via: claude -p (installed plugin, sonnet)
+Generated via: claude -p (skill from clone, sonnet)
 Weakest: {dim} ({score}), Strongest: {dim} ({score})"
 git push origin main
 ```
 
 Update `eval/loop-state.json` in this commit.
 
-## Step 12: Cleanup & Report
+## Step 10: Cleanup & Report
 
 ```bash
-# Uninstall plugin
-claude plugin uninstall visualize@careerhackeralex
-claude plugin marketplace remove careerhackeralex
-
-# Delete temp directory
+# Delete temp directory — nothing was installed, so this is the whole cleanup
 rm -rf "$WORK_DIR"
 ```
 
@@ -278,6 +245,6 @@ Triggered when: `loopsSinceResearch >= 5` AND score plateau (< 0.3 improvement o
 4. Class-based theming only (no @media prefers-color-scheme)
 5. Content visible by default
 6. Every fix goes into SKILL.md or references, not just individual files
-7. Plugin structure valid (`.claude-plugin/plugin.json` + `skills/visualize/`)
-8. **All evaluated outputs generated by invoking the installed skill, never hand-crafted**
-9. **Plugin installed from GitHub, not local path**
+7. Skill structure valid (`.claude/skills/visualize/SKILL.md` + `references/`)
+8. **All evaluated outputs generated by invoking the skill, never hand-crafted**
+9. **Skill always loaded from a fresh GitHub clone, never the dev working tree**
