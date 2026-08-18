@@ -39,9 +39,12 @@ This clone is both the state to read and the skill under test — exactly what a
 
 Create a temp output directory, then work from **inside the clone** — Claude Code loads the skill from `.claude/skills/` in the working directory:
 ```bash
-mkdir -p "$WORK_DIR/outputs"
+mkdir -p "$WORK_DIR/visualize/outputs"
 cd "$WORK_DIR/visualize"   # MUST be here, or the skill will not load
 ```
+Outputs go **inside** the clone. `claude -p` refuses to write outside its working
+directory, so a path in `$WORK_DIR` itself would be rejected. The repo ignores
+`*.html`, so the generated files never dirty the clone's git status.
 
 Create a random persona with:
 - Role (e.g., "VP of Sales at a B2B SaaS company")
@@ -55,7 +58,7 @@ For each test prompt:
 claude -p \
   --allowedTools "Write,Read,Edit" \
   --model sonnet \
-  "{test prompt}. Save as $WORK_DIR/outputs/{filename}.html"
+  "{test prompt}. Save as $WORK_DIR/visualize/outputs/{filename}.html"
 ```
 
 **No install, no `--plugin-dir`.** The skill loads from `.claude/skills/` in the working directory, exactly like a user who cloned the repo. Give an absolute output path — outputs otherwise land in the repo root or `~/Downloads/`.
@@ -74,7 +77,7 @@ Save outputs to `eval/rounds/round-{N}/generated/`.
 Run the automated eval pipeline (Layers 1 & 2):
 ```bash
 cd "$WORK_DIR/visualize/eval/pipeline"
-node run.js --dir "$WORK_DIR/outputs" --round {N}
+node run.js --dir "$WORK_DIR/visualize/outputs" --round {N}
 ```
 
 This runs:
@@ -151,12 +154,12 @@ git push origin main
 
 Re-run the **worst 2-3 prompts** from Step 2. The fixes are already live in the clone:
 ```bash
-mkdir -p "$WORK_DIR/outputs-fixed"
+mkdir -p "$WORK_DIR/visualize/outputs-fixed"
 cd "$WORK_DIR/visualize"   # again: the skill loads from here
 claude -p \
   --allowedTools "Write,Read,Edit" \
   --model sonnet \
-  "{same prompt}. Save as $WORK_DIR/outputs-fixed/{filename}.html"
+  "{same prompt}. Save as $WORK_DIR/visualize/outputs-fixed/{filename}.html"
 ```
 Compare before/after. Fixes should produce noticeably better output.
 
@@ -165,7 +168,7 @@ Compare before/after. Fixes should produce noticeably better output.
 Run the pipeline again on re-generated files:
 ```bash
 cd "$WORK_DIR/visualize/eval/pipeline"
-node run.js --dir "$WORK_DIR/outputs-fixed" --round {N}
+node run.js --dir "$WORK_DIR/visualize/outputs-fixed" --round {N}
 ```
 
 Verify:
@@ -182,7 +185,7 @@ Save post-fix screenshots to `eval/rounds/round-{N}/screenshots/`.
 Copy good re-generated outputs to `examples/` if they're better than existing ones:
 ```bash
 cd "$WORK_DIR/visualize"
-cp "$WORK_DIR/outputs-fixed/"*.html examples/
+cp "$WORK_DIR/visualize/outputs-fixed/"*.html examples/
 git add -A
 git commit -m "eval: round {N} — avg {score} ({delta}), gate {GATE}
 

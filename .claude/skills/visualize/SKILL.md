@@ -333,6 +333,8 @@ HTML은 "웹사이트"가 아니라 시각화 도구다. 코드는 값싸다. �
 - **4:5 세로:** `width: 1080px; height: 1350px;` — 인스타그램 세로 게시물
 - **16:9 가로:** `width: 1920px; height: 1080px;` — 발표 슬라이드
 
+**MANDATORY — 래퍼가 flex 체인을 끊지 않게 한다:** 스켈레톤의 `<main>` 래퍼를 쓰면 `main { flex: 1; display: flex; flex-direction: column; min-height: 0; }`을 반드시 넣는다. 이 규칙을 빠뜨리면 (NEVER) `<main>`이 콘텐츠 높이에서 멈춰 캔버스 하단이 비어 버린다. `body`에만 flex를 걸어서는 부족하다.
+
 **핵심 CSS 패턴:**
 ```css
 body {
@@ -340,6 +342,10 @@ body {
   overflow: hidden; /* MUST — prevents scroll, enforces single screen */
   display: flex; flex-direction: column; /* Flex column fills canvas completely */
 }
+/* MANDATORY when a <main> wrapper sits between body and the sections: the wrapper
+   MUST forward the flex chain, or it stops at its natural height and the bottom of
+   the poster stays empty. */
+main { flex: 1; display: flex; flex-direction: column; min-height: 0; }
 .poster-header { padding: 44px 48px 0; }
 .poster-grid { flex: 1; padding: 24px 48px 0; } /* flex:1 expands to fill remaining space */
 .poster-footer { padding: 16px 48px 36px; }
