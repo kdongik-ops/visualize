@@ -139,6 +139,26 @@ async function runLayer2(page, format) {
 // Screenshot capture
 // ============================================================
 
+// A fullPage screenshot does not scroll, so IntersectionObserver never fires for
+// anything below the fold. Pages that use data-reveal came out with their lower
+// half blank, which silently depressed their Layer 3 score. Scroll through once
+// so scroll-triggered content is showing before we capture.
+async function settleScrollReveals(page) {
+  await page.evaluate(async function () {
+    var step = window.innerHeight;
+    var end = document.documentElement.scrollHeight;
+    for (var y = 0; y < end; y += step) {
+      window.scrollTo(0, y);
+      await new Promise(function (r) { setTimeout(r, 60); });
+    }
+    window.scrollTo(0, 0);
+  });
+  // Scrolling also starts the data-count counters (skeleton animates them over
+  // ~1000ms). Capturing too early freezes them mid-count and makes correct data
+  // look wrong. Wait for them to land.
+  await page.waitForTimeout(1400);
+}
+
 async function captureScreenshots(page, htmlFilePath, outDir) {
   var screenshots = {};
   var name = basename(htmlFilePath, '.html');
@@ -152,6 +172,7 @@ async function captureScreenshots(page, htmlFilePath, outDir) {
     else document.documentElement.className = 'theme-dark';
   });
   await page.waitForTimeout(500);
+  await settleScrollReveals(page);
   var darkPath = join(outDir, name + '-dark-1440.png');
   await page.screenshot({ path: darkPath, fullPage: true });
   screenshots.dark1440 = darkPath;
@@ -162,6 +183,7 @@ async function captureScreenshots(page, htmlFilePath, outDir) {
     else document.documentElement.className = 'theme-light';
   });
   await page.waitForTimeout(500);
+  await settleScrollReveals(page);
   var lightPath = join(outDir, name + '-light-1440.png');
   await page.screenshot({ path: lightPath, fullPage: true });
   screenshots.light1440 = lightPath;
@@ -173,6 +195,7 @@ async function captureScreenshots(page, htmlFilePath, outDir) {
     else document.documentElement.className = 'theme-dark';
   });
   await page.waitForTimeout(500);
+  await settleScrollReveals(page);
   var mobilePath = join(outDir, name + '-dark-375.png');
   await page.screenshot({ path: mobilePath, fullPage: true });
   screenshots.darkMobile = mobilePath;

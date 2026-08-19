@@ -8,16 +8,16 @@
 
 ## 결과
 
-| 파일 | 형식 | L2 | L3 | 종합 |
-|---|---|---|---|---|
-| director-briefing.html | slide-deck | 100 | 8.92 | **9.36** |
-| quality-dashboard.html | dashboard | 97 | 8.60 | 9.04 |
-| marketing-kpi-dashboard.html | dashboard | 97 | 8.50 | 8.98 |
-| improvement-timeline.html | (timeline) | 96 | 8.55 | 8.97 |
-| unicode-stats-info.html | (infographic) | 97 | 7.88 | 8.61 |
-| patient-safety-info.html | (infographic) | 97 | 7.22 | **8.21** |
+| 파일 | L2 | L3 | 종합 |
+|---|---|---|---|
+| director-briefing.html | 100 | 8.92 | **9.36** |
+| quality-dashboard.html | 97 | 8.60 | 9.04 |
+| patient-safety-info.html | 97 | 8.60 | 9.04 |
+| marketing-kpi-dashboard.html | 97 | 8.50 | 8.98 |
+| improvement-timeline.html | 96 | 8.55 | 8.97 |
+| unicode-stats-info.html | 97 | 7.88 | **8.61** |
 
-**평균 8.86 / 최저 8.21 / 게이트 ACCEPTABLE** (L2만 보면 9.73, VIRAL)
+**평균 9.00 / 최저 8.61 / 게이트 SHIP** (L2만 보면 9.73, VIRAL)
 
 ## 판정
 
@@ -30,9 +30,22 @@
 
 **정리는 해를 끼치지 않았다.**
 
-+0.42는 미리 정한 ±0.5 잡음 범위 안이다. **개선으로 기록하지 않는다.** 차트가 정상
-동작한 것도 정리 덕분이 아니라 `f01c7a1`의 CDN 수정 덕분이며, 그 사실은 편집 전에 따로
-확인했다 (8월 생성물 10건, 오류 0건).
+### 이 점수를 이전 라운드와 직접 비교하지 말 것
+
+라운드 도중 **측정 도구 자체의 결함을 찾아 고쳤다** (아래 5번). 그 전까지 파이프라인은
+`data-reveal`을 쓰는 페이지의 첫 화면 아래를 빈 칸으로 찍고 있었다. 같은 파일을 고치기
+전후로 채점하면 이렇게 갈린다.
+
+| | patient-safety-info | 라운드 평균 |
+|---|---|---|
+| 고치기 전 (눈먼 스크린샷) | L3 7.22 / 종합 8.21 | 8.86 |
+| 고친 뒤 (실제 화면) | L3 8.60 / 종합 9.04 | **9.00** |
+
+**R58의 8.44와 그 이전 라운드 점수는 전부 눈먼 파이프라인으로 매긴 값이다.** 8.44 → 9.00을
+개선으로 읽으면 안 된다. R58도 다시 재면 더 높게 나올 것이다. **R59부터가 새 기준선이다.**
+
+정리가 해를 끼치지 않았다는 판정은 그대로 유효하다. 그 판정은 절대 점수가 아니라 콘솔
+오류·차트 체크·스켈레톤 준수 여부에 근거하며, 그 셋은 측정 방식이 바뀌지 않았다.
 
 ## 발견과 조치
 
@@ -86,6 +99,23 @@ SKILL.md는 `@media (max-width: 375px) { body { overflow-x: hidden; } }`를 지�
 `improvement-timeline`(타임라인)과 `unicode-stats-info`·`patient-safety-info`
 (인포그래픽)가 전부 `dashboard`로 판정됐다. 점수에 직접 반영되지는 않지만 형식별 체크가
 잘못 적용된다. `format-detect.js` 문제이며 이번 범위 밖으로 남긴다.
+
+### 5. 파이프라인이 첫 화면 아래를 못 보고 있었다 [PIPELINE]
+
+`fullPage: true` 스크린샷은 스크롤하지 않는다. 따라서 뷰포트 밖 요소의
+IntersectionObserver가 발화하지 않고, `data-reveal` 섹션이 `opacity: 0`인 채로 찍힌다.
+`patient-safety-info`는 하단 60%가 빈 칸으로 나왔고 L3에서 그만큼 깎였다. **페이지는
+멀쩡했고 측정 도구가 못 본 것이다.**
+
+→ `run.js`에 `settleScrollReveals()`를 넣어 캡처 전에 페이지를 한 번 훑는다.
+
+**첫 수정 뒤 두 번째 문제가 드러났다.** 스크롤이 `data-count` 카운터도 함께 발화시키는데,
+곧바로 캡처하니 애니메이션 도중 값이 찍혔다 (47→36, 68→51, 79→60 — 모두 약 76% 지점).
+정확한 데이터가 틀린 것처럼 보인다. → 캡처 전 1,400ms 대기를 추가했다 (스켈레톤 카운터는
+약 1,000ms).
+
+이 결함은 이번 라운드뿐 아니라 **과거 모든 라운드의 Layer 3 점수를 낮췄다.** 앞서
+`saas-dashboard` 재생성본이 "내용이 없다"고 판단됐던 것도 같은 원인일 가능성이 크다.
 
 ## 하네스 결함 (스킬 문제 아님)
 
