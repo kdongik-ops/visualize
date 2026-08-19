@@ -287,18 +287,24 @@
       menu.style.display = '';
     }
 
-    // === Chart.js Pattern (use when file has Chart.js) ===
-    // var chartsBuilt = false;
-    // function buildCharts() {
-    //   if (chartsBuilt || typeof Chart === 'undefined') return;
-    //   var isDark = document.documentElement.classList.contains('theme-dark');
-    //   var textColor = isDark ? '#EDEDED' : '#0f172a';
-    //   var borderColor = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
-    //   // Create charts with theme-aware colors
-    //   chartsBuilt = true;
+    // === Chart.js Pattern (use when file has Chart.js) — SKILL.md의 정식 패턴 축약본 ===
+    // var myChart;
+    // function getColors() {
+    //   var s = getComputedStyle(document.documentElement);
+    //   return { text: s.getPropertyValue('--text').trim(), sub: s.getPropertyValue('--text-secondary').trim(),
+    //            border: s.getPropertyValue('--border').trim(), accent: s.getPropertyValue('--accent').trim() };
     // }
-    // function onThemeChange() { chartsBuilt = false; buildCharts(); }
-    // window.addEventListener('load', buildCharts);
+    // function getCanvas(id) { return document.getElementById(id); }   // 캐시하지 말고 매번 찾는다
+    // function buildCharts() {
+    //   if (typeof Chart === 'undefined') { console.error('Chart.js not loaded'); return; }
+    //   var c = getColors();
+    //   Chart.defaults.color = c.sub;
+    //   Chart.defaults.animation = false;
+    //   try { if (myChart) myChart.destroy(); } catch (e) {}
+    //   myChart = new Chart(getCanvas('myChart'), { /* maintainAspectRatio: false, tooltip enabled */ });
+    // }
+    // function onThemeChange() { requestAnimationFrame(function () { setTimeout(buildCharts, 100); }); }
+    // document.addEventListener('DOMContentLoaded', buildCharts);
 
     // === YOUR SCRIPTS BELOW (use var for top-level variables, define onThemeChange for chart re-renders) ===
   </script>

@@ -8,7 +8,7 @@
 - **Chart.js: 기본 애니메이션을 끈다** — 차트를 만들기 전에 `Chart.defaults.animation = false;`를 넣는다. 기본 애니메이션 때문에 스크린샷, Playwright 테스트, 초기 렌더에서 차트가 빈 칸으로 보이거나 깨진다. 13~25라운드에서 "차트 깨짐"으로 반복되던 버그다.
 - **Chart.js: 색은 명시적인 값으로** — CSS 변수 값에 16진수 투명도를 이어 붙이지 않는다 (예: `c.remote + '18'`). 대신 `rgba()` 값을 그대로 쓴다: `'rgba(12, 206, 107, 0.15)'`.
 - **Chart.js: resetCanvas를 쓰지 않는다** — 같은 canvas 요소를 그대로 재사용한다. 이전 차트 인스턴스를 `.destroy()`로 없앤 다음 같은 canvas에 새로 만든다.
-- **Chart.js: 레이아웃이 안정된 뒤에 만든다** — `window.addEventListener('load', ...)`에 짧은 `setTimeout(200)`을 주고, 만든 뒤 `window.dispatchEvent(new Event('resize'))`를 발생시킨다.
+- **Chart.js: 만드는 시점** — `document.addEventListener('DOMContentLoaded', buildCharts)`로 만들고, 테마 전환 시에는 `onThemeChange()`에서 `requestAnimationFrame` + `setTimeout(100)`을 거쳐 다시 만든다. CSS 변수가 갱신된 뒤에 색을 읽기 위해서다.
 
 ### 타이포그래피 (Typography)
 - **기본 글꼴:** Inter via Google Fonts CDN — `https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap`
@@ -267,27 +267,28 @@ applyTheme(initial);
 라이브러리 기본값을 넘어 모든 차트에 적용한다:
 
 ```css
-.chart-container {
-  padding: 40px;          /* Breathing room around chart */
-  min-height: 360px;      /* Substantial presence on dashboard */
+.chart-card {
+  padding: 24px;
   background: var(--surface);
   border-radius: 12px;
   border: 1px solid var(--border);
 }
-
-/* Remove excessive grid lines */
-.chart-canvas {
-  border-radius: 8px;     /* Inner chart gets smaller radius */
+.chart-wrap {
+  position: relative;     /* 없으면 높이가 계속 늘어난다 */
+  height: 360px;          /* height를 쓴다. min-height는 쓰지 않는다 */
 }
 ```
 
-**차트 설정 보강:**
-- 여백 지정: `layout: { padding: { top: 30, right: 30, bottom: 30, left: 30 } }`
+**차트 설정 보강** (동작 규칙과 복사용 코드는 SKILL.md의 **Chart.js Integration Rules**를 볼 것):
+- 여백 지정: `layout: { padding: 20 }`
 - 막대 모서리 둥글게: `borderRadius: 4`
-- 격자선 불투명도: 라이트 모드 `rgba(0,0,0,0.04)`, 다크 모드 `rgba(255,255,255,0.02)`
+- 격자선은 아주 희미하게: 다크 `rgba(255,255,255,0.04)`, 라이트 `rgba(0,0,0,0.06)`. `var(--border)` 값을 그대로 써도 된다
+- 글꼴 크기: 축 눈금 13px 이상, 축 제목 14px, 차트 제목 16px 이상, 범례 13px
+- 축 라벨은 가로로: `maxRotation: 0`. 라벨이 넘치면 개수를 줄인다
+- 선 차트 점: 기본 반지름 0, 호버 6
+- 도넛·원 차트: 조각에 퍼센트 라벨을 항상 넣는다
+- 계열 색은 서로 뚜렷이 다르게 — 접근성과 판독성 양쪽에 필요하다
 - 테마 강조색과 어울리는 색 팔레트
-- 축 라벨 크기: 가독성을 위해 최소 13px
-- 기본 애니메이션 제거: `Chart.defaults.animation = false`
 
 ### 간격 (Spacing)
 - **8px 그리드** — 모든 간격은 배수로: 4, 8, 12, 16, 24, 32, 48, 64, 96px
@@ -337,7 +338,7 @@ applyTheme(initial);
 ### 카드 호버 마이크로인터랙션
 모든 카드에 은은한 호버 효과를 둔다 — 그림자 높이기만 하고 변형은 쓰지 않는다:
 ```css
-.card, .stat-card, .kpi-card, .stat-item, .chart-container {
+.card, .stat-card, .kpi-card, .stat-item, .chart-card {
   transition: box-shadow 0.2s ease;
 }
 .card:hover, .stat-card:hover, .kpi-card:hover, .stat-item:hover {

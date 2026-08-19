@@ -128,7 +128,17 @@ Work in the cloned repo from Step 1 (`$WORK_DIR/visualize`). Edits take effect o
 - Add anti-patterns ("DON'T: gradient text on headings")
 - Simplify verbose instructions
 - Make ignored instructions more prominent ("CRITICAL:" prefix)
-- Keep under **5,000 words**
+- Keep under **5,000 words** — verify with `wc -w .claude/skills/visualize/SKILL.md`
+
+**One rule, one place.** When an instruction already exists, edit that block. Never append
+a second block stating the same rule elsewhere in the file.
+
+**Fix the cause, not the symptom.** Read `consoleErrors` in `scores.json` first — the root
+cause is usually written there verbatim. R50-R58 spent nine rounds appending 1,484 words of
+Chart.js defensive code (`ChartManager`, `chartsBuilt`, guards, troubleshooting lists) to a
+failure whose actual cause was one wrong CDN filename: `dist/chart.min.js` is the ESM build
+and dies in a plain `<script>`. Commit `f01c7a1` fixed it in one line. The 1,484 words fixed
+nothing and were deleted.
 
 **References (priority order):**
 1. `skeleton.md` — the HTML template, affects every output
@@ -241,7 +251,7 @@ Triggered when: `loopsSinceResearch >= 5` AND score plateau (< 0.3 improvement o
 ## Invariants (Never Break These)
 
 1. Git repo always in working state
-2. SKILL.md under 5,000 words
+2. SKILL.md under 5,000 words — one rule stated in exactly one place
 3. All top-level JS uses `var`
 4. Class-based theming only (no @media prefers-color-scheme)
 5. Content visible by default

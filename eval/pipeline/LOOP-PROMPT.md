@@ -199,6 +199,10 @@ Write your analysis to `eval/rounds/round-{N}/analysis.md` with this structure:
    - Resolve contradictions
    - Move buried rules to more prominent positions
    - **SKILL.md must stay under 5,000 words** — move details to references
+   - **One rule, one place** — edit the existing block, never append a second one
+   - **Read `consoleErrors` before proposing a fix** — the root cause is usually there
+     verbatim. R50-R58 appended 1,484 words of Chart.js defensive code to a failure whose
+     cause was one wrong CDN filename (ESM build in a plain `<script>`).
 
 2. Fix references (priority order):
    - `references/skeleton.md` (affects every output)
@@ -322,7 +326,7 @@ Only run this instead of the normal loop when triggered (see Step 0).
 ## Invariants (NEVER violate)
 
 1. Git repo always in working state after each commit
-2. SKILL.md under 5,000 words
+2. SKILL.md under 5,000 words — one rule stated in exactly one place
 3. All top-level JS in skeleton/examples uses `var` (not let/const)
 4. Class-based theming only (no @media prefers-color-scheme for CSS vars)
 5. Content visible by default (no JS-hidden content)

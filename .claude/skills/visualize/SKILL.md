@@ -35,12 +35,12 @@ Created your visualization! Opening in browser now...
 
 ## Critical Requirements — 필수 요구사항 (NON-NEGOTIABLE)
 
-⚠️ **EVALUATION FAILURE GUARANTEED WITHOUT THESE 8 ELEMENTS** ⚠️
+⚠️ **EVALUATION FAILURE GUARANTEED WITHOUT THESE 9 ELEMENTS** ⚠️
 
 **EVERY file MUST start from the skeleton template in [references/skeleton.md](references/skeleton.md) — 템플릿 ENTIRE 전체를 복사한 다음 내용을 추가한다.**
 
 1. **CSS 사용자 정의 속성:** 아래 이름을 정확히 써야 한다: `--bg, --surface, --surface-hover, --border, --text, --text-secondary, --accent, --accent-secondary, --positive, --negative, --warning` — 다른 이름은 NO (--bg-primary도, --text-primary도 안 된다). **CRITICAL:** 평가 시스템과 맞물리려면 이 속성 이름이 정확해야 한다.
-2. **유틸리티 메뉴 시스템 (MANDATORY):** `.viz-menu-toggle` 버튼, `.viz-menu-dropdown` 컨테이너, PNG 내려받기 버튼(`onclick="downloadImage()"`), 인쇄 버튼(`onclick="window.print()"`), html-to-image CDN 스크립트(`<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>`)를 모두 갖춘 `.viz-menu` 요소. **EVALUATION CRITICAL:** 메뉴 시스템은 자동으로 검사되며 없으면 WILL CAUSE FAILURES.
+2. **유틸리티 메뉴 시스템 (MANDATORY):** `.viz-menu-toggle` 버튼, `.viz-menu-dropdown` 컨테이너, PNG 내려받기 버튼(`onclick="downloadImage()"`), 인쇄 버튼(`onclick="window.print()"`), html-to-image CDN 스크립트(`<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>`)를 모두 갖춘 `.viz-menu` 요소. **EVALUATION CRITICAL:** 메뉴 시스템은 자동으로 검사되며 없으면 WILL CAUSE FAILURES. 전체 구현(HTML·CSS·JS, 인쇄 스타일, 슬라이드 덱 예외)은 [references/menu.md](references/menu.md)를 보라.
 3. **테마 클래스 (EVALUATION CRITICAL):** 스타일시트에 `.theme-light`와 `.theme-dark` 클래스를 BOTH 둘 다 명시적으로 정의하고, 사용자 정의 속성을 빠짐없이 넣어야 한다. **EXAMPLE REQUIRED:**
 ```css
 :root { /* base properties */ }
@@ -48,80 +48,18 @@ Created your visualization! Opening in browser now...
 .theme-dark { --bg: #0a0a0a; --surface: #1a1a1a; --text: #ffffff; /* etc */ }
 ```
 **`:root`만 쓰거나 `@media (prefers-color-scheme)`에 의존하지 말 것 (NEVER) — 평가 시스템은 클래스 기반 테마를 검사한다.**
-4. **시맨틱 HTML:** `<main id="main-content">` 요소, **MANDATORY: 주요 내용 블록마다 `<section>` 요소를 여러 개** (헤더, 지표, 차트 등), skip-to-content 링크. 구분되는 내용 영역은 각각 시맨틱 `<section>` 태그로 감싼다.
-5. **Chart.js 요구사항 (EVALUATION CRITICAL):** `</head>` 앞에 `<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>`를 MUST 넣어야 한다. **MANDATORY:** Chart.js 스크립트 IMMEDIATELY 바로 뒤에 `<script>Chart.defaults.animation = false;</script>`를 넣는다 (애니메이션 결함을 막고 평가 시스템이 자동으로 검사한다). **MANDATORY CHART VALIDATION:** 모든 차트 함수는 `if (typeof Chart === 'undefined') { console.error('Chart.js not loaded'); return; }`로 시작해야 한다 (MUST). **CHART ACCESSIBILITY:** 모든 canvas 요소에 `role="img"`와 설명이 담긴 `aria-label` 속성이 MUST 있어야 한다. **CRITICAL CHART CONFIG:** 접근성을 위해 `maintainAspectRatio: false`, `responsive: true`, `plugins: { tooltip: { enabled: true } }`를 설정한다. **툴팁을 끄지 않는다 (NEVER)** - 평가 시스템이 툴팁이 켜져 있는지 검사한다. **CHART RELIABILITY SYSTEM:** 빈틈없는 연동을 위해 전용 ChartManager 패턴을 쓴다:
-```javascript
-var ChartManager = {
-  charts: new Map(),
-  safeInit: function(canvasId, config) {
-    if (typeof Chart === 'undefined') {
-      console.error('Chart.js library not loaded - check CDN inclusion');
-      return null;
-    }
-    try {
-      if (this.charts.has(canvasId)) {
-        this.charts.get(canvasId).destroy();
-        this.charts.delete(canvasId);
-      }
-      var ctx = document.getElementById(canvasId);
-      if (!ctx) {
-        console.error('Canvas element not found: ' + canvasId);
-        return null;
-      }
-      // Ensure no conflicting chart instances
-      if (ctx.chart) {
-        ctx.chart.destroy();
-        delete ctx.chart;
-      }
-      // Set accessibility attributes
-      ctx.setAttribute('role', 'img');
-      if (!ctx.getAttribute('aria-label')) {
-        ctx.setAttribute('aria-label', 'Chart visualization');
-      }
-      // Initialize with enhanced error handling
-      var chart = new Chart(ctx, config);
-      this.charts.set(canvasId, chart);
-      return chart;
-    } catch (error) {
-      console.error('Chart initialization failed for ' + canvasId + ':', error);
-      return null;
-    }
-  },
-  updateTheme: function() {
-    if (typeof Chart === 'undefined') return;
-    this.charts.forEach(function(chart, canvasId) {
-      try {
-        chart.update();
-      } catch (error) {
-        console.error('Chart theme update failed for ' + canvasId + ':', error);
-      }
-    });
-  },
-  destroyAll: function() {
-    this.charts.forEach(function(chart) {
-      try {
-        chart.destroy();
-      } catch (error) {
-        console.error('Chart destruction failed:', error);
-      }
-    });
-    this.charts.clear();
-  }
-};
+4. **시맨틱 HTML:** `<main id="main-content">` 요소, **MANDATORY: 주요 내용 블록마다 `<section>` 요소를 여러 개** (헤더, 지표, 차트 등), skip-to-content 링크, 랜드마크 역할 (`role="banner"`, `role="main"`, `role="complementary"`). 구분되는 내용 영역은 각각 시맨틱 `<section>` 태그로 감싼다.
+5. **Chart.js 요구사항 (EVALUATION CRITICAL):** `</head>` 앞에 UMD 빌드를 MUST 넣어야 한다:
+```html
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script>Chart.defaults.animation = false;</script>
 ```
-`new Chart()`를 직접 쓰는 대신 `ChartManager.safeInit()`을 쓴다. **CRITICAL CHART CONFIG:** 접근성을 위해 `maintainAspectRatio: false`, `responsive: true`, `plugins: { tooltip: { enabled: true } }`를 설정한다. **CHART CONTAINER DIMENSIONS:** 차트가 제대로 그려지려면 컨테이너에 `height`가 300px 이상으로 명시되어 있어야 한다. CSS 사용자 정의 속성으로 테마에 반응하는 색을 쓰고, 고정된 16진수 색은 절대 쓰지 않는다. **Chart.js CDN과 함께 import/export 문법을 NEVER 쓰지 않는다** — 표준 var 선언만 쓴다.
+**파일명이 `chart.umd.min.js`여야 한다 (MANDATORY).** `dist/chart.min.js`는 ESM 빌드라 평범한 `<script>`에서 `Cannot use import statement outside a module`을 던지고 파일 전체가 죽는다. 같은 이유로 **파일 어디에도 `import`/`export` 문법을 쓰지 않는다 (NEVER)** — 최상위는 `var` 선언만 쓴다.
 
-**CHART.JS TROUBLESHOOTING (CRITICAL):** 차트가 빈 흰 공간으로 나온다면 아래를 확인한다:
-- Chart.js CDN이 `</head>` 앞에 들어갔는지 확인
-- `Chart.defaults.animation = false;`가 CDN 바로 뒤에 있는지 확인
-- 차트 초기화가 DOMContentLoaded 이벤트 리스너 안에 있는지 확인
-- 파일 어디에도 모듈 import/export 문법이 없는지 확인
-- ChartManager.safeInit() 패턴을 올바르게 썼는지 확인
-- canvas에 `role="img"`와 `aria-label` 속성이 있는지 확인
-
+   차트를 만드는 코드는 아래 **Chart.js Integration Rules** 절에 하나만 있다. 그것을 그대로 쓴다.
 6. **반응형 디자인:** 섹션 간격 48px 이상, **CRITICAL: 375px 뷰포트에서 가로 오버플로 NO** (MANDATORY: 가로 스크롤을 막기 위해 `@media (max-width: 375px) { body { overflow-x: hidden; } }`를 넣는다), **MANDATORY FONT-SIZE HIERARCHY:** h1 ≥ 2.5rem, h2 ≥ 2rem, h3 ≥ 1.5rem, body = 1rem. **SLIDE DECK REQUIREMENTS:** 제목 슬라이드 h1 ≥ 3rem, 본문 슬라이드 제목 ≥ 2.5rem, 제목 단계 간 시각적 구분이 분명할 것. **SLIDE SECTION SPACING:** 슬라이드 안 주요 구역은 48px 이상 간격을 둔다 (제목-본문, 본문-차트, 차트-내비게이션). **모든 레이아웃을 375px 너비에서 확인한다 — 특히 대시보드는 차트 컨테이너가 넘치기 쉽다.** **CSS CONTAINER QUERIES:** 더 정밀한 반응형에는 컨테이너 기반 쿼리를 쓴다:
 ```css
-.chart-container { container-type: inline-size; }
+.chart-card { container-type: inline-size; }
 @container (max-width: 400px) { 
   .chart-legend { display: none; } 
   .chart-title { font-size: 1rem; }
@@ -217,8 +155,7 @@ HTML은 "웹사이트"가 아니라 시각화 도구다. 코드는 값싸다. �
 - **애니메이션:** 페이지 로드에는 CSS @keyframes (.animate + .delay-N), 스크롤에는 data-reveal + IntersectionObserver, 카운터에는 data-count. 내용은 기본적으로 보인다. **첫 화면에 보이는 내용에는 data-reveal을 NEVER 쓰지 않는다** — 대신 `.animate` 클래스를 쓴다. `data-reveal`은 첫 화면 아래 내용에만 아껴서 쓴다 (최대 3~4개 섹션).
 - **접근성:** Skip-to-content, aria-label, 랜드마크 역할, :focus-visible, 차트 데이터용 sr-only. 전체 점검 목록은 참조 문서를 볼 것.
 - **아이콘:** 인라인 SVG만, 이모지는 절대 쓰지 않는다. Lucide 스타일 24x24, 선 기반.
-- **Chart.js (MANDATORY PATTERNS):** 스크립트 맨 위에 `Chart.defaults.animation = false;`, 테마 전환 시 파기 후 재생성, 명시적인 rgba() 색, 툴팁 항상 켜기, 모든 차트 옵션에 `maintainAspectRatio: false`. **접근성: canvas를 `role="img"`와 설명이 담긴 `aria-label`을 가진 div로 감싼다**. **가드 패턴:** `chartsBuilt` 플래그를 쓴다 — `onThemeChange()`는 다시 만들기 전에 `if (chartsBuilt)`를 확인해야 한다. **차트 컨테이너는 존재감을 위해 min-height: 360px가 필요하다.**
-- **Chart.js 맞춤 설정:** 기본값을 넘어 전문적인 스타일을 적용한다 — 여백 지정 (`layout: { padding: 30 }`), 과한 격자선 제거 (불투명도 0.04 이하), 둥근 모서리 (`borderRadius: 4`), 테마와 어울리는 색 팔레트. 차트 컨테이너는 존재감을 위해 모서리 반지름 12px, 내부 여백 40px, 최소 높이 360px가 필요하다. 자동 생성된 티가 나는 라이브러리 기본값은 피한다.
+- **Chart.js:** 정식 패턴 하나만 쓴다 — 아래 **Chart.js Integration Rules** 절을 볼 것. 차트 카드는 모서리 반지름 12px, 내부 여백 24px, 차트 영역 높이 360px로 존재감을 준다. 라이브러리 기본값 그대로 두지 않는다.
 - **타이포그래피 위계:** MANDATORY 글꼴 크기가 내림차순이어야 한다: h1 > h2 > h3 > 본문. **REQUIRED MINIMUMS:** h1: 3rem 이상 (48px), h2: 2rem 이상 (32px), h3: 1.5rem 이상 (24px), body: 1rem (16px). **EVALUATION CRITICAL:** 각 제목 단계는 앞 단계보다 눈에 띄게 작아야 하며 단계 간 차이가 최소 0.5rem이어야 한다. 유효한 위계 예시: h1: 3rem, h2: 2.5rem, h3: 1.5rem, body: 1rem.
 - **시각적 절제:** 떠다니는 구, 그라디언트 테두리, 제목의 그라디언트 텍스트, 확대 변형, 발광 효과, 장식용 애니메이션을 쓰지 않는다.
 - **통계 수치의 색:** 색을 입힌 숫자는 의미를 담아야 한다 (초록/positive = 좋은 지표, 빨강/negative = 나쁜 지표, accent = 주요·중립 강조). 분명한 의미가 없으면 `var(--text)`를 쓴다. 통계 수치에 임의로 색을 입히지 않는다 (Never). **카드 4개 이상인 KPI 그리드:** 수치에 강조색을 최대 2개만 쓴다 — 가장 중요한 지표 하나에 `var(--accent)`, 나머지는 전부 `var(--text)`. `var(--positive)`/`var(--negative)`는 변화량 표시(화살표, 퍼센트)에만 쓰고 카드의 주요 수치에는 쓰지 않는다.
@@ -230,39 +167,15 @@ HTML은 "웹사이트"가 아니라 시각화 도구다. 코드는 값싸다. �
 
 ## Critical Implementation Requirements — 구현 필수 요구사항
 
-**MANDATORY: 스켈레톤 템플릿을 쓴다** — 요구사항이 전부 내장된 복사·붙여넣기용 HTML은 [references/skeleton.md](references/skeleton.md)를 보라.
+**MANDATORY: [references/skeleton.md](references/skeleton.md)의 스켈레톤 템플릿에서 시작한다.**
+아래 요구사항이 전부 내장돼 있다. 각 항목은 평가 검사기가 자동으로 확인한다.
 
-**JavaScript 구현 규칙:**
-- **최상위 변수는 전부 `var`를 MUST 써야 한다** (`let`/`const`가 아니다). 함수 호이스팅으로 인한 TDZ 오류를 피하기 위함
-- **테마 전환은 `cycleTheme()` 함수를 MUST 써야 한다** — 스켈레톤에 올바른 `applyTheme()` 구현과 함께 들어 있다
-- **메뉴는 바깥 클릭 처리가 된 `toggleMenu()`를 MUST 써야 한다** — 스켈레톤에 바깥 클릭과 Escape 키로 드롭다운이 닫히는 처리가 들어 있다
-- **차트 재생성:** 테마 변경 시 차트를 다시 그리도록 `function onThemeChange() {}`를 정의한다
-- **모바일 반응형:** 모든 레이아웃을 375px 뷰포트 너비에서 확인한다 — 카드 그리드에는 CSS Grid `minmax(320px, 1fr)`를 쓴다
-
-**평가 검사기가 확인하는 것:**
-- `cycleTheme()` 함수가 있고 동작한다 (html 클래스를 바꾼다)
-- `toggleMenu()` 함수가 있고 바깥 클릭 시 닫힌다  
-- 최상위 JS 변수가 `var`로 선언되어 있다
-- 375px 너비에서 가로 오버플로가 없다
-- 기본 메뉴 외의 인터랙티브 요소가 있다 (호버 상태, 차트 인터랙션 등)
-
-**스켈레톤 템플릿에 필요한 기능이 모두 들어 있다. 구현 오류를 피하려면 ALWAYS skeleton.md에서 시작한다.**
-
-## Semantic HTML Requirements — 시맨틱 HTML 요구사항
-
-모든 시각화는 아래 시맨틱 요소를 포함해야 한다:
-
-**필수 구조:**
-- 주요 내용을 담는 `<main>` 요소
-- 주요 내용 블록마다 `<section>` 요소
-- 랜드마크 역할 (`role="banner"`, `role="main"`, `role="complementary"`) 또는 skip-to-content link
-- 차트 접근성: 차트 컨테이너에 `role="img"`와 `aria-label`
-
-**추가 요구사항:**
-- `@media print` 스타일 정의
-- 접근성을 위한 `@media (prefers-reduced-motion)` 스타일
-- 섹션 간 충분한 간격 (48px 이상)
-- 인터랙티브 요소의 호버 상태
+- **최상위 변수는 전부 `var`를 MUST 써야 한다** (`let`/`const`가 아니다) — 함수 호이스팅으로 인한 TDZ 오류를 피한다
+- **`cycleTheme()`** — html 클래스를 바꿔 테마를 전환한다. 스켈레톤에 올바른 `applyTheme()` 구현이 함께 있다
+- **`toggleMenu()`** — 바깥 클릭과 Escape 키로 드롭다운이 닫혀야 한다. 스켈레톤에 처리가 들어 있다
+- **`function onThemeChange() {}`를 정의한다** — 테마 변경 시 차트를 다시 그린다
+- **375px 뷰포트에서 가로 오버플로가 없어야 한다** — 카드 그리드에는 CSS Grid `minmax(320px, 1fr)`를 쓴다
+- **기본 메뉴 외에 인터랙티브 요소가 있어야 한다** — 호버 상태, 차트 인터랙션 등
 
 ## Visualization Types — 시각화 형식
 
@@ -400,57 +313,12 @@ main { flex: 1; display: flex; flex-direction: column; min-height: 0; }
 - **진입 애니메이션** — 슬라이드 안 요소들이 시차를 두고 등장한다
 - **발표자 노트** — `data-notes` 속성, 인쇄할 때만 보인다
 
-### High-Impact Presentation Slides — 임팩트가 큰 발표 슬라이드 (비즈니스 맥락)
-투자 발표, 스타트업 피치, 경영진 브리핑에서는:
-- **첫 슬라이드의 시각적 무게** — 더 강한 그라디언트, 더 큰 타이포그래피(4~6rem), 설득력 있는 통계를 눈에 띄게 배치한다
-- **가치 제안의 명료함** — 첫 슬라이드가 5초 안에 핵심 가치를 전달해야 한다
-- **전문적인 신뢰감** — 타이포그래피, 간격, 색 선택이 기업·투자 수준의 기대치에 맞아야 한다
-- **데이터로 이야기하기** — 차트 슬라이드마다 원시 데이터 나열이 아니라 분명한 통찰을 짚어 준다
+- **테마별 그라디언트** — 제목·구분 슬라이드는 다크(깊고 진하게)와 라이트(부드러운 파스텔) 짝을 따로 정의한다. 본문 슬라이드 배경은 `var(--bg)`/`var(--surface)`를 쓰고 어두운 색을 하드코딩하지 않는다 (Never).
+- **차트 슬라이드** — 차트 영역 높이 **400px 이상** (대시보드 360px보다 크게). 구조와 JS는 아래 **Chart.js Integration Rules**와 같다.
+- **투자 발표·경영진 브리핑** — 첫 슬라이드 제목 4~6rem, 5초 안에 가치 제안이 전달되게 한다.
 
-### Theme-Aware Slide Gradients — 테마에 반응하는 슬라이드 그라디언트 (CRITICAL)
+슬라이드 유형 9가지, 그라디언트 CSS, 내비게이션 패턴은 [references/types.md](references/types.md) §Slide Deck을 보라.
 
-슬라이드 덱은 다크와 라이트에서 시각적으로 확실히 달라 보여야 한다 (MUST). 그라디언트 배경이 바뀌어야 한다:
-
-```css
-/* Dark theme: deep, saturated gradients */
-.theme-dark .slide-title { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e3a5f 100%); }
-.theme-dark .slide-content { background: var(--bg); }
-
-/* Light theme: soft, pastel gradients */
-.theme-light .slide-title { background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 50%, #dbeafe 100%); }
-.theme-light .slide-content { background: var(--bg); }
-```
-
-규칙:
-- 제목·구분 슬라이드: 테마별 그라디언트 짝을 쓴다 (다크=깊고 진하게, 라이트=부드럽고 파스텔로). **내용의 주제를 연상시키는 그라디언트 색을 고른다** — 기술 피치는 차가운 파랑, 게임 피치는 선명한 보라·청록, 헬스케어 덱은 차분한 초록·틸.
-- 본문 슬라이드: `var(--bg)` 또는 `var(--surface)`를 쓴다 — 하드코딩한 어두운 배경은 NOT 안 된다
-- 슬라이드 위 데이터 카드: `var(--surface)`와 `var(--border)`를 쓴다 — 자동으로 맞춰진다
-- 슬라이드 내용에 `#1a1a2e` 같은 어두운 색을 하드코딩하지 않는다 (Never) — CSS 변수를 쓴다
-- 확인 방법: 테마를 전환했을 때 모든 슬라이드가 그 모드에 맞게 의도적으로 설계된 것처럼 보여야 한다
-
-### Slide Types — 슬라이드 유형
-1. **Title** — 테마에 반응하는 그라디언트 배경, 큰 제목, 부제. 가운데 정렬.
-2. **Content** — 제목 + 항목 또는 제목 + 시각물. 글이 많아서는 안 된다 (Never).
-3. **Section divider** — 화면을 꽉 채운 강조색에 구역 제목만.
-4. **Stat** — 큰 숫자 하나, 라벨 하나, 통찰 문장 하나.
-5. **Chart** — 제목과 핵심 요지가 있는 Chart.js 시각화. chart-container 래퍼 클래스를 MUST 써야 한다.
-6. **Two-column** — 비교나 글+시각물을 위한 분할 레이아웃.
-7. **Quote** — 출처가 붙은 큰 인용문.
-8. **Closing** — 행동 유도, 연락처, 또는 요약 + 소셜 링크.
-
-### Slide Deck Chart Requirements — 슬라이드 덱 차트 요구사항 (CRITICAL)
-발표의 차트 슬라이드는 대시보드와 같은 컨테이너 기준을 따라야 한다 (MUST):
-```html
-<div class="chart-slide-container">
-  <h2>Chart Title</h2>
-  <div class="chart-container" style="height: 400px; padding: 40px; border-radius: 12px; background: var(--surface);">
-    <canvas id="slideChart" role="img" aria-label="Description"></canvas>
-  </div>
-</div>
-```
-- **chart-container 클래스를 쓴다** — 형식이 달라도 평가 기준이 일관되게 유지된다
-- 슬라이드 차트는 **최소 높이 400px** — 발표에서 읽히도록 대시보드 차트보다 크게
-- **maintainAspectRatio: false** — 슬라이드 레이아웃에서 크기가 제대로 잡히려면 필요하다
 
 ## Data Ingestion — 데이터 받아들이기
 
@@ -562,13 +430,6 @@ main { flex: 1; display: flex; flex-direction: column; min-height: 0; }
 - @page 여백 상자가 있는 인쇄 스타일
 - prefers-reduced-motion 지원
 
-### Skeleton Rules — 스켈레톤 규칙
-- 최상위 JS 변수는 전부 `var`를 쓴다 (TDZ 오류를 막는다)
-- MANDATORY: 스크롤 애니메이션에는 `data-reveal`을, 페이지 로드 진입에는 `.animate.delay-N`을 쓴다. `.reveal` 클래스를 위한 JavaScript 스크롤 감시자를 넣는다.
-- 테마 전환 시 차트를 다시 그리도록 `function onThemeChange() {}`를 정의한다
-- 시맨틱 HTML을 쓴다: `<main>`, `<section>`, `<header>`, `<article>`
-- 스크립트 최상위에서 `let`/`const`를 쓰지 않는다
-
 ## Minimum Sizing Rules — 최소 크기 규칙
 
 요소는 읽히고 존재감이 있을 만큼 커야 한다:
@@ -595,268 +456,87 @@ main { flex: 1; display: flex; flex-direction: column; min-height: 0; }
 - 배경색과 가까운 값으로 글자 색을 정하지 않는다 (NEVER)
 - 머릿속으로 확인: "이 글자가 다크(#030712)와 라이트(#f8fafc) 배경 BOTH 양쪽에서 보이는가?"
 
-## Chart.js Integration Rules — Chart.js 연동 규칙 (CRITICAL — MOST COMMON FAILURE)
+## Chart.js Integration Rules — Chart.js 연동 규칙 (CRITICAL)
 
-차트는 두 번째로 흔한 실패 원인이다. 아래 규칙은 모든 차트에 MANDATORY다:
+아래가 유일한 정식 패턴이다. 다른 방식을 쓰지 않는다 (Never). CDN과 UMD 빌드 요구사항은
+위 Critical Requirements 5번을 볼 것.
 
-### 1. 컨테이너 구조 (REQUIRED)
+### 컨테이너 구조 (REQUIRED)
+
 ```html
-<!-- MANDATORY PATTERN FOR EVERY CHART -->
-<div role="img" aria-label="Detailed description of chart data and insights">
-  <div class="chart-container" style="height: 360px; padding: 40px; border-radius: 12px; background: var(--surface);">
-    <canvas id="uniqueChartId"></canvas>
-  </div>
+<div class="chart-card" role="img" aria-label="차트가 보여 주는 내용과 핵심 통찰">
+  <h3>Revenue Growth</h3>
+  <div class="sr-only">Jan $98K, Feb $102K, Mar $108K, ... Dec $142K.</div>
+  <div class="chart-wrap"><canvas id="revenueChart"></canvas></div>
 </div>
 ```
-
-### 2. 캔버스 크기 (REQUIRED)
-- **컨테이너에 높이를 명시해야 한다:** 대시보드는 최소 360px, 그 외 형식은 300px
-- **canvas 요소에는 크기를 지정할 필요가 없다** — `maintainAspectRatio: false`면 Chart.js가 알아서 처리한다
-- **컨테이너 여백:** 전문적인 간격을 위해 내부 여백 40px
-- **컨테이너 모서리 반지름:** 현대적인 카드 느낌을 위해 12px
-
-### 3. Chart.js 초기화 (MANDATORY PATTERN)
-```javascript
-// REQUIRED: Chart destruction and canvas reset to prevent "Canvas already in use" errors
-var chartsBuilt = false; // Guard flag
-
-function buildCharts() {
-  if (chartsBuilt) return; // Prevent double-initialization during theme detection
-  
-  // REQUIRED: Reset canvas before building
-  function resetCanvas(id) {
-    var old = document.getElementById(id);
-    if (!old) return null;
-    var parent = old.parentNode;
-    var canvas = document.createElement('canvas');
-    canvas.id = id;
-    parent.replaceChild(canvas, old);
-    return canvas;
-  }
-  
-  // Example chart with required settings
-  var ctx = resetCanvas('myChart');
-  if (ctx) {
-    new Chart(ctx, {
-      type: 'bar',
-      data: { /* your data */ },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false, // REQUIRED
-        animation: false, // MANDATORY: Plus set Chart.defaults.animation = false globally
-        plugins: {
-          tooltip: {
-            enabled: true, // NEVER disable tooltips
-            padding: 12,
-            cornerRadius: 8
-          }
-        },
-        layout: { padding: 20 } // REQUIRED: breathing room
-      }
-    });
-  }
-  
-  chartsBuilt = true; // Mark as built
-}
-
-// CRITICAL: Disable Chart.js default animations IMMEDIATELY after Chart.js loads
-Chart.defaults.animation = false; // MUST be set before any chart creation
-
-// REQUIRED: Build charts after DOM loads
-document.addEventListener('DOMContentLoaded', buildCharts);
-
-// REQUIRED: Rebuild charts on theme change
-function onThemeChange() {
-  chartsBuilt = false; // Reset flag
-  setTimeout(buildCharts, 100); // Slight delay for CSS variable updates
-}
+```css
+.chart-card { padding: 24px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); }
+.chart-wrap { position: relative; height: 360px; }   /* 대시보드 360px, 그 외 300px 이상 */
 ```
-- **MANDATORY: 호버 툴팁을 켠다** — Chart.js 툴팁을 끄지 않는다 (never):
-  ```javascript
-  options: {
-    plugins: {
-      tooltip: {
-        enabled: true, // NEVER set to false
-        mode: 'index',
-        intersect: false
-      }
-    }
-  }
-  ```
-- **최소 차트 높이:** 데스크톱 300px, 모바일 250px
-- **글꼴 크기 기본값:** 축 눈금 라벨 최소 13px, 축 제목 14px, 차트 제목 최소 16px. 범례 13px.
-- **차트 여백:** 숨 쉴 공간을 위해 `layout: { padding: { top: 20, right: 20, bottom: 20, left: 20 } }`를 넣는다
-- **축 눈금 설정:** 라벨을 가로로 유지하려면 `maxRotation: 0`. 라벨이 넘치면 `maxTicksLimit`으로 개수를 줄인다
-- **격자선:** 아주 희미하게 — 다크는 `rgba(255,255,255,0.04)`, 라이트는 `rgba(0,0,0,0.06)`
-- **툴팁 스타일:** `padding: 12`, `cornerRadius: 8`, `titleFont: { size: 14 }`, `bodyFont: { size: 13 }`
-- **점 반지름:** 기본 0, 호버 시 6 — 선 차트가 깔끔해진다
-- **`maintainAspectRatio: false`를 설정하고** 크기는 CSS 컨테이너로 제어한다
-- **테마에 반응하는 색을 쓴다:** 렌더 시점에 CSS 변수를 읽고, 테마가 바뀌면 다시 그린다
-- **차트 글자 색:** `Chart.defaults.color = getComputedStyle(root).getPropertyValue('--text-secondary').trim()`으로 설정한다
-- **격자선 색:** `var(--border)` 값을 쓴다
-- **범례 위치:** 가로형 차트는 'top', 공간이 있는 세로형은 'right'
-- **축 라벨:** 가능하면 가로로 유지한다 - 꼭 필요한 게 아니면 회전시키지 않는다
-- **도넛·원 차트:** 조각에 퍼센트 라벨을 항상 넣는다
-- **반응형:** `responsive: true`가 기본이지만 컨테이너에 크기가 명시되어 있어야 한다
-- **고대비 색:** 접근성을 위해 데이터 계열 간 색 차이를 충분히 둔다
+
+- **`role="img"`와 `aria-label`은 바깥 래퍼에 둔다** — canvas에 두면 차트를 다시 그릴 때 사라질 수 있다.
+- **canvas의 직계 부모(`.chart-wrap`)에 `height`를 준다.** 평가 시스템은 이 요소의 실제 렌더 높이를 잰다. `min-height`가 아니라 `height`를 쓰고, 인라인 style로 300px 아래로 덮어쓰지 않는다 (Never).
+- **`position: relative`가 없으면** `responsive: true` + `maintainAspectRatio: false` 조합에서 높이가 계속 늘어난다.
+- `.sr-only` 블록에 차트 데이터를 글로 적는다 — 화면 낭독기 접근성.
+
+### 만들고 다시 그리기 (MANDATORY PATTERN)
 
 ```javascript
-// Theme-aware Chart.js setup (include in every chart visualization)
-function getChartColors() {
+var revenueChart;   // 최상위 변수는 전부 var (let/const는 TDZ 오류)
+
+function getColors() {
   var s = getComputedStyle(document.documentElement);
   return {
     text: s.getPropertyValue('--text').trim(),
-    textSecondary: s.getPropertyValue('--text-secondary').trim(),
+    sub: s.getPropertyValue('--text-secondary').trim(),
     border: s.getPropertyValue('--border').trim(),
     surface: s.getPropertyValue('--surface').trim(),
-    accent: s.getPropertyValue('--accent').trim(),
+    accent: s.getPropertyValue('--accent').trim()
   };
 }
 
-// REQUIRED: Reset canvas before rebuilding charts (prevents "Canvas already in use" errors)
-function resetCanvas(id) {
-  var old = document.getElementById(id);
-  var parent = old.parentNode;
-  var canvas = document.createElement('canvas');
-  canvas.id = id;
-  parent.replaceChild(canvas, old);
-  return canvas;
-}
+// REQUIRED: 그릴 때마다 새로 찾는다. 최상위에서 캐시하면 참조가 상해서
+// "can't acquire context from the given item" 오류가 난다.
+function getCanvas(id) { return document.getElementById(id); }
 
-// Usage in buildCharts():
-//   try { if (window.myChart) window.myChart.destroy(); } catch(e) {}
-//   window.myChart = new Chart(resetCanvas('myChart'), { ... });
-
-// CRITICAL: Always check chart existence before destroy() to prevent console errors
 function buildCharts() {
-  var isDark = document.documentElement.classList.contains('theme-dark');
-  var colors = getChartColors();
-  
-  // Safe chart destruction and rebuild pattern
-  if (window.myChart) {
-    try { window.myChart.destroy(); } catch(e) { /* ignore */ }
-  }
-  window.myChart = new Chart(resetCanvas('myChart'), {
-    // chart config with theme-aware colors
+  if (typeof Chart === 'undefined') { console.error('Chart.js not loaded'); return; }
+  var c = getColors();
+  Chart.defaults.color = c.sub;
+  Chart.defaults.animation = false;                  // MANDATORY
+
+  try { if (revenueChart) revenueChart.destroy(); } catch (e) {}   // REQUIRED: 다시 그리기 전에 파기
+
+  revenueChart = new Chart(getCanvas('revenueChart'), {
+    type: 'line',
+    data: { /* your data */ },
     options: {
+      responsive: true,
+      maintainAspectRatio: false,                    // MANDATORY
+      plugins: {
+        tooltip: { enabled: true, padding: 12, cornerRadius: 8,   // NEVER disable
+                   titleFont: { size: 14 }, bodyFont: { size: 13 } },
+        legend: { labels: { font: { size: 13 } } }
+      },
+      layout: { padding: 20 },
       scales: {
-        x: { ticks: { color: colors.textSecondary }, grid: { color: colors.border } },
-        y: { ticks: { color: colors.textSecondary }, grid: { color: colors.border } }
+        x: { ticks: { color: c.sub, font: { size: 13 }, maxRotation: 0 }, grid: { color: c.border } },
+        y: { ticks: { color: c.sub, font: { size: 13 } }, grid: { color: c.border } }
       }
     }
   });
 }
+
+// skeleton.md의 applyTheme()이 테마를 바꿀 때 이 함수를 부른다
+function onThemeChange() { requestAnimationFrame(function () { setTimeout(buildCharts, 100); }); }
+document.addEventListener('DOMContentLoaded', buildCharts);
 ```
 
-## Critical Debugging Patterns — 핵심 디버깅 패턴
+격자선 불투명도, 글꼴 크기, 점 반지름 등 **보이는 것을 좌우하는 값**은
+[references/design-system.md](references/design-system.md) §Chart.js 전문가용 스타일링에,
+차트 유형별 요령은 [references/libraries.md](references/libraries.md) §Chart.js에 있다.
 
-### 카운터 애니메이션 디버깅 패턴
-KPI 값이 애니메이션되지 않고 "0%"로 멈춰 있으면 아래 디버깅 패턴을 넣는다:
-```javascript
-// DEBUG: Add after counter observer setup to verify intersection
-var counterEl = document.querySelector('[data-count]');
-if (counterEl) {
-  console.log('Counter element found:', counterEl); // DEBUG
-  var cObs = new IntersectionObserver(function(entries) {
-    console.log('Counter intersection triggered:', entries); // DEBUG
-    entries.forEach(function(e) { 
-      if (e.isIntersecting) { 
-        console.log('Starting counter animation'); // DEBUG
-        animateCounters(); 
-        cObs.disconnect(); 
-      } 
-    });
-  }, { threshold: 0.3 });
-  cObs.observe(counterEl);
-} else {
-  console.warn('No [data-count] elements found'); // DEBUG
-}
-```
-
-### Chart.js 연동 안전 패턴
-콘솔 오류를 막기 위해 모든 Chart.js 사용에 MANDATORY:
-```javascript
-// STEP 1: Global variables - MUST use var, never let/const
-var chartsBuilt = false;
-
-// STEP 2: Chart building function with validation
-function buildCharts() {
-  // CRITICAL: Always validate Chart.js loaded first
-  if (chartsBuilt || typeof Chart === 'undefined') return;
-  
-  // STEP 3: Destroy existing charts to prevent "Canvas already in use"
-  if (window.myChart) window.myChart.destroy();
-  
-  // STEP 4: Reset canvas elements
-  var canvas = document.getElementById('chartId');
-  if (!canvas) return;
-  
-  // STEP 5: Get theme colors from CSS variables
-  var isDark = document.documentElement.className.includes('theme-dark');
-  var textColor = isDark ? '#EDEDED' : '#0f172a';
-  var gridColor = isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.06)';
-  
-  // STEP 6: Create chart with proper options
-  try {
-    window.myChart = new Chart(canvas.getContext('2d'), {
-      // Your chart configuration here
-      options: {
-        responsive: true,
-        maintainAspectRatio: false, // REQUIRED
-        plugins: {
-          tooltip: { enabled: true }, // REQUIRED - never disable
-          legend: { 
-            labels: { color: textColor, font: { family: 'Inter' } }
-          }
-        },
-        scales: {
-          x: { 
-            ticks: { color: textColor },
-            grid: { color: gridColor }
-          },
-          y: { 
-            ticks: { color: textColor },
-            grid: { color: gridColor }
-          }
-        }
-      }
-    });
-    
-    chartsBuilt = true;
-  } catch (error) {
-    console.error('Chart creation failed:', error);
-  }
-}
-
-// STEP 7: Theme change handler
-function onThemeChange() {
-  if (chartsBuilt) {
-    chartsBuilt = false;
-    buildCharts();
-  }
-    var ctx = document.getElementById('myChart');
-    if (!ctx) {
-      console.error('Chart canvas #myChart not found');
-      return;
-    }
-    // ... build chart
-  } catch (error) {
-    console.error('Chart building failed:', error);
-  }
-}
-```
-
-### 메뉴 바깥 클릭 처리
-이벤트 핸들러를 보강해 바깥을 클릭했을 때 메뉴가 닫히도록 한다:
-```javascript
-document.addEventListener('click', function(e) { 
-  var menu = document.querySelector('.viz-menu');
-  var dropdown = document.getElementById('vizMenuDropdown');
-  if (!e.target.closest('.viz-menu') && dropdown) {
-    dropdown.classList.remove('open');
-  }
-});
-```
 
 ## Process — 작업 절차
 

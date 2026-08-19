@@ -45,7 +45,8 @@ Motion.inView('.section', (info) => {
 **적합한 용도:** 기본값이 이미 아름다운 표준 차트. 막대, 선, 원, 도넛, 레이더, 극좌표, 산점도, 버블.
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script>Chart.defaults.animation = false;</script>
 ```
 
 ### 언제 쓰는가
@@ -73,7 +74,9 @@ new Chart(document.getElementById('myChart'), {
   },
   options: {
     responsive: true,
+    maintainAspectRatio: false,          // MANDATORY
     plugins: {
+      tooltip: { enabled: true },        // NEVER disable
       legend: { position: 'bottom' },
       title: { display: true, text: 'Monthly Revenue' }
     },
@@ -87,6 +90,12 @@ new Chart(document.getElementById('myChart'), {
 - 막대 모서리를 둥글게 하려면 `borderRadius`를 쓴다
 - 선 데이터셋에 `tension: 0.4`를 주면 곡선이 부드러워진다
 - 차트 유형 혼합: `{ type: 'bar', datasets: [{ type: 'line', ... }, { ... }] }`
+- 범례 위치: 가로형 차트는 `'top'`, 공간이 있는 세로형은 `'right'`
+- 라벨이 넘치면 `maxTicksLimit`으로 눈금 개수를 줄인다
+- 툴팁 글꼴: `titleFont: { size: 14 }`, `bodyFont: { size: 13 }`
+- `responsive: true`는 기본이지만 컨테이너에 크기가 명시돼 있어야 동작한다
+
+만들고 다시 그리는 정식 코드는 SKILL.md의 **Chart.js Integration Rules**에 있다.
 
 ---
 
@@ -143,6 +152,8 @@ svg.selectAll('rect').data(data).join('rect')
 ```html
 <script src="https://cdn.jsdelivr.net/npm/three@0.170/build/three.module.min.js" type="module"></script>
 ```
+
+**`type="module"`은 Three.js에만 쓴다.** 다른 라이브러리와 같은 파일에서 `import`/`export`를 쓰면 스크립트 전체가 죽는다 — Chart.js UMD 빌드와는 절대 섞지 않는다 (NEVER).
 
 ### 언제 쓰는가
 - 3D 데이터 시각화 (3D 산점도, 지형)
