@@ -103,6 +103,9 @@ visualize/
 
 ## 자주 걸리는 함정
 
+- Chart.js CDN은 **`chart.js@4.4.7/dist/chart.umd.min.js`** (UMD 빌드)여야 한다.
+  `dist/chart.min.js`는 ESM이라 평범한 `<script>`에서 파일 전체를 죽인다.
+  라운드 50~58이 이 한 글자 차이 때문에 낭비됐다 (커밋 `f01c7a1`)
 - Chart.js: 차트를 만들기 전에 `Chart.defaults.animation = false`를 반드시 넣는다
 - 테마 전환: 차트는 파기하고 다시 만들어야 한다 (색을 렌더 시점에 읽는다)
 - 최상위에서 `let`/`const` → TDZ 오류. 항상 `var`를 쓴다.
