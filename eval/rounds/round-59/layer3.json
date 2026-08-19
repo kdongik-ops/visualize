@@ -1,0 +1,108 @@
+{
+  "weights": {
+    "D1": 0.15,
+    "D2": 0.15,
+    "D3": 0.1,
+    "D4": 0.15,
+    "D5": 0.15,
+    "D6": 0.2,
+    "D7": 0.1
+  },
+  "scores": {
+    "director-briefing.html": {
+      "D1": 9.0,
+      "D2": 9.0,
+      "D3": 9.0,
+      "D4": 8.5,
+      "D5": 9.0,
+      "D6": 9.0,
+      "D7": 9.0
+    },
+    "quality-dashboard.html": {
+      "D1": 8.5,
+      "D2": 8.5,
+      "D3": 8.5,
+      "D4": 8.0,
+      "D5": 9.0,
+      "D6": 9.0,
+      "D7": 8.5
+    },
+    "improvement-timeline.html": {
+      "D1": 8.5,
+      "D2": 8.0,
+      "D3": 8.5,
+      "D4": 8.5,
+      "D5": 9.0,
+      "D6": 8.5,
+      "D7": 9.0
+    },
+    "marketing-kpi-dashboard.html": {
+      "D1": 8.5,
+      "D2": 9.0,
+      "D3": 8.5,
+      "D4": 8.5,
+      "D5": 8.0,
+      "D6": 8.5,
+      "D7": 8.5
+    },
+    "unicode-stats-info.html": {
+      "D1": 8.0,
+      "D2": 8.0,
+      "D3": 8.0,
+      "D4": 7.5,
+      "D5": 8.0,
+      "D6": 8.0,
+      "D7": 7.5
+    },
+    "patient-safety-info.html": {
+      "D1": 7.0,
+      "D2": 8.0,
+      "D3": 8.0,
+      "D4": 6.0,
+      "D5": 8.5,
+      "D6": 6.5,
+      "D7": 7.0
+    }
+  },
+  "rows": [
+    [
+      "patient-safety-info.html",
+      97,
+      7.22,
+      8.21
+    ],
+    [
+      "unicode-stats-info.html",
+      97,
+      7.88,
+      8.61
+    ],
+    [
+      "improvement-timeline.html",
+      96,
+      8.55,
+      8.97
+    ],
+    [
+      "marketing-kpi-dashboard.html",
+      97,
+      8.5,
+      8.98
+    ],
+    [
+      "quality-dashboard.html",
+      97,
+      8.6,
+      9.04
+    ],
+    [
+      "director-briefing.html",
+      100,
+      8.92,
+      9.36
+    ]
+  ],
+  "average": 8.86,
+  "min": 8.21,
+  "gate": "ACCEPTABLE"
+}

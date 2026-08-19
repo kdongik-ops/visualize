@@ -149,6 +149,10 @@
     details { overflow: hidden; }
     details summary { cursor: pointer; list-style: none; }
     details summary::-webkit-details-marker { display: none; }
+    /* 여닫는 라벨을 바꾸려면 summary는 비우고 ::after에만 넣는다.
+       텍스트 노드와 ::after에 같은 말을 넣으면 화면에 두 번 나온다. */
+    details summary::after { content: '자세히 보기'; }
+    details[open] summary::after { content: '접기'; }
     ::details-content {
       transition: block-size 0.3s ease, opacity 0.3s ease;
       block-size: 0; opacity: 0; overflow: hidden;
@@ -279,11 +283,16 @@
     async function downloadImage() {
       var menu = document.querySelector('.viz-menu');
       menu.style.display = 'none';
+      // 아직 스크롤되지 않아 opacity:0 상태인 구역을 잠시 보이게 한다.
+      // 이렇게 하지 않으면 첫 화면 아래 내용이 PNG에서 빈 칸으로 나온다.
+      var hidden = document.querySelectorAll('.reveal:not(.visible)');
+      hidden.forEach(function (el) { el.style.opacity = '1'; el.style.transform = 'none'; });
       try {
         var url = await htmlToImage.toPng(document.body, { quality: 1, pixelRatio: 2, filter: function(n) { return !n.classList || !n.classList.contains('viz-menu'); } });
         var a = document.createElement('a'); a.href = url;
         a.download = document.title.replace(/\s+/g, '-').toLowerCase() + '.png'; a.click();
       } catch(e) { console.error('Download failed:', e); }
+      hidden.forEach(function (el) { el.style.opacity = ''; el.style.transform = ''; });
       menu.style.display = '';
     }
 

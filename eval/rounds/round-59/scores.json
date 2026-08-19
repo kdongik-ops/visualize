@@ -1,0 +1,93 @@
+{
+  "round": 59,
+  "timestamp": "2026-08-19T08:56:52.907Z",
+  "filesEvaluated": 6,
+  "average": 9.73,
+  "minScore": 9.6,
+  "gate": "VIRAL",
+  "results": [
+    {
+      "file": "director-briefing.html",
+      "format": "slide-deck",
+      "layer2Score": 100,
+      "layer3Score": null,
+      "overall": 10,
+      "failedChecks": [],
+      "consoleErrors": []
+    },
+    {
+      "file": "improvement-timeline.html",
+      "format": "dashboard",
+      "layer2Score": 96,
+      "layer3Score": null,
+      "overall": 9.6,
+      "failedChecks": [
+        {
+          "name": "section-spacing",
+          "message": "Adequate spacing between major sections (>= 48px)"
+        },
+        {
+          "name": "card-padding",
+          "message": "Card elements have sufficient padding (>= 24px)"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "file": "marketing-kpi-dashboard.html",
+      "format": "dashboard",
+      "layer2Score": 97,
+      "layer3Score": null,
+      "overall": 9.7,
+      "failedChecks": [
+        {
+          "name": "no-overflow-375",
+          "message": "No horizontal overflow at 375px viewport width (mobile)"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "file": "patient-safety-info.html",
+      "format": "dashboard",
+      "layer2Score": 97,
+      "layer3Score": null,
+      "overall": 9.7,
+      "failedChecks": [
+        {
+          "name": "no-overflow-375",
+          "message": "No horizontal overflow at 375px viewport width (mobile)"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "file": "quality-dashboard.html",
+      "format": "dashboard",
+      "layer2Score": 97,
+      "layer3Score": null,
+      "overall": 9.7,
+      "failedChecks": [
+        {
+          "name": "no-overflow-375",
+          "message": "No horizontal overflow at 375px viewport width (mobile)"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "file": "unicode-stats-info.html",
+      "format": "dashboard",
+      "layer2Score": 97,
+      "layer3Score": null,
+      "overall": 9.7,
+      "failedChecks": [
+        {
+          "name": "font-size-hierarchy",
+          "message": "Clear font-size hierarchy: h1 > h2 > h3 > body"
+        }
+      ],
+      "consoleErrors": []
+    }
+  ]
+}

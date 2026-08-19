@@ -57,7 +57,7 @@ Created your visualization! Opening in browser now...
 **파일명이 `chart.umd.min.js`여야 한다 (MANDATORY).** `dist/chart.min.js`는 ESM 빌드라 평범한 `<script>`에서 `Cannot use import statement outside a module`을 던지고 파일 전체가 죽는다. 같은 이유로 **파일 어디에도 `import`/`export` 문법을 쓰지 않는다 (NEVER)** — 최상위는 `var` 선언만 쓴다.
 
    차트를 만드는 코드는 아래 **Chart.js Integration Rules** 절에 하나만 있다. 그것을 그대로 쓴다.
-6. **반응형 디자인:** 섹션 간격 48px 이상, **CRITICAL: 375px 뷰포트에서 가로 오버플로 NO** (MANDATORY: 가로 스크롤을 막기 위해 `@media (max-width: 375px) { body { overflow-x: hidden; } }`를 넣는다), **MANDATORY FONT-SIZE HIERARCHY:** h1 ≥ 2.5rem, h2 ≥ 2rem, h3 ≥ 1.5rem, body = 1rem. **SLIDE DECK REQUIREMENTS:** 제목 슬라이드 h1 ≥ 3rem, 본문 슬라이드 제목 ≥ 2.5rem, 제목 단계 간 시각적 구분이 분명할 것. **SLIDE SECTION SPACING:** 슬라이드 안 주요 구역은 48px 이상 간격을 둔다 (제목-본문, 본문-차트, 차트-내비게이션). **모든 레이아웃을 375px 너비에서 확인한다 — 특히 대시보드는 차트 컨테이너가 넘치기 쉽다.** **CSS CONTAINER QUERIES:** 더 정밀한 반응형에는 컨테이너 기반 쿼리를 쓴다:
+6. **반응형 디자인:** 섹션 간격 48px 이상, **CRITICAL: 375px 뷰포트에서 가로 오버플로 NO** (MANDATORY: 가로 스크롤을 막기 위해 `@media (max-width: 375px) { html, body { overflow-x: hidden; } }`를 넣는다. **`html`을 빼면 효과가 없다** — 평가는 `documentElement.scrollWidth`를 잰다), **MANDATORY FONT-SIZE HIERARCHY:** h1 ≥ 2.5rem, h2 ≥ 2rem, h3 ≥ 1.5rem, body = 1rem. **SLIDE DECK REQUIREMENTS:** 제목 슬라이드 h1 ≥ 3rem, 본문 슬라이드 제목 ≥ 2.5rem, 제목 단계 간 시각적 구분이 분명할 것. **SLIDE SECTION SPACING:** 슬라이드 안 주요 구역은 48px 이상 간격을 둔다 (제목-본문, 본문-차트, 차트-내비게이션). **모든 레이아웃을 375px 너비에서 확인한다 — 특히 대시보드는 차트 컨테이너가 넘치기 쉽다.** **CSS CONTAINER QUERIES:** 더 정밀한 반응형에는 컨테이너 기반 쿼리를 쓴다:
 ```css
 .chart-card { container-type: inline-size; }
 @container (max-width: 400px) { 
@@ -416,9 +416,8 @@ main { flex: 1; display: flex; flex-direction: column; min-height: 0; }
 
 ## Mandatory HTML Skeleton — 필수 HTML 스켈레톤
 
-**EVERY visualization MUST start from the skeleton.** 복사한 다음 내용을 추가한다.
-
-**스켈레톤 전체 코드:** 테마, 인쇄 스타일, Inter 글꼴, 애니메이션, 메뉴, 호버 효과가 들어간 복사·붙여넣기용 HTML 템플릿은 [references/skeleton.md](references/skeleton.md)를 보라.
+**EVERY visualization MUST start from the skeleton.** 복사·붙여넣기용 전체 코드는
+[references/skeleton.md](references/skeleton.md)에 있다. 복사한 다음 내용을 추가한다.
 
 스켈레톤이 제공하는 것:
 - 클래스 기반 다크/라이트 테마 (첫 방문 시 OS 설정 감지, localStorage에 저장)
@@ -471,13 +470,16 @@ main { flex: 1; display: flex; flex-direction: column; min-height: 0; }
 </div>
 ```
 ```css
-.chart-card { padding: 24px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); }
+.chart-card { padding: 24px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border);
+              min-width: 0; }                        /* MANDATORY: 그리드·플렉스 항목이 줄어들 수 있게 */
 .chart-wrap { position: relative; height: 360px; }   /* 대시보드 360px, 그 외 300px 이상 */
+canvas { max-width: 100%; }                          /* MANDATORY: 없으면 375px에서 가로 오버플로 */
 ```
 
 - **`role="img"`와 `aria-label`은 바깥 래퍼에 둔다** — canvas에 두면 차트를 다시 그릴 때 사라질 수 있다.
 - **canvas의 직계 부모(`.chart-wrap`)에 `height`를 준다.** 평가 시스템은 이 요소의 실제 렌더 높이를 잰다. `min-height`가 아니라 `height`를 쓰고, 인라인 style로 300px 아래로 덮어쓰지 않는다 (Never).
 - **`position: relative`가 없으면** `responsive: true` + `maintainAspectRatio: false` 조합에서 높이가 계속 늘어난다.
+- **`canvas { max-width: 100% }`와 `min-width: 0`은 둘 다 MANDATORY다.** Chart.js가 canvas에 인라인 `width`를 박으면, 그리드·플렉스 기본값 `min-width: auto` 때문에 항목이 셀 밖으로 커진다. 창을 좁히면 차트가 줄어들지 않고 가로 스크롤이 생긴다 — `no-overflow-375` 실패의 가장 흔한 원인이다.
 - `.sr-only` 블록에 차트 데이터를 글로 적는다 — 화면 낭독기 접근성.
 
 ### 만들고 다시 그리기 (MANDATORY PATTERN)
